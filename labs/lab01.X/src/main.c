@@ -104,6 +104,9 @@ using the task parameter.  This allows the same task function to be used to
 create multiple tasks that each behave slightly differently. */
 static void taskToggleAnLED(void *pvParameters);
 
+//cals tasks
+static void taskmyLeds(void *pvParameters);
+
 /* Performs the hardware initialisation to ready the hardware to run this example */
 static void prvSetupHardware(void);
 
@@ -229,34 +232,4 @@ static void prvSetupHardware(void)
 #endif
 }
 
-//I tried to put this in a separate file but too many includes are required
-static void taskmyLeds(void *pvParameters)
-{
-  //  xTaskParameter_t *pxTaskParameter;
-  //  portTickType xStartTime;
 
-    /* The parameter points to an xTaskParameters_t structure. */
- //   pxTaskParameter = (xTaskParameter_t *) pvParameters;
-
-    while (1)
-    {
-        /* Note the time before entering the while loop.  xTaskGetTickCount()
-        is a FreeRTOS API function. */
-   //     xStartTime = xTaskGetTickCount();
-
-        /* Loop until pxTaskParameters->xToggleRate ticks have */
-    //    while ((xTaskGetTickCount() - xStartTime) < pxTaskParameter->xToggleRate);
-
-
-
-        /* This task toggles the LED specified in its task parameter. */
-        /* This task toggles the LED specified in its task parameter. */
-#ifndef Explorer_16
-        mPORTDToggleBits(1 << pxTaskParameter->usLEDNumber);
-#else
-    //here is the SFR driver code
-        mPORTAToggleBits(1 << pxTaskParameter->usLEDNumber);
-#endif
-        toggleLED(1);
-    }
-}
