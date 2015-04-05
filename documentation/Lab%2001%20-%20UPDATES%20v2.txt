@@ -1,0 +1,25 @@
+Lab 01 UPDATES v2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project Properties UPDATES
+======================================================================
+Hardware Tools: ICD 3
+Device: PIC32MX460F512L
+
+
+
+xc-32-gcc Option catergories: Preprocessing and Messages UPDATES
+======================================================================
+Add to Preprocessor macros:
+
+_SUPPRESS_PLIB_WARNING
+_DISABLE_OPENADC10_CONFIGPORT_WARNING
+
+
+
+Version 2 ADDITIONS
+======================================================================
+In portmacro.h, change #define statement at approximately Line 185
+FROM: #define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
+  TO: #define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
+
