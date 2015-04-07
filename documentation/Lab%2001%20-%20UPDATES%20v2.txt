@@ -23,3 +23,6 @@ In portmacro.h, change #define statement at approximately Line 185
 FROM: #define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
   TO: #define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
 
+CALS NOTES:
+You can't instantaite the task in the myTasks.c file, I am not sure why you make it in part 2 step 3. I tried extern and declaring it in any config I could think of.
+YOU CAN DO IT! It is just very unconventional. Just have to add the .c file to main in addition to the .h!
