@@ -264,9 +264,6 @@
         <property key="programoptions.uselvpprogramming" value="false"/>
         <property key="voltagevalue" value="3.25"/>
       </ICD3PlatformTool>
-      <SKDEPIC32PlatformTool>
-        <property key="whatToProgram" value="all"/>
-      </SKDEPIC32PlatformTool>
     </conf>
   </confs>
 </configurationDescriptor>

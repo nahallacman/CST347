@@ -2,7 +2,6 @@ build/default/production/src/main.o:  \
 src/main.c  \
 include/myTasks.h  \
  include/leddrv.h  \
-include/leddrv.h  \
 ../FreeRTOS/Source/include/FreeRTOS.h  \
  include/FreeRTOSConfig.h  \
 ../FreeRTOS/Source/include/projdefs.h  \
@@ -12,4 +11,6 @@ include/leddrv.h  \
  ../FreeRTOS/Source/include/mpu_wrappers.h  \
  ../FreeRTOS/Source/include/task.h  \
 ../FreeRTOS/Source/include/list.h  \
- ../FreeRTOS/Source/include/queue.h 
+ ../FreeRTOS/Source/include/queue.h  \
+include/leddrv.h  \
+src/myTasks.c 

@@ -66,6 +66,7 @@
 
 #include "myTasks.h"
 #include "leddrv.h"
+#include "myTasks.c"
 
 /* Hardware include. */
 #include <xc.h>
@@ -75,9 +76,9 @@
 #include <plib.h>
 
 /* FreeRTOS includes. */
-#include <FreeRTOS.h>
-#include "task.h"
-#include "queue.h"
+//#include <FreeRTOS.h>
+//#include "task.h"
+//#include "queue.h"
 
 /* cals includes */
 
@@ -105,7 +106,7 @@ create multiple tasks that each behave slightly differently. */
 static void taskToggleAnLED(void *pvParameters);
 
 //cals tasks
-static void taskmyLeds(void *pvParameters);
+//extern static void taskmyLeds(void *pvParameters);
 
 /* Performs the hardware initialisation to ready the hardware to run this example */
 static void prvSetupHardware(void);
@@ -115,10 +116,10 @@ static void prvSetupHardware(void);
 /*-----------------------------------------------------------*/
 /* The structure that is passed into tasks that use the prvToggleAnLED() task function.
  The structure lets the task know which LED to toggle, and at which rate. */
-typedef struct xTASK_PARAMETER {
-    uint16_t usLEDNumber;                   /* The number of the LED to toggle. */
-    portTickType xToggleRate;               /* The rate at which the LED should be toggle. */
-} xTaskParameter_t;
+//typedef struct xTASK_PARAMETER {
+//    uint16_t usLEDNumber;                   /* The number of the LED to toggle. */
+//    portTickType xToggleRate;               /* The rate at which the LED should be toggle. */
+//} xTaskParameter_t;
 
 /*-----------------------------------------------------------*/
 /* Variables used by this demo.                              */
@@ -231,5 +232,4 @@ static void prvSetupHardware(void)
     mPORTASetPinsDigitalOut(BIT_0 | BIT_1 | BIT_2);
 #endif
 }
-
 

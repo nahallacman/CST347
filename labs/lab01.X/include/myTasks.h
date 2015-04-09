@@ -15,38 +15,24 @@ extern "C" {
 
 #include "leddrv.h"
 
-//void taskmyLeds(uint8_t time, uint8_t tasktype);
-//static void taskmyLeds(void *pvParameters);
+#include <FreeRTOS.h>
+#include "task.h"
+#include "queue.h"
+
+
+/*-----------------------------------------------------------*/
+/* Structures used by this demo.                             */
+/*-----------------------------------------------------------*/
+/* The structure that is passed into tasks that use the prvToggleAnLED() task function.
+ The structure lets the task know which LED to toggle, and at which rate. */
+typedef struct xTASK_PARAMETER {
+    uint16_t usLEDNumber;                   /* The number of the LED to toggle. */
+    portTickType xToggleRate;               /* The rate at which the LED should be toggle. */
+} xTaskParameter_t;
+
 
 //cals tasks
-//static void taskmyLeds(void *pvParameters);
-
-//I tried to put this in a separate file but too many includes are required
-static void taskmyLeds(void *pvParameters)
-{
-  //  xTaskParameter_t *pxTaskParameter;
-  //  portTickType xStartTime;
-
-    /* The parameter points to an xTaskParameters_t structure. */
- //   pxTaskParameter = (xTaskParameter_t *) pvParameters;
-
-    while (1)
-    {
-        /* Note the time before entering the while loop.  xTaskGetTickCount()
-        is a FreeRTOS API function. */
-   //     xStartTime = xTaskGetTickCount();
-
-        /* Loop until pxTaskParameters->xToggleRate ticks have */
-    //    while ((xTaskGetTickCount() - xStartTime) < pxTaskParameter->xToggleRate);
-
-
-
-        /* This task toggles the LED specified in its task parameter. */
-        /* This task toggles the LED specified in its task parameter. */
-
-        toggleLED(1);
-    }
-}
+static void taskmyLeds(void *pvParameters);
 
 #ifdef	__cplusplus
 }
