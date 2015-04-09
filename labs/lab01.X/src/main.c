@@ -137,19 +137,19 @@ int main(void)
     prvSetupHardware();
 
     //here is where the tasks are initiated and set up
-    
+    /*
     xTaskCreate(taskToggleAnLED,
             "LED1",
             configMINIMAL_STACK_SIZE,
             (void *) &xTask0Parameters,
             1,
             NULL);
-
+*/
     
      xTaskCreate(taskmyLeds,
             "LED1",
             configMINIMAL_STACK_SIZE,
-            (void *) &xTask0Parameters,
+            (void *) &xTask2Parameters,
             1,
             NULL);
 
@@ -216,20 +216,7 @@ static void prvSetupHardware(void)
     mOSCSetPBDIV(OSC_PB_DIV_2);
     INTEnableSystemMultiVectoredInt();
     
-    //initalizeLedDriver();
+    initalizeLedDriver();
 
-    /* LEDs off. */
-#ifndef Explorer_16
-    mPORTDClearBits(BIT_0 | BIT_1 | BIT_2);
-#else
-    mPORTAClearBits(BIT_0 | BIT_1 | BIT_2);
-#endif
-
-    /* LEDs are outputs. */
-#ifndef Explorer_16
-    mPORTDSetPinsDigitalOut(BIT_0 | BIT_1 | BIT_2);
-#else
-    mPORTASetPinsDigitalOut(BIT_0 | BIT_1 | BIT_2);
-#endif
 }
 
