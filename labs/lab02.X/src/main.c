@@ -136,9 +136,23 @@ int main(void)
     /* Perform any hardware initialisation that may be necessary. */
     prvSetupHardware();
 
+    TaskHandle_t xHandle[3];
+
+    xHandle[0] = NULL;
+    xHandle[1] = NULL;
+    xHandle[2] = NULL;
+
     //here is where the tasks are initiated and set up
-    /*
+    
     xTaskCreate(taskToggleAnLED,
+            "LED1",
+            configMINIMAL_STACK_SIZE,
+            (void *) &xTask0Parameters,
+            1,
+            &xHandle[0]);
+ configASSERT( xHandle[0] );
+    /*
+     xTaskCreate(taskmyLeds,
             "LED1",
             configMINIMAL_STACK_SIZE,
             (void *) &xTask0Parameters,
@@ -146,31 +160,33 @@ int main(void)
             NULL);
 */
     
-     xTaskCreate(taskmyLeds,
-            "LED1",
-            configMINIMAL_STACK_SIZE,
-            (void *) &xTask0Parameters,
-            1,
-            NULL);
-
-    /*
     xTaskCreate(taskToggleAnLED,
             "LED2",
             configMINIMAL_STACK_SIZE,
             (void *) &xTask1Parameters,
             1,
-            NULL);
+            &xHandle[1]);
+ configASSERT( xHandle[1] );
 
     xTaskCreate(taskToggleAnLED,
             "LED3",
             configMINIMAL_STACK_SIZE,
             (void *) &xTask2Parameters,
             1,
-            NULL);
-*/
+            &xHandle[2]);
+ configASSERT( xHandle[2] );
 
+  //if( xHandle[0] != NULL )
+  //{
+  //    vTaskDelete( xHandle[0] );
+  //}
+
+    //vTaskSuspend(xHandle[2]);
     /* Start the scheduler so the tasks start executing.  This function should not return. */
     vTaskStartScheduler();
+
+
+
 }
 
 /*-----------------------------------------------------------*/
@@ -190,20 +206,15 @@ static void taskToggleAnLED(void *pvParameters)
     {
         /* Note the time before entering the while loop.  xTaskGetTickCount()
         is a FreeRTOS API function. */
-        xStartTime = xTaskGetTickCount();
+        //xStartTime = xTaskGetTickCount();
 
         /* Loop until pxTaskParameters->xToggleRate ticks have */
-        while ((xTaskGetTickCount() - xStartTime) < pxTaskParameter->xToggleRate);
+        //while ((xTaskGetTickCount() - xStartTime) < pxTaskParameter->xToggleRate);
 
+        //try to delay the task for 500 ms
+        vTaskDelay(500);
         
-		
-        /* This task toggles the LED specified in its task parameter. */
-#ifndef Explorer_16
-        mPORTDToggleBits(1 << pxTaskParameter->usLEDNumber);
-#else
-    //here is the SFR driver code
-        mPORTAToggleBits(1 << pxTaskParameter->usLEDNumber);
-#endif
+        toggleLED(pxTaskParameter->usLEDNumber);
 
     }
 }
@@ -218,5 +229,25 @@ static void prvSetupHardware(void)
     
     initalizeLedDriver();
 
+    //switch pullups
+    ConfigCNPullups(CN15_PULLUP_ENABLE | CN16_PULLUP_ENABLE | CN19_PULLUP_ENABLE);
 }
 
+static void taskSystemControl(void *pvParameters)
+{
+    xTaskParameter_t *pxTaskParameter;
+    portTickType xStartTime;
+
+    /* The parameter points to an xTaskParameters_t structure. */
+    pxTaskParameter = (xTaskParameter_t *) pvParameters;
+
+    while (1)
+    {
+        //check for button presses
+
+        //debounce button press
+
+        //try to delay the task for 500 ms
+        vTaskDelay(100);
+    }
+}
