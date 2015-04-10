@@ -107,6 +107,7 @@ static void taskToggleAnLED(void *pvParameters);
 
 //cals tasks
 //extern static void taskmyLeds(void *pvParameters);
+static void taskSystemControl(void *pvParameters);
 
 /* Performs the hardware initialisation to ready the hardware to run this example */
 static void prvSetupHardware(void);
@@ -143,6 +144,13 @@ int main(void)
     xHandle[2] = NULL;
 
     //here is where the tasks are initiated and set up
+
+       xTaskCreate(taskSystemControl,
+            "LED1",
+            configMINIMAL_STACK_SIZE,
+            (void *) &xTask0Parameters,
+            1,
+            NULL);
     
     xTaskCreate(taskToggleAnLED,
             "LED1",
@@ -241,9 +249,53 @@ static void taskSystemControl(void *pvParameters)
     /* The parameter points to an xTaskParameters_t structure. */
     pxTaskParameter = (xTaskParameter_t *) pvParameters;
 
+    uint8_t SW1 = 1;
+    uint8_t SW2 = 1;
+    uint8_t SW3 = 1;
+
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int a = 0;
     while (1)
     {
+
+        i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
+        j = mPORTDReadBits(BIT_7);
+        k = mPORTDReadBits(BIT_13);
         //check for button presses
+        if((i & BIT_6) != 0 )
+        {
+            //button not pressed
+            a = 1;
+        }
+        else
+        {
+            //button pressed
+            a = 0;
+        }
+
+        if((i & BIT_7) != 0 )
+        {
+            //button not pressed
+            a = 1;
+        }
+        else
+        {
+            //button pressed
+            a = 0;
+        }
+
+        if((i & BIT_13) != 0 )
+        {
+            //button not pressed
+            a = 1;
+        }
+        else
+        {
+            //button pressed
+            a = 0;
+        }
 
         //debounce button press
 
