@@ -81,7 +81,13 @@
 //#include "queue.h"
 
 /* cals includes */
-
+enum state_enum{
+    IDLE = 0,
+    DB1,
+    PRESSED,
+    HOLD,
+    DB2
+};
 
 /* Hardware configuration. */
 #pragma config FPLLMUL = MUL_20, FPLLIDIV = DIV_2, FPLLODIV = DIV_1, FWDTEN = OFF
@@ -268,6 +274,11 @@ static void taskSystemControl(void *pvParameters)
     uint8_t SW3 = 1;
     uint8_t lastSW3 = 0;
 
+    uint8_t state[3];
+    state[0] = 0;
+    state[1] = 0;
+    state[2] = 0;
+
     int index = 0;
     int i = 0;
     //int j = 0;
@@ -275,7 +286,70 @@ static void taskSystemControl(void *pvParameters)
     int a = 0;
     while (1)
     {
-
+        i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
+        switch(state[0])
+        {
+            case IDLE:
+                if(i & BIT_6)
+                {
+                    state[0] = IDLE; // no change
+                }
+                else
+                {
+                    state[0] = DB1;
+                }
+                vTaskDelay(10);
+                break;
+            case DB1:
+                if(i & BIT_6)
+                {
+                    state[0] = IDLE;
+                }
+                else
+                {
+                    state[0] = PRESSED;
+                }
+                break;
+            case PRESSED:
+                //start a task
+                if(index < 3) // max of 3 tasks
+                {
+                       xTaskCreate(taskToggleAnLED,
+                        "LED1",
+                        configMINIMAL_STACK_SIZE,
+                        (void *) &xTask3Parameters[index],
+                        1,
+                        &xHandle[index]);
+                        configASSERT( xHandle[index] );
+                    index++;
+                }
+                state[0] = HOLD;
+                break;
+            case HOLD:
+                if(i & BIT_6)
+                {
+                    state[0] = DB2;
+                }
+                else
+                {
+                    state[0] = HOLD; // no change
+                }
+                vTaskDelay(10);
+                break;
+            case DB2:
+                if(i & BIT_6)
+                {
+                    state[0] = IDLE;
+                }
+                else
+                {
+                    state[0] = HOLD;
+                }
+                break;
+            default:
+                state[0] = IDLE;
+        }
+        /*
         i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
         //j = mPORTDReadBits(BIT_7);
         //k = mPORTDReadBits(BIT_13);
@@ -341,6 +415,7 @@ static void taskSystemControl(void *pvParameters)
             a = 0;
         }
 
+         */
         //debounce button press
 
         vTaskDelay(100);
