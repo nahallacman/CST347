@@ -40,7 +40,7 @@
     FreeRTOS WEB site.
 
     1 tab == 4 spaces!
-    
+
  ***************************************************************************
  *                                                                       *
  *    Having a problem?  Start by reading the FAQ "My application does   *
@@ -50,17 +50,17 @@
  *                                                                       *
  ***************************************************************************
 
-    
-    http://www.FreeRTOS.org - Documentation, training, latest information, 
+
+    http://www.FreeRTOS.org - Documentation, training, latest information,
     license and contact details.
-    
+
     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
     including FreeRTOS+Trace - an indispensable productivity tool.
 
-    Real Time Engineers ltd license FreeRTOS to High Integrity Systems, who sell 
-    the code with commercial support, indemnification, and middleware, under 
+    Real Time Engineers ltd license FreeRTOS to High Integrity Systems, who sell
+    the code with commercial support, indemnification, and middleware, under
     the OpenRTOS brand: http://www.OpenRTOS.com.  High Integrity Systems also
-    provide a safety engineered and independently SIL3 certified version under 
+    provide a safety engineered and independently SIL3 certified version under
     the SafeRTOS brand: http://www.SafeRTOS.com.
  */
 
@@ -96,7 +96,7 @@ enum state_enum{
 
 /* Time is measured in "ticks".  The tick rate is set by the configTICK_RATE_HZ
 configuration parameter (defined in FreeRTOSConfig.h).  If configTICK_RATE_HZ
-is equal to or less than 1000 (1KHz) then portTICK_RATE_MS can be used to 
+is equal to or less than 1000 (1KHz) then portTICK_RATE_MS can be used to
 convert a time in milliseconds into a time in ticks. */
 #define mainTOGGLE_PERIOD ( 200UL / portTICK_RATE_MS )
 
@@ -131,7 +131,7 @@ static void prvSetupHardware(void);
 /*-----------------------------------------------------------*/
 /* Variables used by this demo.                              */
 /*-----------------------------------------------------------*/
-/* Create an xTaskParameters_t structure for each of the two tasks that are 
+/* Create an xTaskParameters_t structure for each of the two tasks that are
 created using the prvToggleAnLED() task function. */
 static const xTaskParameter_t xTask0Parameters = {0 /* Toggle LED1 */, (800 / portTICK_RATE_MS) /* At 800ms. */};
 static const xTaskParameter_t xTask1Parameters = {1 /* Toggle LED2 */, (400 / portTICK_RATE_MS) /* At 400ms. */};
@@ -228,7 +228,7 @@ static void taskToggleAnLED(void *pvParameters)
 
         //try to delay the task for 500 ms
         vTaskDelay(500);
-        
+
         toggleLED(pxTaskParameter->usLEDNumber);
 
     }
@@ -241,7 +241,7 @@ static void prvSetupHardware(void)
     SYSTEMConfigPerformance(configCPU_CLOCK_HZ);
     mOSCSetPBDIV(OSC_PB_DIV_2);
     INTEnableSystemMultiVectoredInt();
-    
+
     initalizeLedDriver();
 
     //switch pullups
@@ -349,6 +349,68 @@ static void taskSystemControl(void *pvParameters)
             default:
                 state[0] = IDLE;
         }
+
+        switch(state[1])
+        {
+            case IDLE:
+                if(i & BIT_7)
+                {
+                    state[1] = IDLE; // no change
+                }
+                else
+                {
+                    state[1] = DB1;
+                }
+                vTaskDelay(10);
+                break;
+            case DB1:
+                if(i & BIT_7)
+                {
+                    state[1] = IDLE;
+                }
+                else
+                {
+                    state[1] = PRESSED;
+                }
+                break;
+            case PRESSED:
+                //end a task
+                if(index > 0) // minimum tasks of 0
+                {
+                    if( xHandle[index - 1] != NULL )
+                    {
+                        vTaskDelete( xHandle[index - 1] );
+                    }
+                    index--;
+                }
+                state[1] = HOLD;
+                break;
+            case HOLD:
+                if(i & BIT_7)
+                {
+                    state[1] = DB2;
+                }
+                else
+                {
+                    state[1] = HOLD; // no change
+                }
+                vTaskDelay(10);
+                break;
+            case DB2:
+                if(i & BIT_7)
+                {
+                    state[1] = IDLE;
+                }
+                else
+                {
+                    state[1] = HOLD;
+                }
+                break;
+            default:
+                state[1] = IDLE;
+        }
+
+
         /*
         i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
         //j = mPORTDReadBits(BIT_7);
@@ -357,7 +419,7 @@ static void taskSystemControl(void *pvParameters)
         if((i & BIT_6) != lastSW1 )
         {
             //button not pressed
-            
+
         }
         else
         {
