@@ -274,6 +274,7 @@ static void taskSystemControl(void *pvParameters)
     uint8_t SW3 = 1;
     uint8_t lastSW3 = 0;
 
+    uint8_t paused = 0;
     uint8_t state[3];
     state[0] = 0;
     state[1] = 0;
@@ -281,7 +282,7 @@ static void taskSystemControl(void *pvParameters)
 
     int index = 0;
     int i = 0;
-    //int j = 0;
+    int j = 0;
     //int k = 0;
     int a = 0;
     while (1)
@@ -410,7 +411,81 @@ static void taskSystemControl(void *pvParameters)
                 state[1] = IDLE;
         }
 
+        switch(state[2])
+        {
+            case IDLE:
+                if(i & BIT_13)
+                {
+                    state[2] = IDLE; // no change
+                }
+                else
+                {
+                    state[2] = DB1;
+                }
+                vTaskDelay(10);
+                break;
+            case DB1:
+                if(i & BIT_13)
+                {
+                    state[2] = IDLE;
+                }
+                else
+                {
+                    state[2] = PRESSED;
+                }
+                break;
+            case PRESSED:
+                //end a task
+                //if(index > 0) // minimum tasks of 0
+                //{
+                    if(paused == 0)
+                    {
+                        //suspend all tasks
+                        paused = 1;
+                        for(j = 0; j < index; j++)
+                        {
+                            vTaskSuspend(xHandle[j]);
+                        }
 
+                    }
+                    else
+                    {
+                        //resume all tasks
+                        paused = 0;
+
+                        for(j = 0; j < index; j++)
+                        {
+                            vTaskResume(xHandle[j]);
+                        }
+                    }
+
+                //}
+                state[2] = HOLD;
+                break;
+            case HOLD:
+                if(i & BIT_13)
+                {
+                    state[2] = DB2;
+                }
+                else
+                {
+                    state[2] = HOLD; // no change
+                }
+                vTaskDelay(10);
+                break;
+            case DB2:
+                if(i & BIT_13)
+                {
+                    state[2] = IDLE;
+                }
+                else
+                {
+                    state[2] = HOLD;
+                }
+                break;
+            default:
+                state[2] = IDLE;
+        }
         /*
         i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
         //j = mPORTDReadBits(BIT_7);
