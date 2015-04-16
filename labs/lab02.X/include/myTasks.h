@@ -19,6 +19,7 @@ extern "C" {
 #include "task.h"
 #include "queue.h"
 
+#include <plib.h>
 
 /*-----------------------------------------------------------*/
 /* Structures used by this demo.                             */
@@ -33,6 +34,16 @@ typedef struct xTASK_PARAMETER {
 
 //cals tasks
 static void taskmyLeds(void *pvParameters);
+
+/* A task that toggles an LED at a fixed frequency.  This time, the LED to
+toggle and the rate at which the LED is toggled are passed into the task
+using the task parameter.  This allows the same task function to be used to
+create multiple tasks that each behave slightly differently. */
+static void taskToggleAnLED(void *pvParameters);
+
+
+//extern static void taskmyLeds(void *pvParameters);
+static void taskSystemControl(void *pvParameters);
 
 #ifdef	__cplusplus
 }
