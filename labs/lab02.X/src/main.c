@@ -151,7 +151,7 @@ int main(void)
             (void *) &xTask0Parameters,
             1,
             NULL);
-    
+/*
     xTaskCreate(taskToggleAnLED,
             "LED1",
             configMINIMAL_STACK_SIZE,
@@ -159,6 +159,7 @@ int main(void)
             1,
             &xHandle[0]);
  configASSERT( xHandle[0] );
+ */
     /*
      xTaskCreate(taskmyLeds,
             "LED1",
@@ -167,7 +168,7 @@ int main(void)
             1,
             NULL);
 */
-    
+   /*
     xTaskCreate(taskToggleAnLED,
             "LED2",
             configMINIMAL_STACK_SIZE,
@@ -183,7 +184,7 @@ int main(void)
             1,
             &xHandle[2]);
  configASSERT( xHandle[2] );
-
+*/
   //if( xHandle[0] != NULL )
   //{
   //    vTaskDelete( xHandle[0] );
@@ -205,7 +206,7 @@ int main(void)
 static void taskToggleAnLED(void *pvParameters)
 {
     xTaskParameter_t *pxTaskParameter;
-    portTickType xStartTime;
+    //portTickType xStartTime;
 
     /* The parameter points to an xTaskParameters_t structure. */
     pxTaskParameter = (xTaskParameter_t *) pvParameters;
@@ -249,30 +250,73 @@ static void taskSystemControl(void *pvParameters)
     /* The parameter points to an xTaskParameters_t structure. */
     pxTaskParameter = (xTaskParameter_t *) pvParameters;
 
-    uint8_t SW1 = 1;
-    uint8_t SW2 = 1;
-    uint8_t SW3 = 1;
+    TaskHandle_t xHandle[3];
 
+    xHandle[0] = NULL;
+    xHandle[1] = NULL;
+    xHandle[2] = NULL;
+
+    xTaskParameter_t xTask3Parameters[3];// = {0 /* Toggle LED1 */, (800 / portTICK_RATE_MS) /* At 800ms. */};
+    xTask3Parameters[0] = xTask0Parameters;
+    xTask3Parameters[1] = xTask1Parameters;
+    xTask3Parameters[2] = xTask2Parameters;
+
+    uint8_t SW1 = 1;
+    uint8_t lastSW1 = 0;
+    uint8_t SW2 = 1;
+    uint8_t lastSW2 = 0;
+    uint8_t SW3 = 1;
+    uint8_t lastSW3 = 0;
+
+    int index = 0;
     int i = 0;
-    int j = 0;
-    int k = 0;
+    //int j = 0;
+    //int k = 0;
     int a = 0;
     while (1)
     {
 
         i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
-        j = mPORTDReadBits(BIT_7);
-        k = mPORTDReadBits(BIT_13);
+        //j = mPORTDReadBits(BIT_7);
+        //k = mPORTDReadBits(BIT_13);
         //check for button presses
-        if((i & BIT_6) != 0 )
+        if((i & BIT_6) != lastSW1 )
         {
             //button not pressed
-            a = 1;
+            
         }
         else
         {
-            //button pressed
-            a = 0;
+            vTaskDelay(10);
+            i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
+            if((i & BIT_6) != lastSW1 )
+            {
+
+            }
+            else
+            {
+                lastSW1 = (i & BIT_6);
+                //button pressed
+                if(lastSW1 == 0)
+                {
+                    //start a task
+                    if(index < 3) // max of 3 tasks
+                    {
+                           xTaskCreate(taskToggleAnLED,
+                            "LED1",
+                            configMINIMAL_STACK_SIZE,
+                            (void *) &xTask3Parameters[index],
+                            1,
+                            &xHandle[index]);
+                            configASSERT( xHandle[index] );
+                        index++;
+                    }
+                }
+                else
+                {
+                    //button release
+                }
+            }
         }
 
         if((i & BIT_7) != 0 )
@@ -299,7 +343,6 @@ static void taskSystemControl(void *pvParameters)
 
         //debounce button press
 
-        //try to delay the task for 500 ms
         vTaskDelay(100);
     }
 }
