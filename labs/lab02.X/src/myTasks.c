@@ -202,17 +202,20 @@ static void taskSystemControl(void *pvParameters)
 
                 break;
             case PRESSED:
-                //start a task
-                if(index < 3) // max of 3 tasks
+                if(!paused)
                 {
-                       xTaskCreate(taskToggleAnLED,
-                        "LED1",
-                        configMINIMAL_STACK_SIZE,
-                        (void *) &xTask3Parameters[index],
-                        1,
-                        &xHandle[index]);
-                        configASSERT( xHandle[index] );
-                    index++;
+                    //start a task
+                    if(index < 3) // max of 3 tasks
+                    {
+                           xTaskCreate(taskToggleAnLED,
+                            "LED1",
+                            configMINIMAL_STACK_SIZE,
+                            (void *) &xTask3Parameters[index],
+                            1,
+                            &xHandle[index]);
+                            configASSERT( xHandle[index] );
+                        index++;
+                    }
                 }
                 state[0] = HOLD;
                 break;
@@ -263,14 +266,17 @@ static void taskSystemControl(void *pvParameters)
                 }
                 break;
             case PRESSED:
-                //end a task
-                if(index > 0) // minimum tasks of 0
+                if(!paused)
                 {
-                    if( xHandle[index - 1] != NULL )
+                    //end a task
+                    if(index > 0) // minimum tasks of 0
                     {
-                        vTaskDelete( xHandle[index - 1] );
+                        if( xHandle[index - 1] != NULL )
+                        {
+                            vTaskDelete( xHandle[index - 1] );
+                        }
+                        index--;
                     }
-                    index--;
                 }
                 state[1] = HOLD;
                 break;
