@@ -13,6 +13,7 @@
 extern "C" {
 #endif
 
+
 #include "leddrv.h"
 
 #include <FreeRTOS.h>
@@ -20,6 +21,8 @@ extern "C" {
 #include "queue.h"
 
 #include <plib.h>
+
+#include "uartdrv.h"
 
 /*-----------------------------------------------------------*/
 /* Structures used by this demo.                             */
@@ -44,6 +47,9 @@ static void taskToggleAnLED(void *pvParameters);
 
 //extern static void taskmyLeds(void *pvParameters);
 static void taskSystemControl(void *pvParameters);
+
+//task for UART control
+static void taskUARTControl(void *pvParameters);
 
 #ifdef	__cplusplus
 }

@@ -140,6 +140,13 @@ int main(void)
        configASSERT( &xControlHandle[HandleIndex] );
     }
 
+    xTaskCreate(taskSystemControl,
+            "LED1",
+            configMINIMAL_STACK_SIZE,
+            (void *) &xTask0Parameters,
+            1,
+            &xUARTHandle);
+       configASSERT( &xUARTHandle );
 
 /*
     xTaskCreate(taskToggleAnLED,
