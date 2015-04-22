@@ -81,8 +81,10 @@ static void taskSystemControl(void *pvParameters)
 
     
     
-
-    do{
+    if(currentHandle < 3)
+    {
+        while(currentHandle < 3)
+        {
         // null out the handle just in case
         xControlHandle[currentHandle] = NULL;
         //create the corresponding LED task
@@ -105,8 +107,8 @@ static void taskSystemControl(void *pvParameters)
 
         //once everything is set up, increment the currentHandle index
         currentHandle++;
+        }
     }
-    while(currentHandle < 3);
 
 
 

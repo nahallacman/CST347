@@ -57,7 +57,7 @@ struct __attribute__ ((packed)) AMessage
     //char ucData[ 20 ];
  } xMessage;
 
- struct __attribute__ ((packed)) UARTMessage
+ struct /*__attribute__ ((packed)) */UARTMessage
  {
      uint8_t ucMessageID;
      char ucMessage[20];
