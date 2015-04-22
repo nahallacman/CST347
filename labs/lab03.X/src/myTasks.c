@@ -14,8 +14,8 @@ static const xTaskParameter_t xTask2Parameters = {2 /* Toggle LED3 */, (150 / po
 
 
  static const char LED1MESSAGE[] = "LED 1 IS NOW ACTIVE";
- static const char LED2MESSAGE[20] = "LED 2 IS NOW ACTIVE";
- static const char LED3MESSAGE[20] = "LED 3 IS NOW ACTIVE";
+ static const char LED2MESSAGE[] = "LED 2 IS NOW ACTIVE";
+ static const char LED3MESSAGE[] = "LED 3 IS NOW ACTIVE";
 
 //task handles for the switch control tasks
 TaskHandle_t xControlHandle[3];
@@ -52,10 +52,10 @@ static void taskSystemControl(void *pvParameters)
     uint8_t lastSW3 = 0;
 
     uint8_t paused = 0;
-    uint8_t state[3];
-    state[0] = 0;
-    state[1] = 0;
-    state[2] = 0;
+    uint8_t buttonState[3];
+    buttonState[0] = 0;
+    buttonState[1] = 0;
+    buttonState[2] = 0;
 
     int index = 0;
     int i = 0;
@@ -82,8 +82,7 @@ static void taskSystemControl(void *pvParameters)
     
     
 
-    if(currentHandle < 3)
-    {
+    do{
         // null out the handle just in case
         xControlHandle[currentHandle] = NULL;
         //create the corresponding LED task
@@ -107,6 +106,7 @@ static void taskSystemControl(void *pvParameters)
         //once everything is set up, increment the currentHandle index
         currentHandle++;
     }
+    while(currentHandle < 3);
 
 
 
@@ -118,12 +118,12 @@ static void taskSystemControl(void *pvParameters)
     while (1)
     {
         i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
-        switch(state[0])
+        switch(buttonState[0])
         {
             case IDLE:
                 if(i & BIT_6)
                 {
-                    state[0] = IDLE; // no change
+                    buttonState[0] = IDLE; // no change
                 }
                 else
                 {
@@ -131,11 +131,11 @@ static void taskSystemControl(void *pvParameters)
                     i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
                     if(i & BIT_6)
                     {
-                        state[0] = IDLE;
+                        buttonState[0] = IDLE;
                     }
                     else
                     {
-                        state[0] = PRESSED;
+                        buttonState[0] = PRESSED;
                     }
                     //    state[0] = DB1;
                 }
@@ -159,7 +159,7 @@ static void taskSystemControl(void *pvParameters)
                      */
 
                 //}
-                DIR = INCR;
+                DIR = DECR;
                 Message1.dirrection = DIR;
                 if( xQueueSendToBack(
                                xQueue, //QueueHandle_t xQueue,
@@ -174,7 +174,7 @@ static void taskSystemControl(void *pvParameters)
                 {   //task was created successfully
                     a = 0;
                 }
-                state[0] = HOLD;
+                buttonState[0] = HOLD;
                 break;
             case HOLD:
                 if(i & BIT_6)
@@ -184,28 +184,28 @@ static void taskSystemControl(void *pvParameters)
                     i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
                     if(i & BIT_6)
                     {
-                        state[0] = IDLE;
+                        buttonState[0] = IDLE;
                     }
                     else
                     {
-                        state[0] = HOLD;
+                        buttonState[0] = HOLD;
                     }
                 }
                 else
                 {
-                    state[0] = HOLD; // no change
+                    buttonState[0] = HOLD; // no change
                 }
                 break;
             default:
-                state[0] = IDLE;
+                buttonState[0] = IDLE;
         }
 
-        switch(state[1])
+        switch(buttonState[1])
         {
             case IDLE:
                 if(i & BIT_7)
                 {
-                    state[1] = IDLE; // no change
+                    buttonState[1] = IDLE; // no change
                 }
                 else
                 {
@@ -213,11 +213,11 @@ static void taskSystemControl(void *pvParameters)
                     i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
                     if(i & BIT_7)
                     {
-                        state[1] = IDLE;
+                        buttonState[1] = IDLE;
                     }
                     else
                     {
-                        state[1] = PRESSED;
+                        buttonState[1] = PRESSED;
                     }
                 }
                 break;
@@ -234,7 +234,7 @@ static void taskSystemControl(void *pvParameters)
                         index--;
                     }
                 }
-                state[1] = HOLD;
+                buttonState[1] = HOLD;
                 break;
             case HOLD:
                 if(i & BIT_7)
@@ -244,29 +244,29 @@ static void taskSystemControl(void *pvParameters)
                     i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
                     if(i & BIT_7)
                     {
-                        state[1] = IDLE;
+                        buttonState[1] = IDLE;
                     }
                     else
                     {
-                        state[1] = HOLD;
+                        buttonState[1] = HOLD;
                     }
                 }
                 else
                 {
-                    state[1] = HOLD; // no change
+                    buttonState[1] = HOLD; // no change
                 }
 
                 break;
             default:
-                state[1] = IDLE;
+                buttonState[1] = IDLE;
         }
 
-        switch(state[2])
+        switch(buttonState[2])
         {
             case IDLE:
                 if(i & BIT_13)
                 {
-                    state[2] = IDLE; // no change
+                    buttonState[2] = IDLE; // no change
                 }
                 else
                 {
@@ -274,11 +274,11 @@ static void taskSystemControl(void *pvParameters)
                     i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
                     if(i & BIT_13)
                     {
-                        state[2] = IDLE;
+                        buttonState[2] = IDLE;
                     }
                     else
                     {
-                        state[2] = PRESSED;
+                        buttonState[2] = PRESSED;
                     }
                 }
                 break;
@@ -308,7 +308,7 @@ static void taskSystemControl(void *pvParameters)
                     }
 
                 //}
-                state[2] = HOLD;
+                buttonState[2] = HOLD;
                 break;
             case HOLD:
                 if(i & BIT_13)
@@ -318,21 +318,21 @@ static void taskSystemControl(void *pvParameters)
                     i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
                     if(i & BIT_13)
                     {
-                        state[2] = IDLE;
+                        buttonState[2] = IDLE;
                     }
                     else
                     {
-                        state[2] = HOLD;
+                        buttonState[2] = HOLD;
                     }
                 }
                 else
                 {
-                    state[2] = HOLD; // no change
+                    buttonState[2] = HOLD; // no change
                 }
 
                 break;
             default:
-                state[2] = IDLE;
+                buttonState[2] = IDLE;
         }
 
         vTaskDelay(100);
@@ -349,13 +349,14 @@ static void taskToggleAnLED(void *pvParameters)
     pxTaskParameter = (xTaskParameter_t *) pvParameters;
 
     struct AMessage *pxRxedMessage;
+    struct AMessage pxAllocMessage;
     uint8_t MessageIDtest = 0;
     enum led_dir led_test;
 
     int delay = 500;
     int a = 0;
 
-    
+    pxRxedMessage = &pxAllocMessage;
 
     while (1)
     {
@@ -415,9 +416,9 @@ static void taskUARTControl(void *pvParameters)
     /* The parameter points to an xTaskParameters_t structure. */
     pxTaskParameter = (xTaskParameter_t *) pvParameters;
 
-
-
     struct UARTMessage *pxRxedMessage;
+    struct UARTMessage Message2;
+    pxRxedMessage = &Message2;
 
     uint8_t ucMessageID = 1;
     char ucMessage[20];
@@ -455,9 +456,9 @@ static void taskUARTControl(void *pvParameters)
         {
             if( uxQueueMessagesWaiting( xUARTQueue ) != 0 ) // see if there are messages waiting
             {
-                if( xQueueReceive( xUARTQueue, &( pxRxedMessage ), portMAX_DELAY ) ) // get the messages
+                if( xQueueReceive( xUARTQueue, ( pxRxedMessage ), portMAX_DELAY ) ) // get the messages
                 {
-                    vUartPutStr(UART2, pxRxedMessage->ucMessage, 20);
+                    vUartPutStr(UART2, pxRxedMessage->ucMessage, 19);
                     //void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen);
                 }
             }
