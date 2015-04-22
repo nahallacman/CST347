@@ -51,7 +51,7 @@ void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen)
     int i;
     for(i = 0; i < iStrLen; i++)
     {
-        vUartPutC(umPortNum, &pString[i] ); //problem dereferencing pString
+        vUartPutC(umPortNum, pString[i] ); //problem dereferencing pString
     }
 }
  

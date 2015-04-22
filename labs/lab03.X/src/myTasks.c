@@ -13,7 +13,7 @@ static const xTaskParameter_t xTask2Parameters = {2 /* Toggle LED3 */, (150 / po
 
 
 
- static const char LED1MESSAGE[20] = "LED 1 IS NOW ACTIVE";
+ static const char LED1MESSAGE[] = "LED 1 IS NOW ACTIVE";
  static const char LED2MESSAGE[20] = "LED 2 IS NOW ACTIVE";
  static const char LED3MESSAGE[20] = "LED 3 IS NOW ACTIVE";
 
@@ -419,11 +419,24 @@ static void taskUARTControl(void *pvParameters)
 
     struct UARTMessage *pxRxedMessage;
 
-    uint8_t ucMessageID;
+    uint8_t ucMessageID = 1;
     char ucMessage[20];
+    int i;
+    //ucMessage = LED1MESSAGE;
+    
 
-    //struct UARTMessage Message1 = { ucMessageID, *ucMessage };
-    struct UARTMessage Message1 = { ucMessageID, *LED1MESSAGE };
+    
+    //ucMessage[0] = LED1MESSAGE[0];
+
+    struct UARTMessage Message1 = { ucMessageID, ucMessage };
+    //struct UARTMessage Message1 = { ucMessageID, *LED1MESSAGE };
+    
+    for(i = 0; i < 20 & LED1MESSAGE[i] != 0; i++)
+    {
+        Message1.ucMessage[i] = LED1MESSAGE[i];
+    }
+    Message1.ucMessage[i] = 0;
+
 
     if( xQueueSendToBack(
                                xUARTQueue, //QueueHandle_t xQueue,
