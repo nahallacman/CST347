@@ -9,34 +9,9 @@ static const xTaskParameter_t xTask0Parameters = {0 /* Toggle LED1 */, (800 / po
 static const xTaskParameter_t xTask1Parameters = {1 /* Toggle LED2 */, (400 / portTICK_RATE_MS) /* At 400ms. */};
 static const xTaskParameter_t xTask2Parameters = {2 /* Toggle LED3 */, (150 / portTICK_RATE_MS) /* At 150ms. */};
 
-/* cals includes */
-enum state_enum{
-    IDLE = 0,
-    DB1,
-    PRESSED,
-    HOLD,
-    DB2
-};
 
-//Why do we use an enum if the size isn't defined?
-enum led_dir{
-    NONE = 0,
-    INCR,
-    DECR
-};
 
-struct __attribute__ ((packed)) AMessage
- {
-    uint8_t ucMessageID;
-    enum led_dir dirrection;
-    //char ucData[ 20 ];
- } xMessage;
 
- struct __attribute__ ((packed)) UARTMessage
- {
-     uint8_t ucMessageID;
-     char ucMessage[20];
- } xUARTMessage;
 
  static const char LED1MESSAGE[20] = "LED 1 IS NOW ACTIVE";
  static const char LED2MESSAGE[20] = "LED 2 IS NOW ACTIVE";
@@ -51,10 +26,6 @@ int currentHandle;
 
 QueueHandle_t xQueue;
 
-//Task and Queue stuff for UART
-TaskHandle_t xUARTHandle;
-
-QueueHandle_t xUARTQueue;
 
 //-----------------------------------------------------------------
 
@@ -383,6 +354,9 @@ static void taskToggleAnLED(void *pvParameters)
 
     int delay = 500;
     int a = 0;
+
+    
+
     while (1)
     {
         /* Note the time before entering the while loop.  xTaskGetTickCount()
@@ -415,7 +389,7 @@ static void taskToggleAnLED(void *pvParameters)
                     }
                     if(led_test == DECR)
                     {
-                        if( delay > 201) // 200? 201?
+                        if( delay > 201) // 200? 201? 250?
                         {
                             delay -= 50;
                         }
@@ -441,20 +415,25 @@ static void taskUARTControl(void *pvParameters)
     /* The parameter points to an xTaskParameters_t structure. */
     pxTaskParameter = (xTaskParameter_t *) pvParameters;
 
-    //placeholder init location. DONT FORGET TO MOVE THIS STUFF
-    UBaseType_t uxQueueLength = 16; //(1000-200)/50 = 16 queue items at max
-    UBaseType_t uxItemSize;
 
-    uxItemSize = sizeof(xUARTMessage);
-    xUARTQueue = xQueueCreate
-    (
-        uxQueueLength,
-        uxItemSize
-    );
 
     struct UARTMessage *pxRxedMessage;
 
+    uint8_t ucMessageID;
+    char ucMessage[20];
 
+    //struct UARTMessage Message1 = { ucMessageID, *ucMessage };
+    struct UARTMessage Message1 = { ucMessageID, *LED1MESSAGE };
+
+    if( xQueueSendToBack(
+                               xUARTQueue, //QueueHandle_t xQueue,
+                               &Message1, //const void * pvItemToQueue,
+                               0 //TickType_t xTicksToWait
+                           ) != pdPASS )
+                {
+                    //task was not able to be created after the xTicksToWait
+                    //a = 0;
+                }
 
     while(1)
     {
@@ -465,7 +444,7 @@ static void taskUARTControl(void *pvParameters)
             {
                 if( xQueueReceive( xUARTQueue, &( pxRxedMessage ), portMAX_DELAY ) ) // get the messages
                 {
-                    //vUartPutStr(UART2, pxRxedMessage->ucMessage, 20);
+                    vUartPutStr(UART2, pxRxedMessage->ucMessage, 20);
                     //void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen);
                 }
             }

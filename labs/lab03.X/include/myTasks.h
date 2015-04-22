@@ -24,6 +24,22 @@ extern "C" {
 
 #include "uartdrv.h"
 
+    /* cals includes */
+enum state_enum{
+    IDLE = 0,
+    DB1,
+    PRESSED,
+    HOLD,
+    DB2
+};
+
+//Why do we use an enum if the size isn't defined?
+enum led_dir{
+    NONE = 0,
+    INCR,
+    DECR
+};
+
 /*-----------------------------------------------------------*/
 /* Structures used by this demo.                             */
 /*-----------------------------------------------------------*/
@@ -33,6 +49,19 @@ typedef struct xTASK_PARAMETER {
     uint16_t usLEDNumber;                   /* The number of the LED to toggle. */
     portTickType xToggleRate;               /* The rate at which the LED should be toggle. */
 } xTaskParameter_t;
+
+struct __attribute__ ((packed)) AMessage
+ {
+    uint8_t ucMessageID;
+    enum led_dir dirrection;
+    //char ucData[ 20 ];
+ } xMessage;
+
+ struct __attribute__ ((packed)) UARTMessage
+ {
+     uint8_t ucMessageID;
+     char ucMessage[20];
+ } xUARTMessage;
 
 
 //cals tasks

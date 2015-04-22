@@ -140,7 +140,7 @@ int main(void)
        configASSERT( &xControlHandle[HandleIndex] );
     }
 
-    xTaskCreate(taskSystemControl,
+    xTaskCreate(taskUARTControl,
             "LED1",
             configMINIMAL_STACK_SIZE,
             (void *) &xTask0Parameters,
@@ -213,4 +213,7 @@ static void prvSetupHardware(void)
 
     //switch pullups
     ConfigCNPullups(CN15_PULLUP_ENABLE | CN16_PULLUP_ENABLE | CN19_PULLUP_ENABLE);
+
+    initUART(UART2, 9600);
+
 }

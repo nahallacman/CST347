@@ -13,5 +13,6 @@ include/myTasks.h  \
 ../FreeRTOS/Source/include/list.h  \
  ../FreeRTOS/Source/include/queue.h  \
 include/uartdrv.h  \
-include/leddrv.h  \
- src/myTasks.c 
+include/myTasks.h  \
+ include/leddrv.h  \
+src/myTasks.c 
