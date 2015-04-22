@@ -27,7 +27,18 @@ void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
 
 void vUartPutC(UART_MODULE umPortNum, char cByte)
 {
+    int test = 0;
     //wait until the transmitter is ready
+    /*
+    if(UARTTransmitterIsReady(umPortNum))
+    {
+        test = 1;
+    }
+    else
+    {
+        test = 2;
+    }
+    */
     while(UARTTransmitterIsReady(umPortNum) == 0)
     {
         vTaskDelay(2); // delay for 2ms every time it isn't ready
@@ -40,7 +51,7 @@ void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen)
     int i;
     for(i = 0; i < iStrLen; i++)
     {
-        vUartPutC(umPortNum, pString[i] );
+        vUartPutC(umPortNum, &pString[i] ); //problem dereferencing pString
     }
 }
  
