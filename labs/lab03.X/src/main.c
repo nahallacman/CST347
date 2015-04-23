@@ -140,6 +140,10 @@ int main(void)
        configASSERT( &xControlHandle[HandleIndex] );
     }
 
+    //suspend the two tasks that are not currently running
+    vTaskSuspend(xControlHandle[1]);
+    vTaskSuspend(xControlHandle[2]);
+    
     xTaskCreate(taskUARTControl,
             "LED1",
             configMINIMAL_STACK_SIZE,
@@ -148,58 +152,10 @@ int main(void)
             &xUARTHandle);
        configASSERT( &xUARTHandle );
 
-/*
-    xTaskCreate(taskToggleAnLED,
-            "LED1",
-            configMINIMAL_STACK_SIZE,
-            (void *) &xTask0Parameters,
-            1,
-            &xHandle[0]);
- configASSERT( xHandle[0] );
- */
-    /*
-     xTaskCreate(taskmyLeds,
-            "LED1",
-            configMINIMAL_STACK_SIZE,
-            (void *) &xTask0Parameters,
-            1,
-            NULL);
-*/
-   /*
-    xTaskCreate(taskToggleAnLED,
-            "LED2",
-            configMINIMAL_STACK_SIZE,
-            (void *) &xTask1Parameters,
-            1,
-            &xHandle[1]);
- configASSERT( xHandle[1] );
-
-    xTaskCreate(taskToggleAnLED,
-            "LED3",
-            configMINIMAL_STACK_SIZE,
-            (void *) &xTask2Parameters,
-            1,
-            &xHandle[2]);
- configASSERT( xHandle[2] );
-*/
-  //if( xHandle[0] != NULL )
-  //{
-  //    vTaskDelete( xHandle[0] );
-  //}
-
     //vTaskSuspend(xHandle[2]);
     /* Start the scheduler so the tasks start executing.  This function should not return. */
     vTaskStartScheduler();
-
-
-
 }
-
-/*-----------------------------------------------------------*/
-
-//cals stuff
-//controls the LED directly. follow this to find the SFR write code
-
 
 /*-----------------------------------------------------------*/
 static void prvSetupHardware(void)
@@ -216,4 +172,5 @@ static void prvSetupHardware(void)
 
     initUART(UART2, 9600);
 
+    SystemControlSetup();
 }

@@ -24,7 +24,132 @@ TaskHandle_t xLEDHandle[3];
 //index for which handle is currently being used.
 int currentHandle;
 
-QueueHandle_t xQueue;
+QueueHandle_t xQueue[3];
+
+
+void SystemControlSetup()
+{
+    xTaskParameter_t xTask3Parameters[3];
+    xTask3Parameters[0] = xTask0Parameters;
+    xTask3Parameters[1] = xTask1Parameters;
+    xTask3Parameters[2] = xTask2Parameters;
+
+    UBaseType_t uxQueueLength = 5;
+    UBaseType_t uxItemSize;
+
+    uxItemSize = sizeof(xMessage);
+/*
+    for(currentHandle = 0; currentHandle < 3; currentHandle++)
+    {
+
+
+        // null out the handle just in case
+        if( xLEDHandle[currentHandle] == NULL )
+        {
+        //create the corresponding LED task
+        xTaskCreate(taskToggleAnLED,
+                            "LED1",
+                            configMINIMAL_STACK_SIZE,
+                            (void *) &xTask3Parameters[currentHandle],
+                            1,
+                            &xLEDHandle[currentHandle]);
+
+                            configASSERT( xLEDHandle[currentHandle] );
+       }
+
+       if( xQueue[currentHandle] == NULL )
+       {
+       xQueue[currentHandle] = xQueueCreate
+                  (
+                     uxQueueLength,
+                     uxItemSize
+                  );
+       }
+
+
+    }
+*/
+
+            // null out the handle just in case
+        if( xLEDHandle[currentHandle] == NULL )
+        {
+        //create the corresponding LED task
+        xTaskCreate(taskToggleAnLED,
+                            "LED1",
+                            configMINIMAL_STACK_SIZE,
+                            (void *) &xTask0Parameters,
+                            1,
+                            &xLEDHandle[currentHandle]);
+
+                            configASSERT( xLEDHandle[currentHandle] );
+       }
+
+       if( xQueue[currentHandle] == NULL )
+       {
+       xQueue[currentHandle] = xQueueCreate
+                  (
+                     uxQueueLength,
+                     uxItemSize
+                  );
+       }
+
+
+    currentHandle++;
+
+        // null out the handle just in case
+        if( xLEDHandle[currentHandle] == NULL )
+        {
+        //create the corresponding LED task
+        xTaskCreate(taskToggleAnLED,
+                            "LED1",
+                            configMINIMAL_STACK_SIZE,
+                            (void *) &xTask1Parameters,
+                            1,
+                            &xLEDHandle[currentHandle]);
+
+                            configASSERT( xLEDHandle[currentHandle] );
+       }
+
+       if( xQueue[currentHandle] == NULL )
+       {
+       xQueue[currentHandle] = xQueueCreate
+                  (
+                     uxQueueLength,
+                     uxItemSize
+                  );
+       }
+
+        currentHandle++;
+
+        // null out the handle just in case
+        if( xLEDHandle[currentHandle] == NULL )
+        {
+        //create the corresponding LED task
+        xTaskCreate(taskToggleAnLED,
+                            "LED1",
+                            configMINIMAL_STACK_SIZE,
+                            (void *) &xTask2Parameters,
+                            1,
+                            &xLEDHandle[currentHandle]);
+
+                            configASSERT( xLEDHandle[currentHandle] );
+       }
+
+       if( xQueue[currentHandle] == NULL )
+       {
+       xQueue[currentHandle] = xQueueCreate
+                  (
+                     uxQueueLength,
+                     uxItemSize
+                  );
+       }
+
+
+     //once everything is set up, reset the currentHandle index
+        currentHandle = 0;
+
+
+}
 
 
 //-----------------------------------------------------------------
@@ -39,10 +164,7 @@ static void taskSystemControl(void *pvParameters)
 
     //TaskHandle_t xControlHandle[3];
 
-    xTaskParameter_t xTask3Parameters[3];// = {0 /* Toggle LED1 */, (800 / portTICK_RATE_MS) /* At 800ms. */};
-    xTask3Parameters[0] = xTask0Parameters;
-    xTask3Parameters[1] = xTask1Parameters;
-    xTask3Parameters[2] = xTask2Parameters;
+
 
     uint8_t SW1 = 1;
     uint8_t lastSW1 = 0;
@@ -59,62 +181,36 @@ static void taskSystemControl(void *pvParameters)
 
     int index = 0;
     int i = 0;
-    int j = 0;
+    //int j = 0;
     //int k = 0;
     int a = 0;
 
-    uint8_t MessageID = 0;
+    uint8_t MessageID = 1;
     enum led_dir DIR = INCR;
 
     
     //START INIT. don't forget to move this later!
     
-    UBaseType_t uxQueueLength = 5;
-    UBaseType_t uxItemSize;
-
-    uxItemSize = sizeof(xMessage);
 
     struct AMessage Message1 = { MessageID, DIR };
     Message1.dirrection = DIR;
     Message1.ucMessageID = MessageID;
-    //Message1.ucMessageID++;
 
-    
-    
-    if(currentHandle < 3)
-    {
-        while(currentHandle < 3)
-        {
-        // null out the handle just in case
-        xControlHandle[currentHandle] = NULL;
-        //create the corresponding LED task
-        xTaskCreate(taskToggleAnLED,
-                            "LED1",
-                            configMINIMAL_STACK_SIZE,
-                            (void *) &xTask3Parameters[currentHandle],
-                            1,
-                            &xLEDHandle[currentHandle]);
 
-                            configASSERT( xLEDHandle[currentHandle] );
-
-       xQueue = NULL;
-
-       xQueue = xQueueCreate
-                  (
-                     uxQueueLength,
-                     uxItemSize
-                  );
-
-        //once everything is set up, increment the currentHandle index
-        currentHandle++;
-        }
-    }
+    uint8_t ucMessageID = 1;
+    char ucMessage[20];
+    //int i;
+    int j;
+    //ucMessage = LED1MESSAGE;
 
 
 
+    //ucMessage[0] = LED1MESSAGE[0];
 
-    //xControlHandle[1] = NULL;
-    //xControlHandle[2] = NULL;
+    struct UARTMessage Message2 = { ucMessageID, ucMessage };
+    //struct UARTMessage Message1 = { ucMessageID, *LED1MESSAGE };
+
+
 
 
     while (1)
@@ -143,28 +239,10 @@ static void taskSystemControl(void *pvParameters)
                 }
                 break;
             case PRESSED:
-                //if(!paused)
-                //{
-                    /*
-                    //start a task
-                    if(index < 3) // max of 3 tasks
-                    {
-                           xTaskCreate(taskToggleAnLED,
-                            "LED1",
-                            configMINIMAL_STACK_SIZE,
-                            (void *) &xTask3Parameters[index],
-                            1,
-                            &xControlHandle[index]);
-                            configASSERT( xControlHandle[index] );
-                        index++;
-                    }
-                     */
-
-                //}
                 DIR = DECR;
                 Message1.dirrection = DIR;
                 if( xQueueSendToBack(
-                               xQueue, //QueueHandle_t xQueue,
+                               xQueue[currentHandle], //QueueHandle_t xQueue,
                                &Message1, //const void * pvItemToQueue,
                                0 //TickType_t xTicksToWait
                            ) != pdPASS )
@@ -224,17 +302,20 @@ static void taskSystemControl(void *pvParameters)
                 }
                 break;
             case PRESSED:
-                if(!paused)
+                DIR = INCR;
+                Message1.dirrection = DIR;
+                if( xQueueSendToBack(
+                               xQueue[currentHandle], //QueueHandle_t xQueue,
+                               &Message1, //const void * pvItemToQueue,
+                               0 //TickType_t xTicksToWait
+                           ) != pdPASS )
                 {
-                    //end a task
-                    if(index > 0) // minimum tasks of 0
-                    {
-                        if( xControlHandle[index - 1] != NULL )
-                        {
-                            vTaskDelete( xControlHandle[index - 1] );
-                        }
-                        index--;
-                    }
+                    //task was not able to be created after the xTicksToWait
+                    a = 0;
+                }
+                else
+                {   //task was created successfully
+                    a = 0;
                 }
                 buttonState[1] = HOLD;
                 break;
@@ -285,31 +366,58 @@ static void taskSystemControl(void *pvParameters)
                 }
                 break;
             case PRESSED:
-                //end a task
-                //if(index > 0) // minimum tasks of 0
-                //{
-                    if(paused == 0)
+                if(currentHandle < 2)
+                {
+                    currentHandle++;
+                }
+                else
+                {
+                    currentHandle = 0;
+                }
+                switch(currentHandle)
+                {
+                    case 0:
+                    for(j = 0; j < 20 & LED1MESSAGE[j] != 0; j++)
                     {
-                        //suspend all tasks
-                        paused = 1;
-                        for(j = 0; j < index; j++)
-                        {
-                            vTaskSuspend(xControlHandle[j]);
-                        }
-
+                        Message2.ucMessage[j] = LED1MESSAGE[j];
                     }
-                    else
+                    Message2.ucMessage[j] = 0;
+                    vTaskResume(xControlHandle[1]);
+                    vTaskSuspend(xControlHandle[2]);
+                    break;
+                    case 1:
+                    for(j = 0; j < 20 & LED2MESSAGE[j] != 0; j++)
                     {
-                        //resume all tasks
-                        paused = 0;
-
-                        for(j = 0; j < index; j++)
-                        {
-                            vTaskResume(xControlHandle[j]);
-                        }
+                        Message2.ucMessage[j] = LED2MESSAGE[j];
                     }
+                    Message2.ucMessage[j] = 0;
+                    vTaskResume(xControlHandle[0]);
+                    vTaskSuspend(xControlHandle[1]);
+                    break;
+                    case 2:
+                    for(j = 0; j < 20 & LED3MESSAGE[j] != 0; j++)
+                    {
+                        Message2.ucMessage[j] = LED3MESSAGE[j];
+                    }
+                    Message2.ucMessage[j] = 0;
+                    vTaskResume(xControlHandle[2]);
+                    vTaskSuspend(xControlHandle[0]);
+                    break;
+                    default:
+                        Message2.ucMessage[0] = "?";
+                        Message2.ucMessage[1] = 0;
+                }
 
-                //}
+                if( xQueueSendToBack(
+                                           xUARTQueue, //QueueHandle_t xQueue,
+                                           &Message2, //const void * pvItemToQueue,
+                                           0 //TickType_t xTicksToWait
+                                       ) != pdPASS )
+                            {
+                                //task was not able to be created after the xTicksToWait
+                                //a = 0;
+                            }
+
                 buttonState[2] = HOLD;
                 break;
             case HOLD:
@@ -350,15 +458,21 @@ static void taskToggleAnLED(void *pvParameters)
     /* The parameter points to an xTaskParameters_t structure. */
     pxTaskParameter = (xTaskParameter_t *) pvParameters;
 
+    xTaskParameter_t a;
+    xTaskParameter_t *b;
+    b = &a;
+
+
     struct AMessage *pxRxedMessage;
     struct AMessage pxAllocMessage;
     uint8_t MessageIDtest = 0;
     enum led_dir led_test;
 
     int delay = 500;
-    int a = 0;
+    //int a = 0;
 
     pxRxedMessage = &pxAllocMessage;
+    //pvParameters = &a;
 
     while (1)
     {
@@ -372,11 +486,11 @@ static void taskToggleAnLED(void *pvParameters)
         //try to delay the task for 500 ms
         vTaskDelay(delay);
 
-        if(xQueue != 0) // make sure the task isn't null
+        if(xQueue[pxTaskParameter->usLEDNumber] != 0) // make sure the task isn't null
         {
-            if( uxQueueMessagesWaiting( xQueue ) != 0 )
+            if( uxQueueMessagesWaiting( xQueue[pxTaskParameter->usLEDNumber] ) != 0 )
             {
-                if( xQueueReceive( xQueue, &( pxRxedMessage ), ( TickType_t ) 0 ) )
+                if( xQueueReceive( xQueue[pxTaskParameter->usLEDNumber], ( pxRxedMessage ), ( TickType_t ) 0 ) )
                 {
                     // pcRxedMessage now points to the struct AMessage variable posted
                     // by vATask.
@@ -390,17 +504,21 @@ static void taskToggleAnLED(void *pvParameters)
                             delay += 50;
                         }
                     }
-                    if(led_test == DECR)
+                    else if(led_test == DECR)
                     {
                         if( delay > 201) // 200? 201? 250?
                         {
                             delay -= 50;
                         }
                     }
+                    else
+                    {
+                        //bad data
+                    }
                 }
                 else
                 {
-                    a = 0;
+                    //a = 0;
                 }
             }
         }
@@ -422,34 +540,7 @@ static void taskUARTControl(void *pvParameters)
     struct UARTMessage Message2;
     pxRxedMessage = &Message2;
 
-    uint8_t ucMessageID = 1;
-    char ucMessage[20];
-    int i;
-    //ucMessage = LED1MESSAGE;
-    
 
-    
-    //ucMessage[0] = LED1MESSAGE[0];
-
-    struct UARTMessage Message1 = { ucMessageID, ucMessage };
-    //struct UARTMessage Message1 = { ucMessageID, *LED1MESSAGE };
-    
-    for(i = 0; i < 20 & LED1MESSAGE[i] != 0; i++)
-    {
-        Message1.ucMessage[i] = LED1MESSAGE[i];
-    }
-    Message1.ucMessage[i] = 0;
-
-
-    if( xQueueSendToBack(
-                               xUARTQueue, //QueueHandle_t xQueue,
-                               &Message1, //const void * pvItemToQueue,
-                               0 //TickType_t xTicksToWait
-                           ) != pdPASS )
-                {
-                    //task was not able to be created after the xTicksToWait
-                    //a = 0;
-                }
 
     while(1)
     {

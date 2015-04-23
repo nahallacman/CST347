@@ -50,7 +50,7 @@ typedef struct xTASK_PARAMETER {
     portTickType xToggleRate;               /* The rate at which the LED should be toggle. */
 } xTaskParameter_t;
 
-struct __attribute__ ((packed)) AMessage
+struct /* __attribute__ ((packed)) */AMessage
  {
     uint8_t ucMessageID;
     enum led_dir dirrection;
@@ -79,6 +79,10 @@ static void taskSystemControl(void *pvParameters);
 
 //task for UART control
 static void taskUARTControl(void *pvParameters);
+
+//sets up the system control tasks
+//and queues
+static void SystemControlSetup();
 
 #ifdef	__cplusplus
 }
