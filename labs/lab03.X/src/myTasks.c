@@ -13,9 +13,9 @@ static const xTaskParameter_t xTask2Parameters = {2 /* Toggle LED3 */, (150 / po
 
 
 
- static const char LED1MESSAGE[] = "LED 1 IS NOW ACTIVE";
- static const char LED2MESSAGE[] = "LED 2 IS NOW ACTIVE";
- static const char LED3MESSAGE[] = "LED 3 IS NOW ACTIVE";
+ static const char LED1MESSAGE[] = "LED 1 ISNOW ACTIVE\n\r";
+ static const char LED2MESSAGE[] = "LED 2 ISNOW ACTIVE\n\r ";
+ static const char LED3MESSAGE[] = "LED 3 ISNOW ACTIVE\n\r ";
 
 //task handles for the switch control tasks
 TaskHandle_t xControlHandle[3];
@@ -660,7 +660,7 @@ static void taskUARTControl(void *pvParameters)
             {
                 if( xQueueReceive( xUARTQueue, ( pxRxedMessage ), portMAX_DELAY ) ) // get the messages
                 {
-                    vUartPutStr(UART2, pxRxedMessage->ucMessage, 19);
+                    vUartPutStr(UART2, pxRxedMessage->ucMessage, 20);
                     //void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen);
                 }
             }
