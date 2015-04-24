@@ -84,6 +84,10 @@ static void taskUARTControl(void *pvParameters);
 //and queues
 static void SystemControlSetup();
 
+
+uint8_t lockout[3];
+
+void createTaskMessageSendToBack(struct UARTMessage);
 #ifdef	__cplusplus
 }
 #endif
