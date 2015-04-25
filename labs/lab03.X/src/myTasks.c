@@ -344,7 +344,6 @@ static void taskSystemControl(void *pvParameters)
                 buttonState[1] = IDLE;
         }
 
-        /*
         switch(buttonState[2])
         {
             case IDLE:
@@ -362,68 +361,9 @@ static void taskSystemControl(void *pvParameters)
                     }
                     else
                     {
-                        buttonState[2] = PRESSED;
+                        buttonState[2] = HOLD;
                     }
                 }
-                break;
-            case PRESSED:
-                if((lockout[0] | lockout[1] |  lockout[2]) == 0)
-                {
-                   
-                    if(currentHandle < 2)
-                    {
-                        currentHandle++;
-                    }
-                    else
-                    {
-                        currentHandle = 0;
-                    }
-                    lockout[currentHandle] = 1;
-                    switch(currentHandle)
-                    {
-                        case 0:
-                        for(j = 0; j < 20 & LED1MESSAGE[j] != 0; j++)
-                        {
-                            Message2.ucMessage[j] = LED1MESSAGE[j];
-                        }
-                        Message2.ucMessage[j] = 0;
-                        vTaskResume(xControlHandle[0]);
-                        vTaskSuspend(xControlHandle[2]);
-                        break;
-                        case 1:
-                        for(j = 0; j < 20 & LED2MESSAGE[j] != 0; j++)
-                        {
-                            Message2.ucMessage[j] = LED2MESSAGE[j];
-                        }
-                        Message2.ucMessage[j] = 0;
-                        vTaskResume(xControlHandle[1]);
-                        vTaskSuspend(xControlHandle[0]);
-                        break;
-                        case 2:
-                        for(j = 0; j < 20 & LED3MESSAGE[j] != 0; j++)
-                        {
-                            Message2.ucMessage[j] = LED3MESSAGE[j];
-                        }
-                        Message2.ucMessage[j] = 0;
-                        vTaskResume(xControlHandle[2]);
-                        vTaskSuspend(xControlHandle[1]);
-                        break;
-                        default:
-                            Message2.ucMessage[0] = "?";
-                            Message2.ucMessage[1] = 0;
-                    }
-
-                    if( xQueueSendToBack(
-                                               xUARTQueue, //QueueHandle_t xQueue,
-                                               &Message2, //const void * pvItemToQueue,
-                                               0 //TickType_t xTicksToWait
-                                           ) != pdPASS )
-                                {
-                                    //task was not able to be created after the xTicksToWait
-                                    //a = 0;
-                                }
-                }
-                buttonState[2] = HOLD;
                 break;
             case HOLD:
                 if(i & BIT_13)
@@ -434,7 +374,81 @@ static void taskSystemControl(void *pvParameters)
                     if(i & BIT_13)
                     {
                         buttonState[2] = IDLE;
-                        lockout[currentHandle] = 0;
+                        if((lockout[0] | lockout[1] |  lockout[2]) == 0)
+                        {
+
+                            if(currentHandle < 2)
+                            {
+                                currentHandle++;
+                            }
+                            else
+                            {
+                                currentHandle = 0;
+                            }
+                            //lockout[currentHandle] = 1;
+                            switch(currentHandle)
+                            {
+                                case 0:
+                                for(j = 0; j < 20 & LED1MESSAGE[j] != 0; j++)
+                                {
+                                    Message2.ucMessage[j] = LED1MESSAGE[j];
+                                }
+                                Message2.ucMessage[j] = 0;
+                                if( xQueueSendToBack(
+                                                       xUARTQueue, //QueueHandle_t xQueue,
+                                                       &Message2, //const void * pvItemToQueue,
+                                                       0 //TickType_t xTicksToWait
+                                                   ) != pdPASS )
+                                        {
+                                            //task was not able to be created after the xTicksToWait
+                                            //a = 0;
+                                        }
+                                vTaskResume(xControlHandle[0]);
+                                vTaskSuspend(xControlHandle[2]);
+                                break;
+                                case 1:
+                                for(j = 0; j < 20 & LED2MESSAGE[j] != 0; j++)
+                                {
+                                    Message2.ucMessage[j] = LED2MESSAGE[j];
+                                }
+                                Message2.ucMessage[j] = 0;
+                                if( xQueueSendToBack(
+                                                       xUARTQueue, //QueueHandle_t xQueue,
+                                                       &Message2, //const void * pvItemToQueue,
+                                                       0 //TickType_t xTicksToWait
+                                                   ) != pdPASS )
+                                        {
+                                            //task was not able to be created after the xTicksToWait
+                                            //a = 0;
+                                        }
+                                vTaskResume(xControlHandle[1]);
+                                vTaskSuspend(xControlHandle[0]);
+                                break;
+                                case 2:
+                                for(j = 0; j < 20 & LED3MESSAGE[j] != 0; j++)
+                                {
+                                    Message2.ucMessage[j] = LED3MESSAGE[j];
+                                }
+                                Message2.ucMessage[j] = 0;
+                                if( xQueueSendToBack(
+                                                       xUARTQueue, //QueueHandle_t xQueue,
+                                                       &Message2, //const void * pvItemToQueue,
+                                                       0 //TickType_t xTicksToWait
+                                                   ) != pdPASS )
+                                        {
+                                            //task was not able to be created after the xTicksToWait
+                                            //a = 0;
+                                        }
+                                vTaskResume(xControlHandle[2]);
+                                vTaskSuspend(xControlHandle[1]);
+                                break;
+                                default:
+                                    Message2.ucMessage[0] = "?";
+                                    Message2.ucMessage[1] = 0;
+                            }
+
+                            
+                        }
                     }
                     else
                     {
@@ -450,109 +464,6 @@ static void taskSystemControl(void *pvParameters)
             default:
                 buttonState[2] = IDLE;
         }
-        */
-
-     if(i & BIT_13)
-                {
-                    //state[0] = DB2;
-                    vTaskDelay(10);
-                    i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
-                    if(i & BIT_13)
-                    {
-                        //done
-                        //buttonState[2] = IDLE;
-                        lockout[currentHandle] = 0;
-                    }
-                    else
-                    {
-                        //go back to checking if the value is high again
-                        //buttonState[2] = HOLD;
-                    }
-                }
-                else
-                {
-                    //buttonState[2] = HOLD; // no change
-                }
-
-    i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);// may be unnecessary, just in case
-    if(i & BIT_13)
-    {
-        //do nothing
-        buttonState[2] = IDLE; // no change
-    }
-    else
-    {
-        //delay and check again in 10ms to debounce the switch
-        vTaskDelay(10);
-        i = mPORTDReadBits(BIT_6 | BIT_7 | BIT_13);
-        if(i & BIT_13)
-        {
-            //check if the button returned to high. If it did, stop here and try again from read the next time
-            buttonState[2] = IDLE;
-        }
-        else
-        {
-            if((lockout[0] | lockout[1] |  lockout[2]) == 0)
-            {
-
-                if(currentHandle < 2)
-                {
-                    currentHandle++;
-                }
-                else
-                {
-                    currentHandle = 0;
-                }
-                lockout[currentHandle] = 1;
-                switch(currentHandle)
-                {
-                    case 0:
-                    for(j = 0; j < 20 & LED3MESSAGE[j] != 0; j++)
-                    {
-                        Message2.ucMessage[j] = LED3MESSAGE[j];
-                    }
-                    Message2.ucMessage[j] = 0;
-                    vTaskResume(xControlHandle[0]);
-                    vTaskSuspend(xControlHandle[2]);
-                    break;
-                    case 1:
-                    for(j = 0; j < 20 & LED1MESSAGE[j] != 0; j++)
-                    {
-                        Message2.ucMessage[j] = LED1MESSAGE[j];
-                    }
-                    Message2.ucMessage[j] = 0;
-                    vTaskResume(xControlHandle[1]);
-                    vTaskSuspend(xControlHandle[0]);
-                    break;
-                    case 2:
-                    for(j = 0; j < 20 & LED2MESSAGE[j] != 0; j++)
-                    {
-                        Message2.ucMessage[j] = LED2MESSAGE[j];
-                    }
-                    Message2.ucMessage[j] = 0;
-                    vTaskResume(xControlHandle[2]);
-                    vTaskSuspend(xControlHandle[1]);
-                    break;
-                    default:
-                        Message2.ucMessage[0] = "?";
-                        Message2.ucMessage[1] = 0;
-                }
-
-                if( xQueueSendToBack(
-                   xUARTQueue, //QueueHandle_t xQueue,
-                   &Message2, //const void * pvItemToQueue,
-                   0 //TickType_t xTicksToWait
-                   ) != pdPASS )
-                {
-                    //task was not able to be created after the xTicksToWait
-                    //a = 0;
-                }
-                
-            }
-        }
-    }
-
-
 
         vTaskDelay(100);
     }
