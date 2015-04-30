@@ -83,7 +83,7 @@ void SystemControlSetup()
                             "LED1",
                             configMINIMAL_STACK_SIZE,
                             (void *) &xTask0Parameters,
-                            1,
+                            3,
                             &xLEDHandle[currentHandle]);
 
                             configASSERT( xLEDHandle[currentHandle] );
@@ -109,7 +109,7 @@ void SystemControlSetup()
                             "LED1",
                             configMINIMAL_STACK_SIZE,
                             (void *) &xTask1Parameters,
-                            1,
+                            3,
                             &xLEDHandle[currentHandle]);
 
                             configASSERT( xLEDHandle[currentHandle] );
@@ -134,7 +134,7 @@ void SystemControlSetup()
                             "LED1",
                             configMINIMAL_STACK_SIZE,
                             (void *) &xTask2Parameters,
-                            1,
+                            3,
                             &xLEDHandle[currentHandle]);
 
                             configASSERT( xLEDHandle[currentHandle] );

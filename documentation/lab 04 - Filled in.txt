@@ -1,0 +1,142 @@
+Lab Observations
+1. After you have created the project per the description above, observe the behavior and
+verify that it performs correctly. The terminal emulator (RealTerm, HyperTerminal, puTTY, etc.)
+will scroll off messages extremely fast. To look at task interaction as displayed in the terminal
+emulator, you will have to pause your debug session. Realize that you are running in
+preemptive scheduling mode.
+Lab 4 Actions – 1: Have the instructor checkoff this function.
+Observe and make note of the behavior of this first part. From here, you will make certain
+changes to your project and then debug/execute and observe behavior in comparison to this part.
+In the change scenarios, make sure to manipulate the switches to exercise the full functionality.
+You will record your observations and comments in the Blackboard Lab 4 Actions “Test”.
+2. Initially create tasks with the following priority scheme (still in preemptive mode):
+a. UART task = 1
+b. MainControl Task = 2
+c. All LED Tasks = 3
+Lab 4 Actions – 2: Debug and observe the behavior. Record responses to the following
+questions.
+i. Does the behavior change from the original Part 1 behavior?
+	yes
+ii. Describe the changes, if any.
+	the main control happens in a grouping, then the LED contols happening in a group, always in the same order.
+	In the first one they were much more intermingled with the main control and LED controls
+iii. If the behavior changes, provide an explanation in relation to the scheduling of
+tasks in this scenario and considering preemptive and cooperative task scheduling,
+and, prioritization.
+	It appears to let the main control task run in groupings due to it's higher priority. 
+	The LED tasks then run in a similar grouping with their identical priorities.
+	Everything is always in the same order every time.
+3. Initially create tasks with the following priority scheme (still in preemptive mode):
+a. UART task = 1
+b. MainControl Task = 2
+c. LED3 Task = 3
+d. LED2 Task = 4
+e. LED1 Task = 5
+Lab 4 Actions – 3: Debug and observe the behavior. Record responses to the following
+questions.
+i. Does the behavior change from the original Part 1 behavior?
+ii. Describe the changes, if any.
+iii. If the behavior changes, provide an explanation in relation to the scheduling of
+tasks in this scenario and considering preemptive and cooperative task scheduling,
+and, prioritization.
+4. Up until now, you have been running in preemptive scheduling mode. Now, switch to
+cooperative scheduling mode by changing the #define configUSE_PREEMPTION
+statement value to 0 in the FreeRTOSConfig.h file. Then, create the tasks with the following
+priority scheme:
+a. UART task = 1
+b. MainControl Task = 1
+c. All LED Tasks = 1
+Lab 4 Actions – 4: Debug and observe the behavior. Record responses to the following
+questions.
+i. Does the behavior change from the original Part 1 behavior?
+ii. Describe the changes, if any.
+iii. If the behavior changes, provide an explanation in relation to the scheduling of
+tasks in this scenario and considering preemptive and cooperative task scheduling,
+and, prioritization.
+5. Initially create tasks with the following priority scheme (still in cooperative mode):
+a. UART task = 1
+b. MainControl Task = 2
+c. All LED Tasks = 3
+Lab 4 Actions – 5: Debug and observe the behavior. Record responses to the following
+questions.
+i. Does the behavior change from the original Part 1 behavior?
+ii. Describe the changes, if any.
+iii. If the behavior changes, provide an explanation in relation to the scheduling of
+tasks in this scenario and considering preemptive and cooperative task scheduling,
+and, prioritization.
+6. Initially create tasks with the following priority scheme (still in cooperative mode):
+a. UART task = 1
+b. MainControl Task = 2
+c. LED3 Task = 3
+d. LED2 Task = 4
+e. LED1 Task = 5
+Lab 4 Actions – 6: Debug and observe the behavior. Record responses to the following
+questions.
+i. Does the behavior change from the original Part 1 behavior?
+ii. Describe the changes, if any.
+iii. If the behavior changes, provide an explanation in relation to the scheduling of
+tasks in this scenario and considering preemptive and cooperative task scheduling,
+and, prioritization.
+7. Now, switch back to preemptive mode (#define configUSE_PREEMPTION 1 in
+FreeRTOSConfig.h). Initially create tasks with the following priority scheme. Note that this
+should be the same as previous step. However, create a second “modified” LED task function
+that uses the original busy wait delay versus the vTaskDelay() delay call. Also, instead of
+making the flash rate variable, fix the flash rate with the fastest delay (200 ms). [If necessary,
+review your Lab 1 code where xTaskGetTickCount() was used to generate a delay].
+Create the LED1 and LED3 tasks using the vTaskDelay-based function and create the LED2
+task using the busy-wait xTaskGetTickCount() based function.
+a. UART task = 1
+b. MainControl Task = 2
+c. LED3 Task = 3
+d. LED2 Task = 4
+e. LED1 Task = 5
+Lab 4 Actions – 7: Debug and observe the behavior. Record responses to the following
+questions.
+i. Does the behavior change from the original Part 1 behavior?
+ii. Describe the changes, if any.
+iii. If the behavior changes, provide an explanation in relation to the scheduling of
+tasks in this scenario and considering preemptive and cooperative task scheduling,
+and, prioritization.
+8. Keeping the changes made in the previous step, just change the scheduling mode back to
+cooperative mode (#define configUSE_PREEMPTION 0 in FreeRTOSConfig.h).
+a. UART task = 1
+b. MainControl Task = 2
+c. LED3 Task = 3
+d. LED2 Task = 4
+e. LED1 Task = 5
+Lab 4 Actions – 8: Debug and observe the behavior. Record responses to the following
+questions.
+i. Does the behavior change from the original Part 1 behavior?
+ii. Describe the changes, if any.
+iii. If the behavior changes, provide an explanation in relation to the scheduling of
+tasks in this scenario and considering preemptive and cooperative task scheduling,
+and, prioritization.
+9. Now, within the busy wait loop for LED2, add the kernel call taskYIELD(). This will
+cause LED2 task to enter the Ready state at that point. Remember, you are now in cooperative
+mode.
+a. UART task = 1
+b. MainControl Task = 2
+c. LED3 Task = 3
+d. LED2 Task = 4
+e. LED1 Task = 5
+Lab 4 Actions – 9: Debug and observe the behavior. Record responses to the following
+questions.
+i. Does the behavior change from the Part 8 behavior above?
+ii. Describe the changes, if any.
+iii. If the behavior changes, provide an explanation in relation to the scheduling of
+tasks in this scenario and especially considering the taskYIELD()function
+within the cooperative mode scheduling scheme.
+10. Leaving everything else as is, raise the priority of the UART task to the same priority as
+the LED 1 task.
+a. UART task = 5
+b. MainControl Task = 2
+c. LED3 Task = 3
+d. LED2 Task = 4
+e. LED1 Task = 5
+Lab 4 Actions – 10: Debug and observe the behavior. Record responses to the following
+questions.
+i. Does the behavior change from the Part 9 behavior above?
+ii. Describe the changes, if any.
+iii. If the behavior changes, provide an explanation in relation to the scheduling of
+tasks in this scenario and especially considering prioritization within the cooperative
+mode scheduling scheme.

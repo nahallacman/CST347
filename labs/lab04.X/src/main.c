@@ -136,7 +136,7 @@ int main(void)
             "LED1",
             configMINIMAL_STACK_SIZE,
             (void *) &xTask0Parameters,
-            1,
+            2,
             &xControlHandle[HandleIndex]);
        configASSERT( &xControlHandle[HandleIndex] );
     //}
