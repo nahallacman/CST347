@@ -405,8 +405,8 @@ static void taskSystemControl(void *pvParameters)
                     if(i & BIT_13)
                     {
                         buttonState[2] = IDLE;
-                        if((lockout[0] | lockout[1] |  lockout[2]) == 0)
-                        {
+                        //if((lockout[0] | lockout[1] |  lockout[2]) == 0)
+                        //{
 
                             if(currentHandle < 2)
                             {
@@ -420,6 +420,7 @@ static void taskSystemControl(void *pvParameters)
                             switch(currentHandle)
                             {
                                 case 0:
+                                /*
                                 for(j = 0; j < 20 & LED1MESSAGE[j] != 0; j++)
                                 {
                                     Message2.ucMessage[j] = LED1MESSAGE[j];
@@ -436,8 +437,10 @@ static void taskSystemControl(void *pvParameters)
                                         }
                                 vTaskResume(xControlHandle[0]);
                                 vTaskSuspend(xControlHandle[2]);
+                                */
                                 break;
                                 case 1:
+                                    /*
                                 for(j = 0; j < 20 & LED2MESSAGE[j] != 0; j++)
                                 {
                                     Message2.ucMessage[j] = LED2MESSAGE[j];
@@ -454,8 +457,10 @@ static void taskSystemControl(void *pvParameters)
                                         }
                                 vTaskResume(xControlHandle[1]);
                                 vTaskSuspend(xControlHandle[0]);
+                                */
                                 break;
                                 case 2:
+                                /*
                                 for(j = 0; j < 20 & LED3MESSAGE[j] != 0; j++)
                                 {
                                     Message2.ucMessage[j] = LED3MESSAGE[j];
@@ -472,6 +477,7 @@ static void taskSystemControl(void *pvParameters)
                                         }
                                 vTaskResume(xControlHandle[2]);
                                 vTaskSuspend(xControlHandle[1]);
+                                */
                                 break;
                                 default:
                                     Message2.ucMessage[0] = "?";
@@ -479,7 +485,7 @@ static void taskSystemControl(void *pvParameters)
                             }
 
                             
-                        }
+                        //}
                     }
                     else
                     {
@@ -561,10 +567,10 @@ static void taskToggleAnLED(void *pvParameters)
         //TODO
         //print the led # starting message
         for(j = 0; j < 20 & LEDSTARTMESSAGE[j] != 0; j++)
-                                {
-                                    Message2.ucMessage[j] = LEDSTARTMESSAGE[j];
-                                }
-                if(pxTaskParameter->usLEDNumber == 0)
+        {
+            Message2.ucMessage[j] = LEDSTARTMESSAGE[j];
+        }
+        if(pxTaskParameter->usLEDNumber == 0)
         {
             Message2.ucMessage[4] = LED1MESSAGE[4];
         }

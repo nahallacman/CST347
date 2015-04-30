@@ -129,8 +129,9 @@ int main(void)
 
     //here is where the tasks are initiated and set up
 
-    for(HandleIndex = 0; HandleIndex < 3; HandleIndex++)
-    {
+    HandleIndex = 0;
+    //for(HandleIndex = 0; HandleIndex < 3; HandleIndex++)
+    //{
        xTaskCreate(taskSystemControl,
             "LED1",
             configMINIMAL_STACK_SIZE,
@@ -138,11 +139,11 @@ int main(void)
             1,
             &xControlHandle[HandleIndex]);
        configASSERT( &xControlHandle[HandleIndex] );
-    }
+    //}
 
     //suspend the two tasks that are not currently running
-    vTaskSuspend(xControlHandle[1]);
-    vTaskSuspend(xControlHandle[2]);
+    //vTaskSuspend(xControlHandle[1]);
+    //vTaskSuspend(xControlHandle[2]);
     
     xTaskCreate(taskUARTControl,
             "LED1",
