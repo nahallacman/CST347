@@ -73,6 +73,8 @@ using the task parameter.  This allows the same task function to be used to
 create multiple tasks that each behave slightly differently. */
 static void taskToggleAnLED(void *pvParameters);
 
+static void OLDtaskToggleAnLED(void *pvParameters);
+
 
 //extern static void taskmyLeds(void *pvParameters);
 static void taskSystemControl(void *pvParameters);

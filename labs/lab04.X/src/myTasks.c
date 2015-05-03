@@ -5,10 +5,15 @@
 /*-----------------------------------------------------------*/
 /* Create an xTaskParameters_t structure for each of the two tasks that are
 created using the prvToggleAnLED() task function. */
-static const xTaskParameter_t xTask0Parameters = {0 /* Toggle LED1 */, (800 / portTICK_RATE_MS) /* At 800ms. */};
-static const xTaskParameter_t xTask1Parameters = {1 /* Toggle LED2 */, (400 / portTICK_RATE_MS) /* At 400ms. */};
-static const xTaskParameter_t xTask2Parameters = {2 /* Toggle LED3 */, (150 / portTICK_RATE_MS) /* At 150ms. */};
+static const xTaskParameter_t xTask0Parameters = {0 /* Toggle LED1 */, (200 / portTICK_RATE_MS) /* At 800ms. */};
+static const xTaskParameter_t xTask1Parameters = {1 /* Toggle LED2 */, (200 / portTICK_RATE_MS) /* At 400ms. */};
+static const xTaskParameter_t xTask2Parameters = {2 /* Toggle LED3 */, (200 / portTICK_RATE_MS) /* At 150ms. */};
 
+static const int UARTTASKPRIORITY = 5;
+static const int MAINCONTROLTASKPRIORITY = 2;
+static const int LED1TASKPRIORITY = 5;
+static const int LED2TASKPRIORITY = 4;
+static const int LED3TASKPRIORITY = 3;
 
 
 
@@ -75,6 +80,7 @@ void SystemControlSetup()
     }
 */
 
+    //LED1
             // null out the handle just in case
         if( xLEDHandle[currentHandle] == NULL )
         {
@@ -83,7 +89,7 @@ void SystemControlSetup()
                             "LED1",
                             configMINIMAL_STACK_SIZE,
                             (void *) &xTask0Parameters,
-                            3,
+                            LED1TASKPRIORITY,
                             &xLEDHandle[currentHandle]);
 
                             configASSERT( xLEDHandle[currentHandle] );
@@ -101,15 +107,16 @@ void SystemControlSetup()
 
     currentHandle++;
 
+    //LED 2
         // null out the handle just in case
         if( xLEDHandle[currentHandle] == NULL )
         {
         //create the corresponding LED task
-        xTaskCreate(taskToggleAnLED,
+        xTaskCreate(OLDtaskToggleAnLED,
                             "LED1",
                             configMINIMAL_STACK_SIZE,
                             (void *) &xTask1Parameters,
-                            3,
+                            LED2TASKPRIORITY,
                             &xLEDHandle[currentHandle]);
 
                             configASSERT( xLEDHandle[currentHandle] );
@@ -126,6 +133,7 @@ void SystemControlSetup()
 
         currentHandle++;
 
+        //LED 3
         // null out the handle just in case
         if( xLEDHandle[currentHandle] == NULL )
         {
@@ -134,7 +142,7 @@ void SystemControlSetup()
                             "LED1",
                             configMINIMAL_STACK_SIZE,
                             (void *) &xTask2Parameters,
-                            3,
+                            LED3TASKPRIORITY,
                             &xLEDHandle[currentHandle]);
 
                             configASSERT( xLEDHandle[currentHandle] );
@@ -675,7 +683,176 @@ static void taskToggleAnLED(void *pvParameters)
                 }
 
         //try to delay the task for 500 ms
-        vTaskDelay(delay);
+        //vTaskDelay(delay);
+        vTaskDelay(200);
+
+
+    }
+}
+
+//"driver" function
+static void OLDtaskToggleAnLED(void *pvParameters)
+{
+    xTaskParameter_t *pxTaskParameter;
+    portTickType xStartTime;
+
+    /* The parameter points to an xTaskParameters_t structure. */
+    pxTaskParameter = (xTaskParameter_t *) pvParameters;
+
+    xTaskParameter_t a;
+    xTaskParameter_t *b;
+    b = &a;
+
+
+    struct AMessage *pxRxedMessage;
+    struct AMessage pxAllocMessage;
+    uint8_t MessageIDtest = 0;
+    enum led_dir led_test;
+
+    int delay = 500;
+    //int a = 0;
+
+    pxRxedMessage = &pxAllocMessage;
+    //pvParameters = &a;
+
+    int j;
+
+    uint8_t ucMessageID = 1;
+    char ucMessage[20];
+    struct UARTMessage Message2 = { ucMessageID, ucMessage };
+
+    uint8_t ucMessageID2 = 2;
+    char ucMessage2[20];
+    struct UARTMessage Message3 = { ucMessageID2, ucMessage2 };
+
+    char ucMessageNumber;
+    ucMessageNumber = pxTaskParameter->usLEDNumber;
+
+    while (1)
+    {
+        //TODO
+        //print the led # starting message
+        for(j = 0; j < 20 & LEDSTARTMESSAGE[j] != 0; j++)
+        {
+            Message2.ucMessage[j] = LEDSTARTMESSAGE[j];
+        }
+        if(pxTaskParameter->usLEDNumber == 0)
+        {
+            Message2.ucMessage[4] = LED1MESSAGE[4];
+        }
+        else if(pxTaskParameter->usLEDNumber == 1)
+        {
+            Message2.ucMessage[4] = LED2MESSAGE[4];
+        }
+        else if(pxTaskParameter->usLEDNumber == 2)
+        {
+            Message2.ucMessage[4] = LED3MESSAGE[4];
+        }
+                                Message2.ucMessage[j] = 0;
+                                if( xQueueSendToBack(
+                                                       xUARTQueue, //QueueHandle_t xQueue,
+                                                       &Message2, //const void * pvItemToQueue,
+                                                       0 //TickType_t xTicksToWait
+                                                   ) != pdPASS )
+                                        {
+                                            //task was not able to be created after the xTicksToWait
+                                            //a = 0;
+                                        }
+
+
+
+
+        /* Note the time before entering the while loop.  xTaskGetTickCount()
+        is a FreeRTOS API function. */
+        //xStartTime = xTaskGetTickCount();
+
+        /* Loop until pxTaskParameters->xToggleRate ticks have */
+        //while ((xTaskGetTickCount() - xStartTime) < pxTaskParameter->xToggleRate);
+
+
+
+        if(xQueue[pxTaskParameter->usLEDNumber] != 0) // make sure the task isn't null
+        {
+            if( uxQueueMessagesWaiting( xQueue[pxTaskParameter->usLEDNumber] ) != 0 )
+            {
+                if( xQueueReceive( xQueue[pxTaskParameter->usLEDNumber], ( pxRxedMessage ), ( TickType_t ) 0 ) )
+                {
+                    // pcRxedMessage now points to the struct AMessage variable posted
+                    // by vATask.
+                    MessageIDtest = pxRxedMessage->ucMessageID;
+                    led_test = pxRxedMessage->dirrection;
+
+                    if(led_test == INCR)
+                    {
+                        if(delay < 1000)
+                        {
+                            delay += 50;
+                        }
+                    }
+                    else if(led_test == DECR)
+                    {
+                        if( delay > 201) // 200? 201? 250?
+                        {
+                            delay -= 50;
+                        }
+                    }
+                    else
+                    {
+                        //bad data
+                    }
+                }
+                else
+                {
+                    //a = 0;
+                }
+            }
+        }
+
+        toggleLED(pxTaskParameter->usLEDNumber);
+
+        //TODO
+        //print the LED # Blocking message
+       for(j = 0; j < 20 & LEDBLOCKMESSAGE[j] != 0; j++)
+                                {
+                                    Message3.ucMessage[j] = LEDBLOCKMESSAGE[j];
+                                }
+        if(pxTaskParameter->usLEDNumber == 0)
+        {
+            Message3.ucMessage[4] = LED1MESSAGE[4];
+        }
+        else if(pxTaskParameter->usLEDNumber == 1)
+        {
+            Message3.ucMessage[4] = LED2MESSAGE[4];
+        }
+        else if(pxTaskParameter->usLEDNumber == 2)
+        {
+            Message3.ucMessage[4] = LED3MESSAGE[4];
+        }
+
+        Message3.ucMessage[j] = 0;
+        if( xQueueSendToBack(
+                               xUARTQueue, //QueueHandle_t xQueue,
+                               &Message3, //const void * pvItemToQueue,
+                               0 //TickType_t xTicksToWait
+                           ) != pdPASS )
+                {
+                    //task was not able to be created after the xTicksToWait
+                    //a = 0;
+                }
+
+        //try to delay the task for 500 ms
+        //vTaskDelay(delay);
+        //vTaskDelay(200);
+
+        /* Note the time before entering the while loop.  xTaskGetTickCount()
+        is a FreeRTOS API function. */
+        xStartTime = xTaskGetTickCount();
+
+        /* Loop until pxTaskParameters->xToggleRate ticks have */
+        while ((xTaskGetTickCount() - xStartTime) < pxTaskParameter->xToggleRate)
+        {
+            taskYIELD();
+        };
     }
 }
 

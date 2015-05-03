@@ -19,22 +19,22 @@ i. Does the behavior change from the original Part 1 behavior?
 	yes
 ii. Describe the changes, if any.
 	the main control happens in a grouping, then the LED contols happening in a group, always in the same order.
-	In the first one they were much more intermingled with the main control and LED controls
+	In the first one they were much more intermingled with the main control and LED controls, but always matched every start with a block, nothing in between.
 iii. If the behavior changes, provide an explanation in relation to the scheduling of
 tasks in this scenario and considering preemptive and cooperative task scheduling,
 and, prioritization.
 	It appears to let the main control task run in groupings due to it's higher priority. 
 	The LED tasks then run in a similar grouping with their identical priorities.
-	Everything is always in the same order every time.
+	Everything is always in the same order every time, never preempted to let another process run.
 3. Initially create tasks with the following priority scheme (still in preemptive mode):
 a. UART task = 1
 b. MainControl Task = 2
 c. LED3 Task = 3
 d. LED2 Task = 4
 e. LED1 Task = 5
-Lab 4 Actions – 3: Debug and observe the behavior. Record responses to the following
+Lab 4 Actions – 3: Debug and observe the behaviour. Record responses to the following
 questions.
-i. Does the behavior change from the original Part 1 behavior?
+i. Does the behaviour change from the original Part 1 behaviour?
 ii. Describe the changes, if any.
 iii. If the behavior changes, provide an explanation in relation to the scheduling of
 tasks in this scenario and considering preemptive and cooperative task scheduling,

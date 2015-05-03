@@ -136,7 +136,7 @@ int main(void)
             "LED1",
             configMINIMAL_STACK_SIZE,
             (void *) &xTask0Parameters,
-            2,
+            MAINCONTROLTASKPRIORITY,
             &xControlHandle[HandleIndex]);
        configASSERT( &xControlHandle[HandleIndex] );
     //}
@@ -149,7 +149,7 @@ int main(void)
             "LED1",
             configMINIMAL_STACK_SIZE,
             (void *) &xTask0Parameters,
-            1,
+            UARTTASKPRIORITY,
             &xUARTHandle);
        configASSERT( &xUARTHandle );
 
