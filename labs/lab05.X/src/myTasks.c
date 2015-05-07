@@ -473,6 +473,7 @@ static void taskToggleAnLED(void *pvParameters)
     struct AMessage pxAllocMessage;
     uint8_t MessageIDtest = 0;
     enum led_dir led_test;
+    int message_value;
 
     int delay = 500;
     //int a = 0;
@@ -495,37 +496,6 @@ static void taskToggleAnLED(void *pvParameters)
 
     while (1)
     {
-        //TODO
-        //print the led # starting message
-        for(j = 0; j < 20 & LEDSTARTMESSAGE[j] != 0; j++)
-        {
-            Message2.ucMessage[j] = LEDSTARTMESSAGE[j];
-        }
-        if(pxTaskParameter->usLEDNumber == 0)
-        {
-            Message2.ucMessage[4] = LED1MESSAGE[4];
-        }
-        else if(pxTaskParameter->usLEDNumber == 1)
-        {
-            Message2.ucMessage[4] = LED2MESSAGE[4];
-        }
-        else if(pxTaskParameter->usLEDNumber == 2)
-        {
-            Message2.ucMessage[4] = LED3MESSAGE[4];
-        }
-                                Message2.ucMessage[j] = 0;
-                                if( xQueueSendToBack(
-                                                       xUARTQueue, //QueueHandle_t xQueue,
-                                                       &Message2, //const void * pvItemToQueue,
-                                                       0 //TickType_t xTicksToWait
-                                                   ) != pdPASS )
-                                        {
-                                            //task was not able to be created after the xTicksToWait
-                                            //a = 0;
-                                        }
-
-
-       
 
         if(xLEDQueue != 0) // make sure the task isn't null
         {
@@ -538,24 +508,20 @@ static void taskToggleAnLED(void *pvParameters)
                     MessageIDtest = pxRxedMessage->ucMessageID;
                     led_test = pxRxedMessage->dirrection;
 
-                    if(led_test == INCR)
+                    //read the message and toggle the appropriate LED
+                    switch(message_value)
                     {
-                        if(delay < 1000)
-                        {
-                            delay += 50;
-                        }
+                        case 0:
+                            toggleLED(0);
+                            break;
+                        case 1:
+                            toggleLED(1);
+                            break;
+                        case 2:
+                            toggleLED(2);
+                            break;
                     }
-                    else if(led_test == DECR)
-                    {
-                        if( delay > 201) // 200? 201? 250?
-                        {
-                            delay -= 50;
-                        }
-                    }
-                    else
-                    {
-                        //bad data
-                    }
+                    
                 }
                 else
                 {
@@ -564,10 +530,11 @@ static void taskToggleAnLED(void *pvParameters)
             }
         }
 
-        toggleLED(pxTaskParameter->usLEDNumber);
+        //toggleLED(pxTaskParameter->usLEDNumber);
 
         //TODO
         //print the LED # Blocking message
+        /*
        for(j = 0; j < 20 & LEDBLOCKMESSAGE[j] != 0; j++)
                                 {
                                     Message3.ucMessage[j] = LEDBLOCKMESSAGE[j];
@@ -595,182 +562,12 @@ static void taskToggleAnLED(void *pvParameters)
                     //task was not able to be created after the xTicksToWait
                     //a = 0;
                 }
-
+*/
         //try to delay the task for 500 ms
         //vTaskDelay(delay);
         vTaskDelay(200);
-
-
     }
 }
-
-/*
-//"driver" function
-static void OLDtaskToggleAnLED(void *pvParameters)
-{
-    xTaskParameter_t *pxTaskParameter;
-    portTickType xStartTime;
-
-    // The parameter points to an xTaskParameters_t structure. 
-    pxTaskParameter = (xTaskParameter_t *) pvParameters;
-
-    xTaskParameter_t a;
-    xTaskParameter_t *b;
-    b = &a;
-
-
-    struct AMessage *pxRxedMessage;
-    struct AMessage pxAllocMessage;
-    uint8_t MessageIDtest = 0;
-    enum led_dir led_test;
-
-    int delay = 500;
-    //int a = 0;
-
-    pxRxedMessage = &pxAllocMessage;
-    //pvParameters = &a;
-
-    int j;
-
-    uint8_t ucMessageID = 1;
-    char ucMessage[20];
-    struct UARTMessage Message2 = { ucMessageID, ucMessage };
-
-    uint8_t ucMessageID2 = 2;
-    char ucMessage2[20];
-    struct UARTMessage Message3 = { ucMessageID2, ucMessage2 };
-
-    char ucMessageNumber;
-    ucMessageNumber = pxTaskParameter->usLEDNumber;
-
-    while (1)
-    {
-        //TODO
-        //print the led # starting message
-        for(j = 0; j < 20 & LEDSTARTMESSAGE[j] != 0; j++)
-        {
-            Message2.ucMessage[j] = LEDSTARTMESSAGE[j];
-        }
-        if(pxTaskParameter->usLEDNumber == 0)
-        {
-            Message2.ucMessage[4] = LED1MESSAGE[4];
-        }
-        else if(pxTaskParameter->usLEDNumber == 1)
-        {
-            Message2.ucMessage[4] = LED2MESSAGE[4];
-        }
-        else if(pxTaskParameter->usLEDNumber == 2)
-        {
-            Message2.ucMessage[4] = LED3MESSAGE[4];
-        }
-                                Message2.ucMessage[j] = 0;
-                                if( xQueueSendToBack(
-                                                       xUARTQueue, //QueueHandle_t xQueue,
-                                                       &Message2, //const void * pvItemToQueue,
-                                                       0 //TickType_t xTicksToWait
-                                                   ) != pdPASS )
-                                        {
-                                            //task was not able to be created after the xTicksToWait
-                                            //a = 0;
-                                        }
-
-
-
-
-        // Note the time before entering the while loop.  xTaskGetTickCount()
-        //is a FreeRTOS API function.
-        //xStartTime = xTaskGetTickCount();
-
-        // Loop until pxTaskParameters->xToggleRate ticks have
-        //while ((xTaskGetTickCount() - xStartTime) < pxTaskParameter->xToggleRate);
-
-
-
-        if(xLEDQueue != 0) // make sure the task isn't null
-        {
-            if( uxQueueMessagesWaiting( xLEDQueue ) != 0 )
-            {
-                if( xQueueReceive( xLEDQueue, ( pxRxedMessage ), ( TickType_t ) 0 ) )
-                {
-                    // pcRxedMessage now points to the struct AMessage variable posted
-                    // by vATask.
-                    MessageIDtest = pxRxedMessage->ucMessageID;
-                    led_test = pxRxedMessage->dirrection;
-
-                    if(led_test == INCR)
-                    {
-                        if(delay < 1000)
-                        {
-                            delay += 50;
-                        }
-                    }
-                    else if(led_test == DECR)
-                    {
-                        if( delay > 201) // 200? 201? 250?
-                        {
-                            delay -= 50;
-                        }
-                    }
-                    else
-                    {
-                        //bad data
-                    }
-                }
-                else
-                {
-                    //a = 0;
-                }
-            }
-        }
-
-        toggleLED(pxTaskParameter->usLEDNumber);
-
-        //TODO
-        //print the LED # Blocking message
-       for(j = 0; j < 20 & LEDBLOCKMESSAGE[j] != 0; j++)
-                                {
-                                    Message3.ucMessage[j] = LEDBLOCKMESSAGE[j];
-                                }
-        if(pxTaskParameter->usLEDNumber == 0)
-        {
-            Message3.ucMessage[4] = LED1MESSAGE[4];
-        }
-        else if(pxTaskParameter->usLEDNumber == 1)
-        {
-            Message3.ucMessage[4] = LED2MESSAGE[4];
-        }
-        else if(pxTaskParameter->usLEDNumber == 2)
-        {
-            Message3.ucMessage[4] = LED3MESSAGE[4];
-        }
-
-        Message3.ucMessage[j] = 0;
-        if( xQueueSendToBack(
-                               xUARTQueue, //QueueHandle_t xQueue,
-                               &Message3, //const void * pvItemToQueue,
-                               0 //TickType_t xTicksToWait
-                           ) != pdPASS )
-                {
-                    //task was not able to be created after the xTicksToWait
-                    //a = 0;
-                }
-
-        //try to delay the task for 500 ms
-        //vTaskDelay(delay);
-        //vTaskDelay(200);
-
-        // Note the time before entering the while loop.  xTaskGetTickCount()
-        //is a FreeRTOS API function.
-        xStartTime = xTaskGetTickCount();
-
-        // Loop until pxTaskParameters->xToggleRate ticks have 
-        while ((xTaskGetTickCount() - xStartTime) < pxTaskParameter->xToggleRate)
-        {
-            taskYIELD();
-        };
-    }
-}
-*/
 
 static void taskUARTTXControl(void *pvParameters)
 {
