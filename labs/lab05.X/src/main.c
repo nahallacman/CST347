@@ -120,16 +120,16 @@ int main(void)
     /* Perform any hardware initialisation that may be necessary. */
     prvSetupHardware();
 
-    int HandleIndex = 0;
+    //int HandleIndex = 0;
     //TaskHandle_t xHandle[3];
 
-    xControlHandle[0] = NULL;
-    xControlHandle[1] = NULL;
-    xControlHandle[2] = NULL;
+    //xControlHandle[0] = NULL;
+    //xControlHandle[1] = NULL;
+    //xControlHandle[2] = NULL;
 
     //here is where the tasks are initiated and set up
 
-    HandleIndex = 0;
+    //HandleIndex = 0;
     //for(HandleIndex = 0; HandleIndex < 3; HandleIndex++)
     //{
        xTaskCreate(taskSystemControl,
@@ -137,8 +137,8 @@ int main(void)
             configMINIMAL_STACK_SIZE,
             (void *) &xTask0Parameters,
             MAINCONTROLTASKPRIORITY,
-            &xControlHandle[HandleIndex]);
-       configASSERT( &xControlHandle[HandleIndex] );
+            &xControlHandle);
+       configASSERT( &xControlHandle );
     //}
 
     //suspend the two tasks that are not currently running

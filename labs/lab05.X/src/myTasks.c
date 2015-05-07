@@ -29,13 +29,16 @@ static const char MAINCONTROLSTART[] = "Main Control Start\n\r";
 static const char MAINCONTROLBLOCK[] = "Main Control Block\n\r";
 
 //task handles for the switch control tasks
-TaskHandle_t xControlHandle[3];
+//TaskHandle_t xControlHandle[3];
+TaskHandle_t xControlHandle;
 //task handles for the LED control tasks
-TaskHandle_t xLEDHandle[3];
+//TaskHandle_t xLEDHandle[3];
+TaskHandle_t xLEDHandle;
 //index for which handle is currently being used.
 int currentHandle;
 
-QueueHandle_t xQueue[3];
+//QueueHandle_t xQueue[3];
+QueueHandle_t xLEDQueue;
 
 
 void SystemControlSetup()
@@ -49,41 +52,11 @@ void SystemControlSetup()
     UBaseType_t uxItemSize;
 
     uxItemSize = sizeof(xMessage);
-/*
-    for(currentHandle = 0; currentHandle < 3; currentHandle++)
-    {
 
-
-        // null out the handle just in case
-        if( xLEDHandle[currentHandle] == NULL )
-        {
-        //create the corresponding LED task
-        xTaskCreate(taskToggleAnLED,
-                            "LED1",
-                            configMINIMAL_STACK_SIZE,
-                            (void *) &xTask3Parameters[currentHandle],
-                            1,
-                            &xLEDHandle[currentHandle]);
-
-                            configASSERT( xLEDHandle[currentHandle] );
-       }
-
-       if( xQueue[currentHandle] == NULL )
-       {
-       xQueue[currentHandle] = xQueueCreate
-                  (
-                     uxQueueLength,
-                     uxItemSize
-                  );
-       }
-
-
-    }
-*/
 
     //LED1
             // null out the handle just in case
-        if( xLEDHandle[currentHandle] == NULL )
+        if( xLEDHandle == NULL )
         {
         //create the corresponding LED task
         xTaskCreate(taskToggleAnLED,
@@ -91,76 +64,24 @@ void SystemControlSetup()
                             configMINIMAL_STACK_SIZE,
                             (void *) &xTask0Parameters,
                             LED1TASKPRIORITY,
-                            &xLEDHandle[currentHandle]);
+                            &xLEDHandle);
 
-                            configASSERT( xLEDHandle[currentHandle] );
+                            configASSERT( xLEDHandle );
        }
 
-       if( xQueue[currentHandle] == NULL )
+       if( xLEDQueue == NULL )
        {
-       xQueue[currentHandle] = xQueueCreate
+       xLEDQueue = xQueueCreate
                   (
                      uxQueueLength,
                      uxItemSize
                   );
        }
 
-/*
-    currentHandle++;
 
-    //LED 2
-        // null out the handle just in case
-        if( xLEDHandle[currentHandle] == NULL )
-        {
-        //create the corresponding LED task
-        xTaskCreate(OLDtaskToggleAnLED,
-                            "LED1",
-                            configMINIMAL_STACK_SIZE,
-                            (void *) &xTask1Parameters,
-                            LED2TASKPRIORITY,
-                            &xLEDHandle[currentHandle]);
-
-                            configASSERT( xLEDHandle[currentHandle] );
-       }
-
-       if( xQueue[currentHandle] == NULL )
-       {
-       xQueue[currentHandle] = xQueueCreate
-                  (
-                     uxQueueLength,
-                     uxItemSize
-                  );
-       }
-
-        currentHandle++;
-
-        //LED 3
-        // null out the handle just in case
-        if( xLEDHandle[currentHandle] == NULL )
-        {
-        //create the corresponding LED task
-        xTaskCreate(taskToggleAnLED,
-                            "LED1",
-                            configMINIMAL_STACK_SIZE,
-                            (void *) &xTask2Parameters,
-                            LED3TASKPRIORITY,
-                            &xLEDHandle[currentHandle]);
-
-                            configASSERT( xLEDHandle[currentHandle] );
-       }
-
-       if( xQueue[currentHandle] == NULL )
-       {
-       xQueue[currentHandle] = xQueueCreate
-                  (
-                     uxQueueLength,
-                     uxItemSize
-                  );
-       }
-*/
 
      //once everything is set up, reset the currentHandle index
-        currentHandle = 0;
+     //   currentHandle = 0;
 
 
     lockout[0] = 0;
@@ -281,8 +202,9 @@ static void taskSystemControl(void *pvParameters)
             case PRESSED:
                 DIR = DECR;
                 Message1.dirrection = DIR;
+                //this may be the wrong kind of message to send to that queue
                 if( xQueueSendToBack(
-                               xQueue[currentHandle], //QueueHandle_t xQueue,
+                               xLEDQueue, //QueueHandle_t xQueue,
                                &Message1, //const void * pvItemToQueue,
                                0 //TickType_t xTicksToWait
                            ) != pdPASS )
@@ -345,7 +267,7 @@ static void taskSystemControl(void *pvParameters)
                 DIR = INCR;
                 Message1.dirrection = DIR;
                 if( xQueueSendToBack(
-                               xQueue[currentHandle], //QueueHandle_t xQueue,
+                               xLEDQueue, //QueueHandle_t xQueue,
                                &Message1, //const void * pvItemToQueue,
                                0 //TickType_t xTicksToWait
                            ) != pdPASS )
@@ -603,22 +525,13 @@ static void taskToggleAnLED(void *pvParameters)
                                         }
 
 
-
-
-        /* Note the time before entering the while loop.  xTaskGetTickCount()
-        is a FreeRTOS API function. */
-        //xStartTime = xTaskGetTickCount();
-
-        /* Loop until pxTaskParameters->xToggleRate ticks have */
-        //while ((xTaskGetTickCount() - xStartTime) < pxTaskParameter->xToggleRate);
-
        
 
-        if(xQueue[pxTaskParameter->usLEDNumber] != 0) // make sure the task isn't null
+        if(xLEDQueue != 0) // make sure the task isn't null
         {
-            if( uxQueueMessagesWaiting( xQueue[pxTaskParameter->usLEDNumber] ) != 0 )
+            if( uxQueueMessagesWaiting( xLEDQueue ) != 0 )
             {
-                if( xQueueReceive( xQueue[pxTaskParameter->usLEDNumber], ( pxRxedMessage ), ( TickType_t ) 0 ) )
+                if( xQueueReceive( xLEDQueue, ( pxRxedMessage ), ( TickType_t ) 0 ) )
                 {
                     // pcRxedMessage now points to the struct AMessage variable posted
                     // by vATask.
@@ -691,13 +604,14 @@ static void taskToggleAnLED(void *pvParameters)
     }
 }
 
+/*
 //"driver" function
 static void OLDtaskToggleAnLED(void *pvParameters)
 {
     xTaskParameter_t *pxTaskParameter;
     portTickType xStartTime;
 
-    /* The parameter points to an xTaskParameters_t structure. */
+    // The parameter points to an xTaskParameters_t structure. 
     pxTaskParameter = (xTaskParameter_t *) pvParameters;
 
     xTaskParameter_t a;
@@ -763,20 +677,20 @@ static void OLDtaskToggleAnLED(void *pvParameters)
 
 
 
-        /* Note the time before entering the while loop.  xTaskGetTickCount()
-        is a FreeRTOS API function. */
+        // Note the time before entering the while loop.  xTaskGetTickCount()
+        //is a FreeRTOS API function.
         //xStartTime = xTaskGetTickCount();
 
-        /* Loop until pxTaskParameters->xToggleRate ticks have */
+        // Loop until pxTaskParameters->xToggleRate ticks have
         //while ((xTaskGetTickCount() - xStartTime) < pxTaskParameter->xToggleRate);
 
 
 
-        if(xQueue[pxTaskParameter->usLEDNumber] != 0) // make sure the task isn't null
+        if(xLEDQueue != 0) // make sure the task isn't null
         {
-            if( uxQueueMessagesWaiting( xQueue[pxTaskParameter->usLEDNumber] ) != 0 )
+            if( uxQueueMessagesWaiting( xLEDQueue ) != 0 )
             {
-                if( xQueueReceive( xQueue[pxTaskParameter->usLEDNumber], ( pxRxedMessage ), ( TickType_t ) 0 ) )
+                if( xQueueReceive( xLEDQueue, ( pxRxedMessage ), ( TickType_t ) 0 ) )
                 {
                     // pcRxedMessage now points to the struct AMessage variable posted
                     // by vATask.
@@ -845,17 +759,18 @@ static void OLDtaskToggleAnLED(void *pvParameters)
         //vTaskDelay(delay);
         //vTaskDelay(200);
 
-        /* Note the time before entering the while loop.  xTaskGetTickCount()
-        is a FreeRTOS API function. */
+        // Note the time before entering the while loop.  xTaskGetTickCount()
+        //is a FreeRTOS API function.
         xStartTime = xTaskGetTickCount();
 
-        /* Loop until pxTaskParameters->xToggleRate ticks have */
+        // Loop until pxTaskParameters->xToggleRate ticks have 
         while ((xTaskGetTickCount() - xStartTime) < pxTaskParameter->xToggleRate)
         {
             taskYIELD();
         };
     }
 }
+*/
 
 static void taskUARTTXControl(void *pvParameters)
 {
