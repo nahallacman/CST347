@@ -51,7 +51,7 @@ void SystemControlSetup()
     UBaseType_t uxQueueLength = 5;
     UBaseType_t uxItemSize;
 
-    uxItemSize = sizeof(xMessage);
+    uxItemSize = sizeof(xLEDMessage);
 
 
     //LED1
@@ -103,16 +103,6 @@ static void taskSystemControl(void *pvParameters)
 
     //TaskHandle_t xControlHandle[3];
 
-
-
-    //uint8_t SW1 = 1;
-    //uint8_t lastSW1 = 0;
-    //uint8_t SW2 = 1;
-    //uint8_t lastSW2 = 0;
-    //uint8_t SW3 = 1;
-    //uint8_t lastSW3 = 0;
-
-    //uint8_t paused = 0;
     uint8_t buttonState[3];
     buttonState[0] = 0;
     buttonState[1] = 0;
@@ -131,8 +121,8 @@ static void taskSystemControl(void *pvParameters)
     //START INIT. don't forget to move this later!
     
 
-    struct AMessage Message1 = { MessageID, DIR };
-    Message1.dirrection = DIR;
+    struct LEDMessage Message1 = { MessageID, DIR };
+    Message1.LEDNum = DIR;
     Message1.ucMessageID = MessageID;
 
 
@@ -201,7 +191,7 @@ static void taskSystemControl(void *pvParameters)
                 break;
             case PRESSED:
                 DIR = DECR;
-                Message1.dirrection = DIR;
+                Message1.LEDNum = DIR;
                 //this may be the wrong kind of message to send to that queue
                 if( xQueueSendToBack(
                                xLEDQueue, //QueueHandle_t xQueue,
@@ -265,7 +255,7 @@ static void taskSystemControl(void *pvParameters)
                 break;
             case PRESSED:
                 DIR = INCR;
-                Message1.dirrection = DIR;
+                Message1.LEDNum = DIR;
                 if( xQueueSendToBack(
                                xLEDQueue, //QueueHandle_t xQueue,
                                &Message1, //const void * pvItemToQueue,
@@ -469,20 +459,21 @@ static void taskToggleAnLED(void *pvParameters)
     b = &a;
 
 
-    struct AMessage *pxRxedMessage;
-    struct AMessage pxAllocMessage;
+    struct LEDMessage *pxRxedMessage;
+    struct LEDMessage pxAllocMessage;
     uint8_t MessageIDtest = 0;
-    enum led_dir led_test;
-    int message_value;
+    //enum led_dir led_test;
+    //int message_value;
+    uint8_t LEDNumber;
 
-    int delay = 500;
+    //int delay = 500;
     //int a = 0;
 
     pxRxedMessage = &pxAllocMessage;
     //pvParameters = &a;
 
     int j;
-
+/*
     uint8_t ucMessageID = 1;
     char ucMessage[20];
     struct UARTMessage Message2 = { ucMessageID, ucMessage };
@@ -490,7 +481,7 @@ static void taskToggleAnLED(void *pvParameters)
     uint8_t ucMessageID2 = 2;
     char ucMessage2[20];
     struct UARTMessage Message3 = { ucMessageID2, ucMessage2 };
-
+*/
     char ucMessageNumber;
     ucMessageNumber = pxTaskParameter->usLEDNumber;
 
@@ -506,10 +497,10 @@ static void taskToggleAnLED(void *pvParameters)
                     // pcRxedMessage now points to the struct AMessage variable posted
                     // by vATask.
                     MessageIDtest = pxRxedMessage->ucMessageID;
-                    led_test = pxRxedMessage->dirrection;
+                    LEDNumber = pxRxedMessage->LEDNum;
 
                     //read the message and toggle the appropriate LED
-                    switch(message_value)
+                    switch(LEDNumber)
                     {
                         case 0:
                             toggleLED(0);
@@ -588,14 +579,14 @@ static void taskUARTTXControl(void *pvParameters)
         //UART handling code
         if(xUARTQueue != 0) // make sure the task isn't null
         {
-            if( uxQueueMessagesWaiting( xUARTQueue ) != 0 ) // see if there are messages waiting
-            {
+            //if( uxQueueMessagesWaiting( xUARTQueue ) != 0 ) // see if there are messages waiting
+            //{
                 if( xQueueReceive( xUARTQueue, ( pxRxedMessage ), portMAX_DELAY ) ) // get the messages
                 {
-                    vUartPutStr(UART2, pxRxedMessage->ucMessage, 20);
+                    vUartPutStr(UART2, pxRxedMessage->ucMessage, 50);
                     //void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen);
                 }
-            }
+           // }
        }
 
 

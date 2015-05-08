@@ -50,17 +50,17 @@ typedef struct xTASK_PARAMETER {
     portTickType xToggleRate;               /* The rate at which the LED should be toggle. */
 } xTaskParameter_t;
 
-struct /* __attribute__ ((packed)) */AMessage
+struct /* __attribute__ ((packed)) */LEDMessage
  {
     uint8_t ucMessageID;
-    enum led_dir dirrection;
+    uint8_t LEDNum;
     //char ucData[ 20 ];
- } xMessage;
+ } xLEDMessage;
 
  struct /*__attribute__ ((packed)) */UARTMessage
  {
      uint8_t ucMessageID;
-     char ucMessage[20];
+     char ucMessage[50];
  } xUARTMessage;
 
 

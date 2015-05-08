@@ -38,6 +38,7 @@
       <itemPath>src/myTasks.c</itemPath>
       <itemPath>src/leddrv.c</itemPath>
       <itemPath>src/uartdrv.c</itemPath>
+      <itemPath>src/uart_isr.S</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
