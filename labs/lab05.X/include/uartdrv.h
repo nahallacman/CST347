@@ -35,6 +35,19 @@ void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen);
 //does it need the UART_MODULE?
 char * vUartGetChar(UART_MODULE umPortNum);
 
+
+//buffer, get and set wrapping functionality for receiving characters
+char UARTRXChar;
+char UARTGetChar(void);
+void UARTSetChar(char in);
+
+//buffer and index for TX functionality
+char TXbuffer[50];
+int TXIndex;
+void UARTPutString(char * string);
+void ClearBuffer(void);
+
+
 #ifdef	__cplusplus
 }
 #endif

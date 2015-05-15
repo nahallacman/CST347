@@ -113,6 +113,7 @@ static void prvSetupHardware(void);
 //    portTickType xToggleRate;               /* The rate at which the LED should be toggle. */
 //} xTaskParameter_t;
 
+static const char M1[] = "1";
 
 /*-----------------------------------------------------------*/
 int main(void)
@@ -120,51 +121,9 @@ int main(void)
     /* Perform any hardware initialisation that may be necessary. */
     prvSetupHardware();
 
-    //int HandleIndex = 0;
-    //TaskHandle_t xHandle[3];
 
-    //xControlHandle[0] = NULL;
-    //xControlHandle[1] = NULL;
-    //xControlHandle[2] = NULL;
+    UARTPutString(M1);
 
-    //here is where the tasks are initiated and set up
-
-    //HandleIndex = 0;
-    //for(HandleIndex = 0; HandleIndex < 3; HandleIndex++)
-    //{
-       xTaskCreate(taskSystemControl,
-            "LED1",
-            configMINIMAL_STACK_SIZE,
-            (void *) &xTask0Parameters,
-            MAINCONTROLTASKPRIORITY,
-            &xControlHandle);
-       configASSERT( &xControlHandle );
-    //}
-
-    //suspend the two tasks that are not currently running
-    //vTaskSuspend(xControlHandle[1]);
-    //vTaskSuspend(xControlHandle[2]);
-    
-    xTaskCreate(taskUARTTXControl,
-            "LED1",
-            configMINIMAL_STACK_SIZE,
-            (void *) &xTask0Parameters,
-            UARTTXTASKPRIORITY,
-            &xUARTTXHandle);
-       configASSERT( &xUARTTXHandle );
-
-    xTaskCreate(taskUARTRXControl,
-            "LED1",
-            configMINIMAL_STACK_SIZE,
-            (void *) &xTask0Parameters,
-            UARTRXTASKPRIORITY,
-            &xUARTRXHandle);
-       configASSERT( &xUARTRXHandle );
-
-       //suspend the task so it isn't running immediately
-       vTaskSuspend(xUARTRXHandle);
-
-    //vTaskSuspend(xHandle[2]);
     /* Start the scheduler so the tasks start executing.  This function should not return. */
     vTaskStartScheduler();
 }
