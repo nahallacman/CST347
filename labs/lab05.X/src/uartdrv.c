@@ -2,7 +2,7 @@
 
 #include "uartdrv.h"
 
-void __attribute__((interrupt(ipl0), vector(_UART2_VECTOR))) vUART2_ISR_Wrapper(void);
+void __attribute__((interrupt(ipl0), vector(_UART1_VECTOR))) vUART1_ISR_Wrapper(void);
 
 void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
 {
@@ -57,7 +57,7 @@ void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
 }
 
 
-void vUART2_ISR(void)
+void vUART1_ISR(void)
 {
     /* Variables */
     static portBASE_TYPE xHigherPriorityTaskWoken;
@@ -70,11 +70,11 @@ void vUART2_ISR(void)
     // ISR exited. Then the CPU will be interrupt again from the currently
     // pending TX interrupt that did not get handle the last time. The interrupt
     // flags can be checked using the plib.
-    if(INTGetFlag(INT_U2RX))
+    if(INTGetFlag(INT_U1RX))
     {
-        INTClearFlag(INT_U2RX);
+        INTClearFlag(INT_U1RX);
         
-        uData = UARTGetData(UART2);
+        uData = UARTGetData(UART1);
         cData = uData.__data;
 
         UARTSetChar(cData);
@@ -87,9 +87,9 @@ void vUART2_ISR(void)
 
 
     }
-    else if(INTGetFlag(INT_U2TX))
+    else if(INTGetFlag(INT_U1TX))
     {
-        INTClearFlag(INT_U2TX);
+        INTClearFlag(INT_U1TX);
 
         //string is already formatted properly,
         //iterate through and send data
@@ -99,14 +99,14 @@ void vUART2_ISR(void)
             //clear TX interrupt flag
             
             //disable TX interrupt
-            INTEnable(INT_U2TX, INT_DISABLED);
+            INTEnable(INT_U1TX, INT_DISABLED);
             //reset print index
             TXIndex = 0;
         }
         else
         {
             //otherwise send the byte
-            UARTSendDataByte(UART2, TXbuffer[TXIndex]);
+            UARTSendDataByte(UART1, TXbuffer[TXIndex]);
             //increase the index
             TXIndex++;
             //do I need to clear the TX interrupt flag here? (probably do)
@@ -197,9 +197,9 @@ void UARTPutString(char * string)
         TXbuffer[i] = string[i];
     }
     //enable the interrupt to actually send the information
-    INTEnable(INT_U2TX, INT_ENABLED);
+    INTEnable(INT_U1TX, INT_ENABLED);
     //not sure if this is necessary, going to manually trigger an interrupt too
-    INTSetFlag(INT_U2TX);
+    INTSetFlag(INT_U1TX);
 }
 
 void ClearBuffer(void)

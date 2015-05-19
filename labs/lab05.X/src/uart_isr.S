@@ -3,19 +3,19 @@
     .set	nomips16
 	.set 	noreorder
 
-    .extern vUART2_ISR
+    .extern vUART1_ISR
 	.extern xISRStackTop
-    .global vUART2_ISR_Wrapper
+    .global vUART1_ISR_Wrapper
     .set noreorder
     .set noat
-    .ent vUART2_ISR_Wrapper
+    .ent vUART1_ISR_Wrapper
 
-vUART2_ISR_Wrapper:
+vUART1_ISR_Wrapper:
     portSAVE_CONTEXT
 
-    jal vUART2_ISR
+    jal vUART1_ISR
     nop
 
     portRESTORE_CONTEXT
 
-    .end vUART2_ISR_Wrapper
+    .end vUART1_ISR_Wrapper
