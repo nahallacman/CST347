@@ -79,11 +79,8 @@ void vUART1_ISR(void)
 
         UARTSetChar(cData);
 
-            //not sure if this goes here
+        //not sure if this goes here
         xHigherPriorityTaskWoken = xTaskResumeFromISR(xUARTRXHandle);
-
-        /* If sending or receiving necessitates a context switch, then switch now. */
-        portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
 
 
     }
@@ -119,6 +116,11 @@ void vUART1_ISR(void)
 
 
 
+
+        /* If sending or receiving necessitates a context switch, then switch now. */
+        portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
+
+
 }
 
 
@@ -147,35 +149,35 @@ void vUART1_ISR(void)
 //}
 
 
-void vUartPutC(UART_MODULE umPortNum, char cByte)
-{
-    int test = 0;
-    //wait until the transmitter is ready
-    /*
-    if(UARTTransmitterIsReady(umPortNum))
-    {
-        test = 1;
-    }
-    else
-    {
-        test = 2;
-    }
-    */
-    while(UARTTransmitterIsReady(umPortNum) == 0)
-    {
-        vTaskDelay(2); // delay for 2ms every time it isn't ready
-    }
-    UARTSendDataByte(umPortNum, cByte); // once it's ready, send the data
-}
-
-void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen)
-{
-    int i;
-    for(i = 0; i < iStrLen; i++)
-    {
-        vUartPutC(umPortNum, pString[i] ); //problem dereferencing pString
-    }
-}
+//void vUartPutC(UART_MODULE umPortNum, char cByte)
+//{
+//    int test = 0;
+//    //wait until the transmitter is ready
+//    /*
+//    if(UARTTransmitterIsReady(umPortNum))
+//    {
+//        test = 1;
+//    }
+//    else
+//    {
+//        test = 2;
+//    }
+//    */
+//    while(UARTTransmitterIsReady(umPortNum) == 0)
+//    {
+//        vTaskDelay(2); // delay for 2ms every time it isn't ready
+//    }
+//    UARTSendDataByte(umPortNum, cByte); // once it's ready, send the data
+//}
+//
+//void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen)
+//{
+//    int i;
+//    for(i = 0; i < iStrLen; i++)
+//    {
+//        vUartPutC(umPortNum, pString[i] ); //problem dereferencing pString
+//    }
+//}
  
 char UARTGetChar(void)
 {
@@ -196,10 +198,11 @@ void UARTPutString(char * string)
     {
         TXbuffer[i] = string[i];
     }
-    //enable the interrupt to actually send the information
-    INTEnable(INT_U1TX, INT_ENABLED);
     //not sure if this is necessary, going to manually trigger an interrupt too
     INTSetFlag(INT_U1TX);
+    //enable the interrupt to actually send the information
+    INTEnable(INT_U1TX, INT_ENABLED);
+
 }
 
 void ClearBuffer(void)

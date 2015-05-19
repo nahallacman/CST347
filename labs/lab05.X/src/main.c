@@ -122,7 +122,7 @@ int main(void)
     prvSetupHardware();
 
 
-    UARTPutString(M1);
+    //UARTPutString(M1);
 
     //vUartPutC(UART1, '8');
 

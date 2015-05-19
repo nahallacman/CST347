@@ -676,15 +676,15 @@ static void taskUARTRXControl(void *pvParameters)
         //if it is send a message with an LED number to the LED queue
         switch(cByte)
         {
-            case 0:
+            case '1':
                 pxAllocMessage.LEDNum = 0;
                 valid_command = 1;
                 break;
-            case 1:
+            case '2':
                 pxAllocMessage.LEDNum = 1;
                 valid_command = 1;
                 break;
-            case 2:
+            case '3':
                 pxAllocMessage.LEDNum = 2;
                 valid_command = 1;
                 break;

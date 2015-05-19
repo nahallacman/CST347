@@ -28,9 +28,9 @@ QueueHandle_t xUARTQueue;
 
 void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud);
 
-void vUartPutC(UART_MODULE umPortNum, char cByte);
-
-void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen);
+//void vUartPutC(UART_MODULE umPortNum, char cByte);
+//
+//void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen);
 
 //does it need the UART_MODULE?
 char * vUartGetChar(UART_MODULE umPortNum);
