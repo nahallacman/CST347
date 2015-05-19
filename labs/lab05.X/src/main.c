@@ -124,6 +124,12 @@ int main(void)
 
     UARTPutString(M1);
 
+    //vUartPutC(UART1, '8');
+
+    //toggleLED(0);
+    //toggleLED(1);
+   // toggleLED(2);
+
     /* Start the scheduler so the tasks start executing.  This function should not return. */
     vTaskStartScheduler();
 }

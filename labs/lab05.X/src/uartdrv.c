@@ -11,7 +11,7 @@ void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
     UBaseType_t uxItemSize;
 
     uxItemSize = sizeof(xUARTMessage);
-    
+
     xUARTQueue = xQueueCreate
     (
         uxQueueLength,
@@ -72,27 +72,32 @@ void vUART2_ISR(void)
     // flags can be checked using the plib.
     if(INTGetFlag(INT_U2RX))
     {
+        INTClearFlag(INT_U2RX);
+        
         uData = UARTGetData(UART2);
         cData = uData.__data;
 
         UARTSetChar(cData);
 
-        INTClearFlag(INT_U2RX);
-
+            //not sure if this goes here
         xHigherPriorityTaskWoken = xTaskResumeFromISR(xUARTRXHandle);
 
         /* If sending or receiving necessitates a context switch, then switch now. */
         portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
+
+
     }
     else if(INTGetFlag(INT_U2TX))
     {
+        INTClearFlag(INT_U2TX);
+
         //string is already formatted properly,
         //iterate through and send data
         if(TXbuffer[TXIndex] == 0)
         {
             //we are done
             //clear TX interrupt flag
-            INTClearFlag(INT_U2TX);
+            
             //disable TX interrupt
             INTEnable(INT_U2TX, INT_DISABLED);
             //reset print index
@@ -117,30 +122,30 @@ void vUART2_ISR(void)
 }
 
 
-/*
-void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
-{
-    //Queue Init
-    UBaseType_t uxQueueLength = 20;
-    UBaseType_t uxItemSize;
 
-    uxItemSize = sizeof(xUARTMessage);
-    
-     xUARTQueue = xQueueCreate
-    (
-        uxQueueLength,
-        uxItemSize
-    );
-    //Queue Init done
-     
-    // Set the Baud Rate of the UART
-    UARTSetDataRate(umPortNum, (uint32_t)configPERIPHERAL_CLOCK_HZ, ui32WantedBaud);
-    // Enable the UART for Transmit Only
-    UARTEnable(umPortNum, UART_ENABLE_FLAGS(UART_PERIPHERAL | UART_TX));
+//void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
+//{
+//    //Queue Init
+//    UBaseType_t uxQueueLength = 20;
+//    UBaseType_t uxItemSize;
+//
+//    uxItemSize = sizeof(xUARTMessage);
+//
+//     xUARTQueue = xQueueCreate
+//    (
+//        uxQueueLength,
+//        uxItemSize
+//    );
+//    //Queue Init done
+//
+//    // Set the Baud Rate of the UART
+//    UARTSetDataRate(umPortNum, (uint32_t)configPERIPHERAL_CLOCK_HZ, ui32WantedBaud);
+//    // Enable the UART for Transmit Only
+//    UARTEnable(umPortNum, UART_ENABLE_FLAGS(UART_PERIPHERAL | UART_TX));
+//
+//
+//}
 
-
-}
-*/
 
 void vUartPutC(UART_MODULE umPortNum, char cByte)
 {

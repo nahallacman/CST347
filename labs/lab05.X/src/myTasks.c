@@ -504,9 +504,9 @@ static void taskToggleAnLED(void *pvParameters)
 
         if(xLEDQueue != 0) // make sure the task isn't null
         {
-            if( uxQueueMessagesWaiting( xLEDQueue ) != 0 )
-            {
-                if( xQueueReceive( xLEDQueue, ( pxRxedMessage ), ( TickType_t ) 0 ) )
+            //if( uxQueueMessagesWaiting( xLEDQueue ) != 0 )
+            //{
+                if( xQueueReceive( xLEDQueue, ( pxRxedMessage ), portMAX_DELAY ) )
                 {
                     // pcRxedMessage now points to the struct AMessage variable posted
                     // by vATask.
@@ -532,7 +532,7 @@ static void taskToggleAnLED(void *pvParameters)
                 {
                     //a = 0;
                 }
-            }
+            //}
         }
 
         //toggleLED(pxTaskParameter->usLEDNumber);
@@ -570,7 +570,7 @@ static void taskToggleAnLED(void *pvParameters)
 */
         //try to delay the task for 500 ms
         //vTaskDelay(delay);
-        vTaskDelay(200);
+        //vTaskDelay(200);
     }
 }
 
@@ -609,7 +609,7 @@ static void taskUARTTXControl(void *pvParameters)
 
 
 
-        vTaskDelay(10);
+        //vTaskDelay(10);
     }
 
 }

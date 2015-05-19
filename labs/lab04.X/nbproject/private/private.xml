@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/FreeRTOS/Source/tasks.c</file>
         <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab04.X/include/FreeRTOSConfig.h</file>
+        <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/FreeRTOS/Source/portable/MPLAB/PIC32MX/port_asm.S</file>
+        <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/FreeRTOS/Source/portable/MPLAB/PIC32MX/ISR_Support.h</file>
+        <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab04.X/src/uartdrv.c</file>
     </open-files>
 </project-private>
