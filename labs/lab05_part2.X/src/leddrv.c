@@ -6,8 +6,15 @@
 
 uint8_t initalizeLedDriver(void)
 {
+    int i;
     mPORTDClearBits(0xFF);
     mPORTDSetPinsDigitalOut(BIT_0 | BIT_1 | BIT_2);
+
+    //initalize the button press mutex
+    for(i = 0; i <= 2; i++)
+    {
+        LEDmutex[i] = xSemaphoreCreateBinary();
+    }
     return 0;
 }
 

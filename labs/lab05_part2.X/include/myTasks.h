@@ -19,11 +19,13 @@ extern "C" {
 #include <FreeRTOS.h>
 #include "task.h"
 #include "queue.h"
+#include "semphr.h"
 
 #include <plib.h>
 
 #include "uartdrv.h"
 
+#include "buttondrv.h"
     /* cals includes */
 enum state_enum{
     IDLE = 0,

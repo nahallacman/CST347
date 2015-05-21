@@ -30,12 +30,12 @@ ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 IMAGE_TYPE=debug
 OUTPUT_SUFFIX=elf
 DEBUGGABLE_SUFFIX=elf
-FINAL_IMAGE=dist/${CND_CONF}/${IMAGE_TYPE}/lab05.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+FINAL_IMAGE=dist/${CND_CONF}/${IMAGE_TYPE}/lab05_part2.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 else
 IMAGE_TYPE=production
 OUTPUT_SUFFIX=hex
 DEBUGGABLE_SUFFIX=elf
-FINAL_IMAGE=dist/${CND_CONF}/${IMAGE_TYPE}/lab05.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+FINAL_IMAGE=dist/${CND_CONF}/${IMAGE_TYPE}/lab05_part2.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 endif
 
 # Object Directory
@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=../FreeRTOS/Source/portable/MemMang/heap_2.c ../FreeRTOS/Source/list.c ../FreeRTOS/Source/portable/MPLAB/PIC32MX/port.c ../FreeRTOS/Source/portable/MPLAB/PIC32MX/port_asm.S ../FreeRTOS/Source/queue.c ../FreeRTOS/Source/tasks.c src/main.c src/myTasks.c src/leddrv.c src/uartdrv.c src/uart_isr.S
+SOURCEFILES_QUOTED_IF_SPACED=../FreeRTOS/Source/portable/MemMang/heap_2.c ../FreeRTOS/Source/list.c ../FreeRTOS/Source/portable/MPLAB/PIC32MX/port.c ../FreeRTOS/Source/portable/MPLAB/PIC32MX/port_asm.S ../FreeRTOS/Source/queue.c ../FreeRTOS/Source/tasks.c src/main.c src/myTasks.c src/leddrv.c src/uartdrv.c src/uart_isr.S src/buttondrv.c src/cn_isr.S
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/167578668/heap_2.o ${OBJECTDIR}/_ext/381897321/list.o ${OBJECTDIR}/_ext/971107649/port.o ${OBJECTDIR}/_ext/971107649/port_asm.o ${OBJECTDIR}/_ext/381897321/queue.o ${OBJECTDIR}/_ext/381897321/tasks.o ${OBJECTDIR}/src/main.o ${OBJECTDIR}/src/myTasks.o ${OBJECTDIR}/src/leddrv.o ${OBJECTDIR}/src/uartdrv.o ${OBJECTDIR}/src/uart_isr.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/167578668/heap_2.o.d ${OBJECTDIR}/_ext/381897321/list.o.d ${OBJECTDIR}/_ext/971107649/port.o.d ${OBJECTDIR}/_ext/971107649/port_asm.o.d ${OBJECTDIR}/_ext/381897321/queue.o.d ${OBJECTDIR}/_ext/381897321/tasks.o.d ${OBJECTDIR}/src/main.o.d ${OBJECTDIR}/src/myTasks.o.d ${OBJECTDIR}/src/leddrv.o.d ${OBJECTDIR}/src/uartdrv.o.d ${OBJECTDIR}/src/uart_isr.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/167578668/heap_2.o ${OBJECTDIR}/_ext/381897321/list.o ${OBJECTDIR}/_ext/971107649/port.o ${OBJECTDIR}/_ext/971107649/port_asm.o ${OBJECTDIR}/_ext/381897321/queue.o ${OBJECTDIR}/_ext/381897321/tasks.o ${OBJECTDIR}/src/main.o ${OBJECTDIR}/src/myTasks.o ${OBJECTDIR}/src/leddrv.o ${OBJECTDIR}/src/uartdrv.o ${OBJECTDIR}/src/uart_isr.o ${OBJECTDIR}/src/buttondrv.o ${OBJECTDIR}/src/cn_isr.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/167578668/heap_2.o.d ${OBJECTDIR}/_ext/381897321/list.o.d ${OBJECTDIR}/_ext/971107649/port.o.d ${OBJECTDIR}/_ext/971107649/port_asm.o.d ${OBJECTDIR}/_ext/381897321/queue.o.d ${OBJECTDIR}/_ext/381897321/tasks.o.d ${OBJECTDIR}/src/main.o.d ${OBJECTDIR}/src/myTasks.o.d ${OBJECTDIR}/src/leddrv.o.d ${OBJECTDIR}/src/uartdrv.o.d ${OBJECTDIR}/src/uart_isr.o.d ${OBJECTDIR}/src/buttondrv.o.d ${OBJECTDIR}/src/cn_isr.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/167578668/heap_2.o ${OBJECTDIR}/_ext/381897321/list.o ${OBJECTDIR}/_ext/971107649/port.o ${OBJECTDIR}/_ext/971107649/port_asm.o ${OBJECTDIR}/_ext/381897321/queue.o ${OBJECTDIR}/_ext/381897321/tasks.o ${OBJECTDIR}/src/main.o ${OBJECTDIR}/src/myTasks.o ${OBJECTDIR}/src/leddrv.o ${OBJECTDIR}/src/uartdrv.o ${OBJECTDIR}/src/uart_isr.o
+OBJECTFILES=${OBJECTDIR}/_ext/167578668/heap_2.o ${OBJECTDIR}/_ext/381897321/list.o ${OBJECTDIR}/_ext/971107649/port.o ${OBJECTDIR}/_ext/971107649/port_asm.o ${OBJECTDIR}/_ext/381897321/queue.o ${OBJECTDIR}/_ext/381897321/tasks.o ${OBJECTDIR}/src/main.o ${OBJECTDIR}/src/myTasks.o ${OBJECTDIR}/src/leddrv.o ${OBJECTDIR}/src/uartdrv.o ${OBJECTDIR}/src/uart_isr.o ${OBJECTDIR}/src/buttondrv.o ${OBJECTDIR}/src/cn_isr.o
 
 # Source Files
-SOURCEFILES=../FreeRTOS/Source/portable/MemMang/heap_2.c ../FreeRTOS/Source/list.c ../FreeRTOS/Source/portable/MPLAB/PIC32MX/port.c ../FreeRTOS/Source/portable/MPLAB/PIC32MX/port_asm.S ../FreeRTOS/Source/queue.c ../FreeRTOS/Source/tasks.c src/main.c src/myTasks.c src/leddrv.c src/uartdrv.c src/uart_isr.S
+SOURCEFILES=../FreeRTOS/Source/portable/MemMang/heap_2.c ../FreeRTOS/Source/list.c ../FreeRTOS/Source/portable/MPLAB/PIC32MX/port.c ../FreeRTOS/Source/portable/MPLAB/PIC32MX/port_asm.S ../FreeRTOS/Source/queue.c ../FreeRTOS/Source/tasks.c src/main.c src/myTasks.c src/leddrv.c src/uartdrv.c src/uart_isr.S src/buttondrv.c src/cn_isr.S
 
 
 CFLAGS=
@@ -75,7 +75,7 @@ FIXDEPS=fixDeps
 ifneq ($(INFORMATION_MESSAGE), )
 	@echo $(INFORMATION_MESSAGE)
 endif
-	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/lab05.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/lab05_part2.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 
 MP_PROCESSOR_OPTION=32MX360F512L
 MP_LINKER_FILE_OPTION=
@@ -102,6 +102,13 @@ ${OBJECTDIR}/src/uart_isr.o: src/uart_isr.S  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/src/uart_isr.o.ok ${OBJECTDIR}/src/uart_isr.o.err 
 	@${FIXDEPS} "${OBJECTDIR}/src/uart_isr.o.d" "${OBJECTDIR}/src/uart_isr.o.asm.d" -t $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./include" -I"../FreeRTOS/Source/include" -I"../FreeRTOS/Source/portable/MPLAB/PIC32MX" -MMD -MF "${OBJECTDIR}/src/uart_isr.o.d"  -o ${OBJECTDIR}/src/uart_isr.o src/uart_isr.S  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),-MD="${OBJECTDIR}/src/uart_isr.o.asm.d",--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--gdwarf-2,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_ICD3=1
 	
+${OBJECTDIR}/src/cn_isr.o: src/cn_isr.S  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/src" 
+	@${RM} ${OBJECTDIR}/src/cn_isr.o.d 
+	@${RM} ${OBJECTDIR}/src/cn_isr.o 
+	@${RM} ${OBJECTDIR}/src/cn_isr.o.ok ${OBJECTDIR}/src/cn_isr.o.err 
+	@${FIXDEPS} "${OBJECTDIR}/src/cn_isr.o.d" "${OBJECTDIR}/src/cn_isr.o.asm.d" -t $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC} $(MP_EXTRA_AS_PRE)  -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./include" -I"../FreeRTOS/Source/include" -I"../FreeRTOS/Source/portable/MPLAB/PIC32MX" -MMD -MF "${OBJECTDIR}/src/cn_isr.o.d"  -o ${OBJECTDIR}/src/cn_isr.o src/cn_isr.S  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),-MD="${OBJECTDIR}/src/cn_isr.o.asm.d",--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--gdwarf-2,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_ICD3=1
+	
 else
 ${OBJECTDIR}/_ext/971107649/port_asm.o: ../FreeRTOS/Source/portable/MPLAB/PIC32MX/port_asm.S  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/971107649" 
@@ -116,6 +123,13 @@ ${OBJECTDIR}/src/uart_isr.o: src/uart_isr.S  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/src/uart_isr.o 
 	@${RM} ${OBJECTDIR}/src/uart_isr.o.ok ${OBJECTDIR}/src/uart_isr.o.err 
 	@${FIXDEPS} "${OBJECTDIR}/src/uart_isr.o.d" "${OBJECTDIR}/src/uart_isr.o.asm.d" -t $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./include" -I"../FreeRTOS/Source/include" -I"../FreeRTOS/Source/portable/MPLAB/PIC32MX" -MMD -MF "${OBJECTDIR}/src/uart_isr.o.d"  -o ${OBJECTDIR}/src/uart_isr.o src/uart_isr.S  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),-MD="${OBJECTDIR}/src/uart_isr.o.asm.d",--gdwarf-2
+	
+${OBJECTDIR}/src/cn_isr.o: src/cn_isr.S  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/src" 
+	@${RM} ${OBJECTDIR}/src/cn_isr.o.d 
+	@${RM} ${OBJECTDIR}/src/cn_isr.o 
+	@${RM} ${OBJECTDIR}/src/cn_isr.o.ok ${OBJECTDIR}/src/cn_isr.o.err 
+	@${FIXDEPS} "${OBJECTDIR}/src/cn_isr.o.d" "${OBJECTDIR}/src/cn_isr.o.asm.d" -t $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC} $(MP_EXTRA_AS_PRE)  -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"./include" -I"../FreeRTOS/Source/include" -I"../FreeRTOS/Source/portable/MPLAB/PIC32MX" -MMD -MF "${OBJECTDIR}/src/cn_isr.o.d"  -o ${OBJECTDIR}/src/cn_isr.o src/cn_isr.S  -Wa,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_AS_POST),-MD="${OBJECTDIR}/src/cn_isr.o.asm.d",--gdwarf-2
 	
 endif
 
@@ -176,6 +190,12 @@ ${OBJECTDIR}/src/uartdrv.o: src/uartdrv.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/src/uartdrv.o 
 	@${FIXDEPS} "${OBJECTDIR}/src/uartdrv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -D_SUPPRESS_PLIB_WARNING -D_DISABLE_OPENADC10_CONFIGPORT_WARNING -I"./include" -I"../FreeRTOS/Source/include" -I"../FreeRTOS/Source/portable/MPLAB/PIC32MX" -MMD -MF "${OBJECTDIR}/src/uartdrv.o.d" -o ${OBJECTDIR}/src/uartdrv.o src/uartdrv.c   
 	
+${OBJECTDIR}/src/buttondrv.o: src/buttondrv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/src" 
+	@${RM} ${OBJECTDIR}/src/buttondrv.o.d 
+	@${RM} ${OBJECTDIR}/src/buttondrv.o 
+	@${FIXDEPS} "${OBJECTDIR}/src/buttondrv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -D_SUPPRESS_PLIB_WARNING -D_DISABLE_OPENADC10_CONFIGPORT_WARNING -I"./include" -I"../FreeRTOS/Source/include" -I"../FreeRTOS/Source/portable/MPLAB/PIC32MX" -MMD -MF "${OBJECTDIR}/src/buttondrv.o.d" -o ${OBJECTDIR}/src/buttondrv.o src/buttondrv.c   
+	
 else
 ${OBJECTDIR}/_ext/167578668/heap_2.o: ../FreeRTOS/Source/portable/MemMang/heap_2.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/167578668" 
@@ -231,6 +251,12 @@ ${OBJECTDIR}/src/uartdrv.o: src/uartdrv.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/src/uartdrv.o 
 	@${FIXDEPS} "${OBJECTDIR}/src/uartdrv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -D_SUPPRESS_PLIB_WARNING -D_DISABLE_OPENADC10_CONFIGPORT_WARNING -I"./include" -I"../FreeRTOS/Source/include" -I"../FreeRTOS/Source/portable/MPLAB/PIC32MX" -MMD -MF "${OBJECTDIR}/src/uartdrv.o.d" -o ${OBJECTDIR}/src/uartdrv.o src/uartdrv.c   
 	
+${OBJECTDIR}/src/buttondrv.o: src/buttondrv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/src" 
+	@${RM} ${OBJECTDIR}/src/buttondrv.o.d 
+	@${RM} ${OBJECTDIR}/src/buttondrv.o 
+	@${FIXDEPS} "${OBJECTDIR}/src/buttondrv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -D_SUPPRESS_PLIB_WARNING -D_DISABLE_OPENADC10_CONFIGPORT_WARNING -I"./include" -I"../FreeRTOS/Source/include" -I"../FreeRTOS/Source/portable/MPLAB/PIC32MX" -MMD -MF "${OBJECTDIR}/src/buttondrv.o.d" -o ${OBJECTDIR}/src/buttondrv.o src/buttondrv.c   
+	
 endif
 
 # ------------------------------------------------------------------------------------
@@ -242,15 +268,15 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: link
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-dist/${CND_CONF}/${IMAGE_TYPE}/lab05.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    
+dist/${CND_CONF}/${IMAGE_TYPE}/lab05_part2.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE)  -mdebugger -D__MPLAB_DEBUGGER_ICD3=1 -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/lab05.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}           -mreserve=data@0x0:0x1FC -mreserve=boot@0x1FC02000:0x1FC02FEF -mreserve=boot@0x1FC02000:0x1FC024FF  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_ICD3=1,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"
+	${MP_CC} $(MP_EXTRA_LD_PRE)  -mdebugger -D__MPLAB_DEBUGGER_ICD3=1 -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/lab05_part2.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}           -mreserve=data@0x0:0x1FC -mreserve=boot@0x1FC02000:0x1FC02FEF -mreserve=boot@0x1FC02000:0x1FC024FF  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_ICD3=1,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"
 	
 else
-dist/${CND_CONF}/${IMAGE_TYPE}/lab05.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
+dist/${CND_CONF}/${IMAGE_TYPE}/lab05_part2.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE)  -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/lab05.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"
-	${MP_CC_DIR}\\xc32-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/lab05.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} 
+	${MP_CC} $(MP_EXTRA_LD_PRE)  -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/lab05_part2.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"
+	${MP_CC_DIR}\\xc32-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/lab05_part2.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} 
 endif
 
 

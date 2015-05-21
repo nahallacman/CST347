@@ -150,5 +150,7 @@ static void prvSetupHardware(void)
     //initUART(UART2, 9600);
     initUART(UART1, 9600);
 
+    initCN();
+
     SystemControlSetup();
 }
