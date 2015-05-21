@@ -67,7 +67,7 @@ struct /* __attribute__ ((packed)) */LEDMessage
 
 
 //cals tasks
-static void taskmyLeds(void *pvParameters);
+//static void taskmyLeds(void *pvParameters);
 
 /* A task that toggles an LED at a fixed frequency.  This time, the LED to
 toggle and the rate at which the LED is toggled are passed into the task
@@ -75,6 +75,13 @@ using the task parameter.  This allows the same task function to be used to
 create multiple tasks that each behave slightly differently. */
 static void taskToggleAnLED(void *pvParameters);
 
+static void taskButton(void *pvParameters);
+
+//sets up the system control tasks
+//and queues
+static void SystemControlSetup();
+
+/*
 static void OLDtaskToggleAnLED(void *pvParameters);
 
 
@@ -87,14 +94,14 @@ static void taskUARTTXControl(void *pvParameters);
 //task for UART recieve control
 static void taskUARTRXControl(void *pvParameters);
 
-//sets up the system control tasks
-//and queues
-static void SystemControlSetup();
+
 
 
 uint8_t lockout[3];
 
 void createTaskMessageSendToBack(struct UARTMessage);
+
+*/
 #ifdef	__cplusplus
 }
 #endif

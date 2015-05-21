@@ -17,7 +17,8 @@ void initCN(void)
     mCNOpen(CN_ON, CN15_ENABLE | CN16_ENABLE | CN19_ENABLE, CN15_PULLUP_ENABLE | CN16_PULLUP_ENABLE | CN19_PULLUP_ENABLE);
 
     // Read PORTx to clear andy *mismatch* for each PORT having a used pin
-    mPORTDRead();
+    //also initalize the variable (may not be the appropriate place for this)
+    LastButtonState = mPORTDRead();
 
     // Set IPC6<20-18> and <17-16> for interrupt priority and subpriority
     // Clear IFS1<0> to clear interrupt status

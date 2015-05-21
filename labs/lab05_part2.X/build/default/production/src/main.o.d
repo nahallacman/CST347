@@ -1,5 +1,5 @@
-build/default/debug/src/myTasks.o:  \
-src/myTasks.c  \
+build/default/production/src/main.o:  \
+src/main.c  \
 include/myTasks.h  \
  include/leddrv.h  \
 ../FreeRTOS/Source/include/FreeRTOS.h  \
@@ -16,4 +16,6 @@ include/myTasks.h  \
  ../FreeRTOS/Source/include/queue.h  \
 include/uartdrv.h  \
 include/myTasks.h  \
- include/buttondrv.h 
+ include/buttondrv.h  \
+include/leddrv.h  \
+src/myTasks.c 
