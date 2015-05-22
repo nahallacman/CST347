@@ -20,6 +20,8 @@ extern "C" {
 #include "queue.h"
 #include "myTasks.h"
 
+#include "IncludeCommon.h"
+
     //Task and Queue stuff for UART
 TaskHandle_t xUARTTXHandle;
 TaskHandle_t xUARTRXHandle;

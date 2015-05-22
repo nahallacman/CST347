@@ -2,7 +2,11 @@
 
 #include "uartdrv.h"
 
+#ifdef CALS_BOARD
 void __attribute__((interrupt(ipl0), vector(_UART1_VECTOR))) vUART1_ISR_Wrapper(void);
+#else
+void __attribute__((interrupt(ipl0), vector(_UART2_VECTOR))) vUART2_ISR_Wrapper(void);
+#endif
 
 void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
 {
@@ -56,9 +60,13 @@ void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
 
 }
 
-
+#ifdef CALS_BOARD
 void vUART1_ISR(void)
 {
+#else
+void vUART2_ISR(void)
+{
+#endif
     /* Variables */
     static portBASE_TYPE xHigherPriorityTaskWoken;
     UART_DATA uData;
@@ -70,11 +78,20 @@ void vUART1_ISR(void)
     // ISR exited. Then the CPU will be interrupt again from the currently
     // pending TX interrupt that did not get handle the last time. The interrupt
     // flags can be checked using the plib.
+    #ifdef CALS_BOARD
     if(INTGetFlag(INT_U1RX))
     {
         INTClearFlag(INT_U1RX);
         
         uData = UARTGetData(UART1);
+    #else
+    if(INTGetFlag(INT_U2RX))
+    {
+        INTClearFlag(INT_U2RX);
+
+        uData = UARTGetData(UART2);
+    #endif
+
         cData = uData.__data;
 
         UARTSetChar(cData);
@@ -84,9 +101,15 @@ void vUART1_ISR(void)
 
 
     }
+    #ifdef CALS_BOARD
     else if(INTGetFlag(INT_U1TX))
     {
         INTClearFlag(INT_U1TX);
+    #else
+    else if(INTGetFlag(INT_U2TX))
+    {
+        INTClearFlag(INT_U2TX);
+    #endif
 
         //string is already formatted properly,
         //iterate through and send data
@@ -96,33 +119,32 @@ void vUART1_ISR(void)
             //clear TX interrupt flag
             
             //disable TX interrupt
+            #ifdef CALS_BOARD
             INTEnable(INT_U1TX, INT_DISABLED);
+            #else
+            INTEnable(INT_U2TX, INT_DISABLED);
+            #endif
             //reset print index
             TXIndex = 0;
         }
         else
         {
             //otherwise send the byte
+            #ifdef CALS_BOARD
             UARTSendDataByte(UART1, TXbuffer[TXIndex]);
+            #else
+            UARTSendDataByte(UART2, TXbuffer[TXIndex]);
+            #endif
             //increase the index
             TXIndex++;
             //do I need to clear the TX interrupt flag here? (probably do)
         }
         //either way we clear the TX interrupt flag
         //INTClearFlag(INT_U2TX);
-
-
     }
-
-
-
-
         /* If sending or receiving necessitates a context switch, then switch now. */
         portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
-
-
 }
-
 
 
 //void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
@@ -198,10 +220,18 @@ void UARTPutString(char * string)
     {
         TXbuffer[i] = string[i];
     }
+
+    #ifdef CALS_BOARD
     //not sure if this is necessary, going to manually trigger an interrupt too
     INTSetFlag(INT_U1TX);
     //enable the interrupt to actually send the information
     INTEnable(INT_U1TX, INT_ENABLED);
+    #else
+    //not sure if this is necessary, going to manually trigger an interrupt too
+    INTSetFlag(INT_U1TX);
+    //enable the interrupt to actually send the information
+    INTEnable(INT_U1TX, INT_ENABLED);
+    #endif
 
 }
 

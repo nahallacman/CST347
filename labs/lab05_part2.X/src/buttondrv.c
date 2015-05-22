@@ -26,12 +26,20 @@ void initCN(void)
     ConfigIntCN(CHANGE_INT_PRI_3 | CHANGE_INT_ON);
 
     //initalize the button press mutex
-    buttonpressmutex = xSemaphoreCreateBinary();
+    //buttonpressmutex = xSemaphoreCreateBinary();
+    buttonpressmutex = xSemaphoreCreateMutex();
+
+            xSemaphoreTake(
+                   buttonpressmutex,
+                   portMAX_DELAY
+               );
 }
 
 
 void vCN_ISR(void)
 {
+    int i;
+
     /* Variables */
     static portBASE_TYPE xHigherPriorityTaskWoken;
 
@@ -44,7 +52,16 @@ void vCN_ISR(void)
     // Returns xHigherPriorityTaskWoken
     
     //this returns true if the give was successful
-    xSemaphoreGiveFromISR( buttonpressmutex, &xHigherPriorityTaskWoken );
+    if( xSemaphoreGiveFromISR( buttonpressmutex, &xHigherPriorityTaskWoken ) == pdTRUE )
+    {
+        //success
+        i = 0;
+    }
+    else
+    {
+        //fail
+        i = 1;
+    }
 
 
     /* If sending or receiving necessitates a context switch, then switch now. */

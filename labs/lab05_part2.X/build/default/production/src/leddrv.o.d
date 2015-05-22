@@ -9,4 +9,5 @@ include/FreeRTOSConfig.h  \
  ../FreeRTOS/Source/portable/MPLAB/PIC32MX/portmacro.h  \
  ../FreeRTOS/Source/include/mpu_wrappers.h  \
  ../FreeRTOS/Source/include/semphr.h  \
-../FreeRTOS/Source/include/queue.h 
+../FreeRTOS/Source/include/queue.h  \
+ include/IncludeCommon.h 

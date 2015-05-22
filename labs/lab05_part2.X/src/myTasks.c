@@ -168,9 +168,11 @@ static void taskButton(void *pvParameters)
 //f. After the ?give? action/s is/are taken, if at all, the Global Button State is updated.
         LastButtonState = ThisButtonState;
         //Return the button press mutex (is this correct?)
-        xSemaphoreGive( buttonpressmutex ) ;
+        //xSemaphoreGive( buttonpressmutex ) ;
 //g. Finally, the Change Notification Interrupt is enabled.
-        ConfigIntCN(CHANGE_INT_ON);
+        //INTEnable(INT_U1TX, INT_DISABLED);
+        //ConfigIntCN(CHANGE_INT_ON, );
+        ConfigIntCN(CHANGE_INT_PRI_3 | CHANGE_INT_ON);
     }
 }
 

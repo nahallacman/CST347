@@ -13,6 +13,8 @@
 #include <FreeRTOS.h>
 #include "semphr.h"
 
+#include "IncludeCommon.h"
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
