@@ -113,6 +113,22 @@ void SystemControlSetup()
     //once everything is set up, reset the currentHandle index
     currentHandle = 0;
 
+        //UART TX and RX Control tasks
+        xTaskCreate(taskUARTTXControl,
+            "LED1",
+            configMINIMAL_STACK_SIZE,
+            (void *) &xTask0Parameters,
+            UARTTXTASKPRIORITY,
+            &xUARTTXHandle);
+       configASSERT( &xUARTTXHandle );
+
+    xTaskCreate(taskUARTRXControl,
+            "LED1",
+            configMINIMAL_STACK_SIZE,
+            (void *) &xTask0Parameters,
+            UARTRXTASKPRIORITY,
+            &xUARTRXHandle);
+       configASSERT( &xUARTRXHandle );
 
 }
 
@@ -304,6 +320,8 @@ static void taskUARTRXControl(void *pvParameters)
             //a = 0;
         }
 
+        /*
+
         //decode the character to see if it is a simple command code
         //if it is send a message with an LED number to the LED queue
         switch(cByte)
@@ -342,6 +360,8 @@ static void taskUARTRXControl(void *pvParameters)
         vTaskSuspend(xUARTRXHandle);
 
         //when the task is resumed, the loop should make the other code happen automatically
+         
+         */
     }
 
 

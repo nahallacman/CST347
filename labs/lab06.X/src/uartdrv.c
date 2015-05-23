@@ -64,6 +64,11 @@ void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
 
     OutputStringBuffer = xSemaphoreCreateMutex();
 
+//    xSemaphoreTake(
+//           OutputStringBuffer,
+//           portMAX_DELAY
+//    );
+
 }
 
 
@@ -89,7 +94,12 @@ void vUART1_ISR(void)
 
         UARTSetChar(cData);
 
-        xSemaphoreGive( InputByteBuffer );
+        //xSemaphoreGive( InputByteBuffer );
+        xSemaphoreGiveFromISR
+        (
+        InputByteBuffer,
+        &xHigherPriorityTaskWoken
+        );
 
 
     }
@@ -109,7 +119,12 @@ void vUART1_ISR(void)
             //reset print index
             TXIndex = 0;
 
-            xSemaphoreGive( OutputStringBuffer );
+            //xSemaphoreGive( OutputStringBuffer );
+            xSemaphoreGiveFromISR
+            (
+            OutputStringBuffer,
+            &xHigherPriorityTaskWoken
+            );
         }
         else
         {
@@ -206,7 +221,7 @@ void UARTPutString(char * string)
 
     //take the mutex so only one person can send at a time.
     xSemaphoreTake(
-           InputByteBuffer,
+           OutputStringBuffer,
            portMAX_DELAY
     );
 

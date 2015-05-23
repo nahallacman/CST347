@@ -102,6 +102,12 @@ uint8_t lockout[3];
 void createTaskMessageSendToBack(struct UARTMessage);
 
 */
+
+//task for UART transmit control
+static void taskUARTTXControl(void *pvParameters);
+
+//task for UART recieve control
+static void taskUARTRXControl(void *pvParameters);
 #ifdef	__cplusplus
 }
 #endif
