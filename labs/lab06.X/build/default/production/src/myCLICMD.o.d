@@ -1,5 +1,5 @@
-build/default/production/src/examplecmd.o:  \
-src/examplecmd.c  \
+build/default/production/src/myCLICMD.o:  \
+src/myCLICMD.c  \
  ../FreeRTOS/Source/include/FreeRTOS.h  \
 include/FreeRTOSConfig.h  \
  ../FreeRTOS/Source/include/projdefs.h  \
@@ -9,4 +9,5 @@ include/FreeRTOSConfig.h  \
  ../FreeRTOS/Source/include/mpu_wrappers.h  \
  src/../../FreeRTOS-Plus-CLI/FreeRTOS_CLI.h  \
  ../FreeRTOS/Source/include/task.h  \
-../FreeRTOS/Source/include/list.h 
+../FreeRTOS/Source/include/list.h  \
+ include/myCLICMD.h 

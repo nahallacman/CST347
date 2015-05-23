@@ -137,6 +137,7 @@ interrupts. */
 
 //this was asked to be put in for the CLI lab
 #define configCOMMAND_INT_MAX_OUTPUT_SIZE 300
-
+//this was asked for use for vTaskList
+#define configUSE_STATS_FORMATTING_FUNCTIONS 1
 
 #endif /* FREERTOS_CONFIG_H */

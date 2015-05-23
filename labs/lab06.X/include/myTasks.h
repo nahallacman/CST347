@@ -26,6 +26,7 @@ extern "C" {
 #include "uartdrv.h"
 
 #include "buttondrv.h"
+
     /* cals includes */
 enum state_enum{
     IDLE = 0,
@@ -115,6 +116,8 @@ static void taskUARTTXControl(void *pvParameters);
 
 //task for UART recieve control
 static void taskUARTRXControl(void *pvParameters);
+
+static void vCommandConsoleTask( void *pvParameters );
 #ifdef	__cplusplus
 }
 #endif
