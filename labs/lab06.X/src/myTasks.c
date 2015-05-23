@@ -39,7 +39,7 @@ TaskHandle_t xLEDHandle[3];
 int currentHandle;
 
 //QueueHandle_t xQueue[3];
-//QueueHandle_t xLEDQueue;
+QueueHandle_t xLEDQueue[3];
 
 TaskHandle_t xButtonTask;
 
@@ -47,6 +47,7 @@ TaskHandle_t xButtonTask;
 
 void SystemControlSetup()
 {
+    /*
     if( xButtonTask == NULL )
     {
     //create the corresponding LED task
@@ -59,58 +60,101 @@ void SystemControlSetup()
 
                         configASSERT( xButtonTask );
     }
+     */
 
+    xTaskParameter_t xTask3Parameters[3];
+    xTask3Parameters[0] = xTask0Parameters;
+    xTask3Parameters[1] = xTask1Parameters;
+    xTask3Parameters[2] = xTask2Parameters;
 
+    UBaseType_t uxQueueLength = 5;
+    UBaseType_t uxItemSize;
 
-    currentHandle = 0;
-    // null out the handle just in case
-    if( xLEDHandle[currentHandle] == NULL )
-    {
-    //create the corresponding LED task
-    xTaskCreate(taskToggleAnLED,
-                        "LED1",
-                        configMINIMAL_STACK_SIZE,
-                        (void *) &xTask0Parameters,
-                        1,
-                        &xLEDHandle[currentHandle]);
+    uxItemSize = sizeof(xLEDMessage);
 
-                        configASSERT( xLEDHandle[currentHandle] );
-    }
+    //set up the 3 led tasks
+    //for(currentHandle = 0; currentHandle < 3; currentHandle++)
+    //{
+        // check if handle is null
+        
+        if( xLEDHandle[currentHandle] == NULL )
+        {
+        //create the corresponding LED task
+        xTaskCreate(taskToggleAnLED,
+                            "LED1",
+                            configMINIMAL_STACK_SIZE,
+                            //(void *) &xTask3Parameters[currentHandle],
+                            (void *) &xTask0Parameters,
+                            LEDTASKPRIORITY,
+                            &xLEDHandle[currentHandle]);
 
+                            configASSERT( xLEDHandle[currentHandle] );
+       }
+       
+
+       if( xLEDQueue[currentHandle] == NULL )
+       {
+       xLEDQueue[currentHandle] = xQueueCreate
+                  (
+                     uxQueueLength,
+                     uxItemSize
+                  );
+       }
+    //}
 
     currentHandle++;
 
-    // null out the handle just in case
-    if( xLEDHandle[currentHandle] == NULL )
-    {
-    //create the corresponding LED task
-    xTaskCreate(taskToggleAnLED,
-                        "LED1",
-                        configMINIMAL_STACK_SIZE,
-                        (void *) &xTask1Parameters,
-                        1,
-                        &xLEDHandle[currentHandle]);
+        if( xLEDHandle[currentHandle] == NULL )
+        {
+        //create the corresponding LED task
+        xTaskCreate(taskToggleAnLED,
+                            "LED1",
+                            configMINIMAL_STACK_SIZE,
+                            //(void *) &xTask3Parameters[currentHandle],
+                            (void *) &xTask1Parameters,
+                            LEDTASKPRIORITY,
+                            &xLEDHandle[currentHandle]);
 
-                        configASSERT( xLEDHandle[currentHandle] );
-    }
+                            configASSERT( xLEDHandle[currentHandle] );
+       }
 
-    currentHandle++;
 
-    // null out the handle just in case
-    if( xLEDHandle[currentHandle] == NULL )
-    {
-    //create the corresponding LED task
-    xTaskCreate(taskToggleAnLED,
-                        "LED1",
-                        configMINIMAL_STACK_SIZE,
-                        (void *) &xTask2Parameters,
-                        1,
-                        &xLEDHandle[currentHandle]);
+       if( xLEDQueue[currentHandle] == NULL )
+       {
+       xLEDQueue[currentHandle] = xQueueCreate
+                  (
+                     uxQueueLength,
+                     uxItemSize
+                  );
+       }
 
-                        configASSERT( xLEDHandle[currentHandle] );
-    }
+        currentHandle++;
 
-    //once everything is set up, reset the currentHandle index
+        if( xLEDHandle[currentHandle] == NULL )
+        {
+        //create the corresponding LED task
+        xTaskCreate(taskToggleAnLED,
+                            "LED1",
+                            configMINIMAL_STACK_SIZE,
+                            //(void *) &xTask3Parameters[currentHandle],
+                            (void *) &xTask2Parameters,
+                            LEDTASKPRIORITY,
+                            &xLEDHandle[currentHandle]);
+
+                            configASSERT( xLEDHandle[currentHandle] );
+       }
+
+
+       if( xLEDQueue[currentHandle] == NULL )
+       {
+       xLEDQueue[currentHandle] = xQueueCreate
+                  (
+                     uxQueueLength,
+                     uxItemSize
+                  );
+       }
+
+    //DONT FORGET TO RESET THE HANDLE INDEX -_-
     currentHandle = 0;
 
         //UART TX and RX Control tasks
@@ -204,14 +248,41 @@ static void taskToggleAnLED(void *pvParameters)
     //xTaskParameter_t *b;
     //b = &a;
 
+    struct LEDMessage *pxRxedMessage;
+    struct LEDMessage pxAllocMessage;
+    uint8_t MessageIDtest = 0;
+    //enum led_dir led_test;
+    int delay = 500;
+
+    //int delay = 500;
+    //int a = 0;
+
+    pxRxedMessage = &pxAllocMessage;
+
     while (1)
     {
-        xSemaphoreTake(
-                   LEDmutex[pxTaskParameter->usLEDNumber],
-                   portMAX_DELAY
-               );
-
-       toggleLED(pxTaskParameter->usLEDNumber);
+        if(xLEDQueue[pxTaskParameter->usLEDNumber] != 0) // make sure the queue isn't null
+        {
+            if( uxQueueMessagesWaiting( xLEDQueue[pxTaskParameter->usLEDNumber] ) != 0 )
+            {
+                if( xQueueReceive( xLEDQueue[pxTaskParameter->usLEDNumber], ( pxRxedMessage ), ( TickType_t ) 0 ) )
+                {
+                    // pcRxedMessage now points to the struct AMessage variable posted
+                    // by vATask.
+                    MessageIDtest = pxRxedMessage->ucMessageID;
+                    //led_test = pxRxedMessage->LEDNum;
+                    delay = pxRxedMessage->LEDDelay;
+                }
+                else
+                {
+                    //a = 0;
+                }
+            }
+        }
+        //no matter what, start out by toggling every 500ms
+        toggleLED(pxTaskParameter->usLEDNumber);
+        vTaskDelay(delay);
+        
     }
 }
 

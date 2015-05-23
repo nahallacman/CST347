@@ -135,5 +135,8 @@ be called.  Only API functions that end in ...FromISR() can be used within
 interrupts. */
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY	0x03
 
+//this was asked to be put in for the CLI lab
+#define configCOMMAND_INT_MAX_OUTPUT_SIZE 300
+
 
 #endif /* FREERTOS_CONFIG_H */
