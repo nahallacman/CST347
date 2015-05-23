@@ -42,6 +42,7 @@
       <itemPath>src/uart_isr.S</itemPath>
       <itemPath>src/buttondrv.c</itemPath>
       <itemPath>src/cn_isr.S</itemPath>
+      <itemPath>src/examplecmd.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

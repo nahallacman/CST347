@@ -54,6 +54,16 @@ void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
     //make sure the TX buffer is nulled out.
     ClearBuffer();
 
+    InputByteBuffer = xSemaphoreCreateMutex();
+
+    //is this take necessary?
+    xSemaphoreTake(
+           InputByteBuffer,
+           portMAX_DELAY
+    );
+
+    OutputStringBuffer = xSemaphoreCreateMutex();
+
 }
 
 
@@ -79,8 +89,7 @@ void vUART1_ISR(void)
 
         UARTSetChar(cData);
 
-        //not sure if this goes here
-        xHigherPriorityTaskWoken = xTaskResumeFromISR(xUARTRXHandle);
+        xSemaphoreGive( InputByteBuffer );
 
 
     }
@@ -99,6 +108,8 @@ void vUART1_ISR(void)
             INTEnable(INT_U1TX, INT_DISABLED);
             //reset print index
             TXIndex = 0;
+
+            xSemaphoreGive( OutputStringBuffer );
         }
         else
         {
@@ -192,6 +203,13 @@ void UARTSetChar(char in)
 void UARTPutString(char * string)
 {
     int i;
+
+    //take the mutex so only one person can send at a time.
+    xSemaphoreTake(
+           InputByteBuffer,
+           portMAX_DELAY
+    );
+
     //format the string for being sent through interrupts
     //should double check that there is a null on the end of the string
     for(i = 0; i < 50 && string[i] != 0; i++)

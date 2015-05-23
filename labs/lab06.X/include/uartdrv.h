@@ -48,6 +48,11 @@ void UARTPutString(char * string);
 void ClearBuffer(void);
 
 
+
+SemaphoreHandle_t InputByteBuffer;
+SemaphoreHandle_t OutputStringBuffer;
+
+
 #ifdef	__cplusplus
 }
 #endif

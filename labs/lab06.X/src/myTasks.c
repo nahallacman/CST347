@@ -198,3 +198,151 @@ static void taskToggleAnLED(void *pvParameters)
        toggleLED(pxTaskParameter->usLEDNumber);
     }
 }
+
+
+static void taskUARTTXControl(void *pvParameters)
+{
+    xTaskParameter_t *pxTaskParameter;
+    portTickType xStartTime;
+
+    /* The parameter points to an xTaskParameters_t structure. */
+    pxTaskParameter = (xTaskParameter_t *) pvParameters;
+
+    struct UARTMessage *pxRxedMessage;
+    struct UARTMessage Message2;
+    pxRxedMessage = &Message2;
+
+
+
+    while(1)
+    {
+        //UART handling code
+        if(xUARTQueue != 0) // make sure the task isn't null
+        {
+            //if( uxQueueMessagesWaiting( xUARTQueue ) != 0 ) // see if there are messages waiting
+            //{
+                if( xQueueReceive( xUARTQueue, ( pxRxedMessage ), portMAX_DELAY ) ) // get the messages
+                {
+
+                    //vUartPutStr(UART2, pxRxedMessage->ucMessage, 50);
+                    //void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen);
+                    UARTPutString(pxRxedMessage->ucMessage);
+                }
+           // }
+       }
+
+
+
+
+
+        //vTaskDelay(10);
+    }
+
+}
+
+static void taskUARTRXControl(void *pvParameters)
+{
+    xTaskParameter_t *pxTaskParameter;
+    portTickType xStartTime;
+
+    /* The parameter points to an xTaskParameters_t structure. */
+    pxTaskParameter = (xTaskParameter_t *) pvParameters;
+
+    struct UARTMessage *pxRxedMessage;
+    struct UARTMessage Message2;
+    pxRxedMessage = &Message2;
+
+
+    struct LEDMessage *pxRxedMessage2;
+    struct LEDMessage pxAllocMessage;
+    pxRxedMessage2 = &pxAllocMessage;
+
+    int valid_command = 0;
+/*
+    while(1)
+    {
+        //UART handling code
+        if(xUARTQueue != 0) // make sure the task isn't null
+        {
+            if( uxQueueMessagesWaiting( xUARTQueue ) != 0 ) // see if there are messages waiting
+            {
+                if( xQueueReceive( xUARTQueue, ( pxRxedMessage ), portMAX_DELAY ) ) // get the messages
+                {
+                    vUartPutStr(UART2, pxRxedMessage->ucMessage, 20);
+                    //void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen);
+                }
+            }
+       }
+          vTaskDelay(10);
+    }
+*/
+    char cByte;
+    UART_DATA data;
+
+    while(1)
+    {
+        //take the semaphor, wait forever if it is not ready yet.
+        xSemaphoreTake(
+           InputByteBuffer,
+           portMAX_DELAY
+        );
+
+        //get data from global variable by calling UARTGetChar()
+        cByte = UARTGetChar();
+
+        //echo it on the tx buffer by queueing a message
+        Message2.ucMessage[0] = cByte;
+        Message2.ucMessage[1] = 0;
+
+        if( xQueueSendToBack(
+                       xUARTQueue, //QueueHandle_t xQueue,
+                       &Message2, //const void * pvItemToQueue,
+                       0 //TickType_t xTicksToWait
+                   ) != pdPASS )
+        {
+            //task was not able to be created after the xTicksToWait
+            //a = 0;
+        }
+
+        //decode the character to see if it is a simple command code
+        //if it is send a message with an LED number to the LED queue
+        switch(cByte)
+        {
+            case '1':
+                pxAllocMessage.LEDNum = 0;
+                valid_command = 1;
+                break;
+            case '2':
+                pxAllocMessage.LEDNum = 1;
+                valid_command = 1;
+                break;
+            case '3':
+                pxAllocMessage.LEDNum = 2;
+                valid_command = 1;
+                break;
+            default:
+                //do nothing and don't send the message to the LED queue
+                valid_command = 0;
+        }
+
+        if(valid_command == 1)
+        {
+            if( xQueueSendToBack(
+                   xLEDQueue, //QueueHandle_t xQueue,
+                   &pxAllocMessage, //const void * pvItemToQueue,
+                   0 //TickType_t xTicksToWait
+               ) != pdPASS )
+            {
+            //task was not able to be created after the xTicksToWait
+            //a = 0;
+            }
+        }
+
+        //suspend itself
+        vTaskSuspend(xUARTRXHandle);
+
+        //when the task is resumed, the loop should make the other code happen automatically
+    }
+
+
+}

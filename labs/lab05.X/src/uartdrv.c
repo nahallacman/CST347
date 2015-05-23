@@ -53,7 +53,6 @@ void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
 
     //make sure the TX buffer is nulled out.
     ClearBuffer();
-
 }
 
 
