@@ -231,6 +231,14 @@ void UARTPutString(char * string)
     {
         TXbuffer[i] = string[i];
     }
+    if(i == 50)
+    {
+        i--;
+    }
+    if(TXbuffer[i] != 0)
+    {
+        TXbuffer[i] = 0;
+    }
     //not sure if this is necessary, going to manually trigger an interrupt too
     INTSetFlag(INT_U1TX);
     //enable the interrupt to actually send the information

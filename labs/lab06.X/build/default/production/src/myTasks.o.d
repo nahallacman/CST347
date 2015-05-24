@@ -16,4 +16,7 @@ include/myTasks.h  \
  ../FreeRTOS/Source/include/queue.h  \
 include/uartdrv.h  \
 include/myTasks.h  \
- include/buttondrv.h 
+ include/buttondrv.h  \
+src/myCLICMD.c  \
+ src/../../FreeRTOS-Plus-CLI/FreeRTOS_CLI.h  \
+include/myCLICMD.h 

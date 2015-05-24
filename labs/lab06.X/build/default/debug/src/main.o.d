@@ -18,4 +18,7 @@ include/uartdrv.h  \
 include/myTasks.h  \
  include/buttondrv.h  \
 include/leddrv.h  \
-src/myTasks.c 
+src/myTasks.c  \
+src/myCLICMD.c  \
+ src/../../FreeRTOS-Plus-CLI/FreeRTOS_CLI.h  \
+include/myCLICMD.h 

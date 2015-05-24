@@ -1,6 +1,6 @@
 #include "myTasks.h"
 
-//#include "myCLICMD.c"
+#include "myCLICMD.c"
 
 /*-----------------------------------------------------------*/
 /* Variables used by this demo.                              */
@@ -21,7 +21,7 @@ static const int LEDTASKPRIORITY = 1;
 
 
 
-
+static const char STATICNULL = '\0';
 //static const char LED1MESSAGE[] = "LED 1 ISNOW ACTIVE\n\r";
 //static const char LED2MESSAGE[] = "LED 2 ISNOW ACTIVE\n\r ";
 //static const char LED3MESSAGE[] = "LED 3 ISNOW ACTIVE\n\r ";
@@ -198,6 +198,9 @@ void SystemControlSetup()
             LEDTASKPRIORITY,
             &xCLITask);
        configASSERT( &xUARTRXHandle );
+
+       const CLI_Command_Definition_t * const command = &xTaskStatsCommand;
+       FreeRTOS_CLIRegisterCommand( command );
 
 
 }
@@ -466,6 +469,7 @@ static void taskUARTRXControl(void *pvParameters)
 
 #define MAX_INPUT_LENGTH 50
 #define MAX_OUTPUT_LENGTH 100
+//#define MAX_OUTPUT_LENGTH 50
 static const int8_t * const pcWelcomeMessage =
  "FreeRTOS command server.\r\nType Help to view a list of registered commands.\r\n";
 
@@ -481,7 +485,7 @@ static void vCommandConsoleTask( void *pvParameters )
 int8_t cRxedChar, cInputIndex = 0;
 portBASE_TYPE xMoreDataToFollow;
 /* The input and output buffers are declared static to keep them off the stack. */
-static int8_t pcOutputString[ MAX_OUTPUT_LENGTH ], pcInputString[ MAX_INPUT_LENGTH ] = "help";
+static int8_t pcOutputString[ MAX_OUTPUT_LENGTH ], pcInputString[ MAX_INPUT_LENGTH ] = "help\0";//"task-stats\0";
  /* This code assumes the peripheral being used as the console has already
  been opened and configured, and is passed into the task as the task parameter.
  Cast the task parameter to the correct type. */
@@ -525,7 +529,7 @@ static int8_t pcOutputString[ MAX_OUTPUT_LENGTH ], pcInputString[ MAX_INPUT_LENG
                     {
                         Message2.ucMessage[j] = pcOutputString[j];
                     }
-                    Message2.ucMessage[j] = 0;
+                    Message2.ucMessage[j] = STATICNULL;
                     if( xQueueSendToBack(
                                            xUARTQueue, //QueueHandle_t xQueue,
                                            &Message2, //const void * pvItemToQueue,
@@ -535,6 +539,30 @@ static int8_t pcOutputString[ MAX_OUTPUT_LENGTH ], pcInputString[ MAX_INPUT_LENG
                                 //task was not able to be created after the xTicksToWait
                                 //a = 0;
                             }
+                    if(j > 49)
+                    {
+                        for(j = 0; j < 50 & pcOutputString[j+50] != 0; j++)
+                        {
+                            Message2.ucMessage[j] = pcOutputString[j+50];
+                        }
+                        if(j < 49)
+                        {
+                            for(; j < 50; j++)
+                            {
+                                Message2.ucMessage[j] = STATICNULL;
+                            }
+                        }
+                        Message2.ucMessage[j] = STATICNULL;
+                            if( xQueueSendToBack(
+                                           xUARTQueue, //QueueHandle_t xQueue,
+                                           &Message2, //const void * pvItemToQueue,
+                                           0 //TickType_t xTicksToWait
+                                       ) != pdPASS )
+                            {
+                                //task was not able to be created after the xTicksToWait
+                                //a = 0;
+                            }
+                    }
 
                  //FreeRTOS_write( xConsole, pcOutputString, strlen( pcOutputString ) );
              } while( xMoreDataToFollow != pdFALSE );

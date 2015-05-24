@@ -132,7 +132,7 @@ int main(void)
     toggleLED(1);
     toggleLED(2);
 
-    //const CLI_Command_Definition_t * const command = xTaskStatsCommand;
+    //const CLI_Command_Definition_t * const command = &xTaskStatsCommand;
     //FreeRTOS_CLIRegisterCommand( command );
     //FreeRTOS_CLIRegisterCommand( &xTaskStatsCommand );
 

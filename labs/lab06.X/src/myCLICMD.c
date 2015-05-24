@@ -36,7 +36,7 @@ const int8_t *pcCommandString )
 }
 
 static const xCommandLineInput xTaskStatsCommand = {"task-stats",
-            "task-stats: Displays a table of task state information\r\n",
+            "task-stats: Displays a table of task state information\r\n\n",
             prvTaskStatsCommand,
             0};
 
