@@ -124,17 +124,9 @@ int main(void)
     prvSetupHardware();
 
 
-    //UARTPutString(M1);
-
-    //vUartPutC(UART1, '8');
-
     toggleLED(0);
     toggleLED(1);
     toggleLED(2);
-
-    //const CLI_Command_Definition_t * const command = &xTaskStatsCommand;
-    //FreeRTOS_CLIRegisterCommand( command );
-    //FreeRTOS_CLIRegisterCommand( &xTaskStatsCommand );
 
     /* Start the scheduler so the tasks start executing.  This function should not return. */
     vTaskStartScheduler();
@@ -157,6 +149,8 @@ static void prvSetupHardware(void)
     initUART(UART1, 9600);
 
     initCN();
+
+    myCLI_init();
 
     SystemControlSetup();
 }

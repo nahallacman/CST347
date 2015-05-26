@@ -12,6 +12,10 @@
 extern "C" {
 #endif
 
+void myCLI_init(void);
+
+//int delayLength;
+
 
 
 

@@ -10,4 +10,13 @@ include/FreeRTOSConfig.h  \
  src/../../FreeRTOS-Plus-CLI/FreeRTOS_CLI.h  \
  ../FreeRTOS/Source/include/task.h  \
 ../FreeRTOS/Source/include/list.h  \
- include/myCLICMD.h 
+ include/myCLICMD.h  \
+src/myTasks.c  \
+include/myTasks.h  \
+include/leddrv.h  \
+ ../FreeRTOS/Source/include/semphr.h  \
+../FreeRTOS/Source/include/queue.h  \
+ ../FreeRTOS/Source/include/queue.h  \
+include/uartdrv.h  \
+include/myTasks.h  \
+ include/buttondrv.h 

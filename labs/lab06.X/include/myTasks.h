@@ -118,6 +118,49 @@ static void taskUARTTXControl(void *pvParameters);
 static void taskUARTRXControl(void *pvParameters);
 
 static void vCommandConsoleTask( void *pvParameters );
+
+
+
+
+
+
+
+
+
+
+TaskHandle_t xLEDHandle[3];
+//TaskHandle_t xLEDHandle;
+//index for which handle is currently being used.
+int currentHandle;
+
+//QueueHandle_t xQueue[3];
+QueueHandle_t xLEDQueue[3];
+
+TaskHandle_t xButtonTask;
+
+TaskHandle_t xCLITask;
+
+
+
+
+
+
+
+static const xTaskParameter_t xTask0Parameters = {0 /* Toggle LED1 */, (200 / portTICK_RATE_MS) /* At 800ms. */};
+static const xTaskParameter_t xTask1Parameters = {1 /* Toggle LED2 */, (200 / portTICK_RATE_MS) /* At 400ms. */};
+static const xTaskParameter_t xTask2Parameters = {2 /* Toggle LED3 */, (200 / portTICK_RATE_MS) /* At 150ms. */};
+
+static const int UARTTXTASKPRIORITY = 2;
+static const int UARTRXTASKPRIORITY = 3;
+//static const int MAINCONTROLTASKPRIORITY = 1;
+static const int LEDTASKPRIORITY = 1;
+//static const int LED1TASKPRIORITY = 5;
+//static const int LED2TASKPRIORITY = 4;
+//static const int LED3TASKPRIORITY = 3;
+
+
+
+static const char STATICNULL = '\0';
 #ifdef	__cplusplus
 }
 #endif

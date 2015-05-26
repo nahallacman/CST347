@@ -1,27 +1,13 @@
 #include "myTasks.h"
 
-#include "myCLICMD.c"
+//#include "myCLICMD.c"
 
 /*-----------------------------------------------------------*/
 /* Variables used by this demo.                              */
 /*-----------------------------------------------------------*/
 /* Create an xTaskParameters_t structure for each of the two tasks that are
 created using the prvToggleAnLED() task function. */
-static const xTaskParameter_t xTask0Parameters = {0 /* Toggle LED1 */, (200 / portTICK_RATE_MS) /* At 800ms. */};
-static const xTaskParameter_t xTask1Parameters = {1 /* Toggle LED2 */, (200 / portTICK_RATE_MS) /* At 400ms. */};
-static const xTaskParameter_t xTask2Parameters = {2 /* Toggle LED3 */, (200 / portTICK_RATE_MS) /* At 150ms. */};
 
-static const int UARTTXTASKPRIORITY = 2;
-static const int UARTRXTASKPRIORITY = 3;
-//static const int MAINCONTROLTASKPRIORITY = 1;
-static const int LEDTASKPRIORITY = 1;
-//static const int LED1TASKPRIORITY = 5;
-//static const int LED2TASKPRIORITY = 4;
-//static const int LED3TASKPRIORITY = 3;
-
-
-
-static const char STATICNULL = '\0';
 //static const char LED1MESSAGE[] = "LED 1 ISNOW ACTIVE\n\r";
 //static const char LED2MESSAGE[] = "LED 2 ISNOW ACTIVE\n\r ";
 //static const char LED3MESSAGE[] = "LED 3 ISNOW ACTIVE\n\r ";
@@ -35,17 +21,7 @@ static const char STATICNULL = '\0';
 //TaskHandle_t xControlHandle[3];
 //TaskHandle_t xControlHandle;
 //task handles for the LED control tasks
-TaskHandle_t xLEDHandle[3];
-//TaskHandle_t xLEDHandle;
-//index for which handle is currently being used.
-int currentHandle;
 
-//QueueHandle_t xQueue[3];
-QueueHandle_t xLEDQueue[3];
-
-TaskHandle_t xButtonTask;
-
-TaskHandle_t xCLITask;
 
 void SystemControlSetup()
 {
@@ -94,19 +70,19 @@ void SystemControlSetup()
         // check if handle is null
 
     //These will have to be created in a task, not initalized like this.
-        if( xLEDHandle[currentHandle] == NULL )
-        {
-        //create the corresponding LED task
-        xTaskCreate(taskToggleAnLED,
-                            "LED2",
-                            configMINIMAL_STACK_SIZE,
-                            //(void *) &xTask3Parameters[currentHandle],
-                            (void *) &xTask0Parameters,
-                            LEDTASKPRIORITY,
-                            &xLEDHandle[currentHandle]);
-
-                            configASSERT( xLEDHandle[currentHandle] );
-       }
+//        if( xLEDHandle[currentHandle] == NULL )
+//        {
+//        //create the corresponding LED task
+//        xTaskCreate(taskToggleAnLED,
+//                            "LED1",
+//                            configMINIMAL_STACK_SIZE,
+//                            //(void *) &xTask3Parameters[currentHandle],
+//                            (void *) &xTask0Parameters,
+//                            LEDTASKPRIORITY,
+//                            &xLEDHandle[currentHandle]);
+//
+//                            configASSERT( xLEDHandle[currentHandle] );
+//       }
        
 
        if( xLEDQueue[currentHandle] == NULL )
@@ -121,19 +97,19 @@ void SystemControlSetup()
 
     currentHandle++;
 
-        if( xLEDHandle[currentHandle] == NULL )
-        {
-        //create the corresponding LED task
-        xTaskCreate(taskToggleAnLED,
-                            "LED3",
-                            configMINIMAL_STACK_SIZE,
-                            //(void *) &xTask3Parameters[currentHandle],
-                            (void *) &xTask1Parameters,
-                            LEDTASKPRIORITY,
-                            &xLEDHandle[currentHandle]);
-
-                            configASSERT( xLEDHandle[currentHandle] );
-       }
+//        if( xLEDHandle[currentHandle] == NULL )
+//        {
+//        //create the corresponding LED task
+//        xTaskCreate(taskToggleAnLED,
+//                            "LED2",
+//                            configMINIMAL_STACK_SIZE,
+//                            //(void *) &xTask3Parameters[currentHandle],
+//                            (void *) &xTask1Parameters,
+//                            LEDTASKPRIORITY,
+//                            &xLEDHandle[currentHandle]);
+//
+//                            configASSERT( xLEDHandle[currentHandle] );
+//       }
 
 
        if( xLEDQueue[currentHandle] == NULL )
@@ -147,19 +123,19 @@ void SystemControlSetup()
 
         currentHandle++;
 
-        if( xLEDHandle[currentHandle] == NULL )
-        {
-        //create the corresponding LED task
-        xTaskCreate(taskToggleAnLED,
-                            "LED1",
-                            configMINIMAL_STACK_SIZE,
-                            //(void *) &xTask3Parameters[currentHandle],
-                            (void *) &xTask2Parameters,
-                            LEDTASKPRIORITY,
-                            &xLEDHandle[currentHandle]);
-
-                            configASSERT( xLEDHandle[currentHandle] );
-       }
+//        if( xLEDHandle[currentHandle] == NULL )
+//        {
+//        //create the corresponding LED task
+//        xTaskCreate(taskToggleAnLED,
+//                            "LED3",
+//                            configMINIMAL_STACK_SIZE,
+//                            //(void *) &xTask3Parameters[currentHandle],
+//                            (void *) &xTask2Parameters,
+//                            LEDTASKPRIORITY,
+//                            &xLEDHandle[currentHandle]);
+//
+//                            configASSERT( xLEDHandle[currentHandle] );
+//       }
 
 
        if( xLEDQueue[currentHandle] == NULL )
@@ -200,68 +176,7 @@ void SystemControlSetup()
             &xCLITask);
        configASSERT( &xCLITask );
 */
-       const CLI_Command_Definition_t * const command = &xTaskStatsCommand;
-       FreeRTOS_CLIRegisterCommand( command );
 
-
-}
-
-static void taskButton(void *pvParameters)
-{
-    xTaskParameter_t *pxTaskParameter;
-    //portTickType xStartTime;
-
-    /* The parameter points to an xTaskParameters_t structure. */
-    pxTaskParameter = (xTaskParameter_t *) pvParameters;
-
-    xTaskParameter_t a;
-    xTaskParameter_t *b;
-    b = &a;
-
-    int ThisButtonState = 0;
-
-
-    while (1)
-    {
-//a. ?Take? the buttonPress mutex.
-        xSemaphoreTake(
-                   buttonpressmutex,
-                   portMAX_DELAY
-               );
-//b. vTaskDelay() for 10 ms to serve as a debounce delay.
-        vTaskDelay(10);
-//c. Read Port D pins. In addition to capturing the pin values, it clears out any Change Differences that currently exist in the module.
-        ThisButtonState = mPORTDRead();
-//d. Compare the Port D pin values with the global State to determine which buttons were pressed OR released.
-//e. When change is detected, a button state change from 0-to-1 (button RELEASE) will ?give? the appropriate ledNAction mutex. Just to be clear, this action is performed ONLY on the release, i.e. not on PRESS. If a 1-to-0 change is detected, no ?give? action is performed.
-        int test;
-        test = LastButtonState & 0x2000;
-        if(LastButtonState == ThisButtonState)
-        {
-            //nothing was actually pressed/released
-        }
-        else if(!( LastButtonState & 0x40 ) && (ThisButtonState & 0x40))//changes from 0 to 1, aka release
-        {
-            //SW 1 release detected
-            xSemaphoreGive( LEDmutex[0] );
-        }
-        else if(!( LastButtonState & 0x80 ) && (ThisButtonState & 0x80))
-        {
-            //SW 2 release detected
-            xSemaphoreGive( LEDmutex[1] );
-        }
-        else if(!( LastButtonState & 0x2000 ) && (ThisButtonState & 0x2000))
-        {
-            //SW 3 release detected
-            xSemaphoreGive( LEDmutex[2] );
-        }
-//f. After the ?give? action/s is/are taken, if at all, the Global Button State is updated.
-        LastButtonState = ThisButtonState;
-        //Return the button press mutex (is this correct?)
-        xSemaphoreGive( buttonpressmutex ) ;
-//g. Finally, the Change Notification Interrupt is enabled.
-        ConfigIntCN(CHANGE_INT_ON);
-    }
 }
 
 
@@ -301,6 +216,7 @@ static void taskToggleAnLED(void *pvParameters)
                     // by vATask.
                     MessageIDtest = pxRxedMessage->ucMessageID;
                     //led_test = pxRxedMessage->LEDNum;
+
                     delay = pxRxedMessage->LEDDelay;
                 }
                 else
@@ -376,9 +292,7 @@ static void taskUARTRXControl(void *pvParameters)
     pxRxedMessage = &Message2;
 
 
-    struct LEDMessage *pxRxedMessage2;
-    struct LEDMessage pxAllocMessage;
-    pxRxedMessage2 = &pxAllocMessage;
+
 
     int valid_command = 0;
     //char cRxedChar;
