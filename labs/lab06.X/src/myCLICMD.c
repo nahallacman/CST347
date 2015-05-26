@@ -8,7 +8,7 @@
 
 #include "myCLICMD.h"
 
-static const char taskListHdr[] = "Name\t\tStat\tPri\tSpace\tTCB\r\n";
+static const char taskListHdr[] = "\nName\tStat\tPri\tSpace\tTCB\r\n";
 
 
 
