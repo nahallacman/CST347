@@ -8,7 +8,7 @@
 
 #include "myCLICMD.h"
 
-static const char taskListHdr[] = "Name\t\tStat\tPri\tS/Space\tTCB";
+static const char taskListHdr[] = "Name\t\tStat\tPri\tSpace\tTCB\r\n";
 
 
 
@@ -36,7 +36,7 @@ const int8_t *pcCommandString )
 }
 
 static const xCommandLineInput xTaskStatsCommand = {"task-stats",
-            "task-stats: Displays a table of task state information\r\n\n",
+            "task-stats: Displays a table of task state information\r\n",
             prvTaskStatsCommand,
             0};
 

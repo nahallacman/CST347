@@ -90,7 +90,8 @@
 #define configMAX_PRIORITIES		( ( unsigned portBASE_TYPE ) 5 )
 #define configMINIMAL_STACK_SIZE	( 290 )
 #define configISR_STACK_SIZE		( 400 )
-#define configTOTAL_HEAP_SIZE		( ( size_t ) 28000 )
+//#define configTOTAL_HEAP_SIZE		( ( size_t ) 28000 )
+#define configTOTAL_HEAP_SIZE		( ( size_t ) 20000 )
 #define configMAX_TASK_NAME_LEN		( 8 )
 #define configUSE_TRACE_FACILITY	1
 #define configUSE_16_BIT_TICKS		0
