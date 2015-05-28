@@ -1,7 +1,5 @@
 #include "uartdrv.h"
 
-#include "uartdrv.h"
-
 void __attribute__((interrupt(ipl0), vector(_UART1_VECTOR))) vUART1_ISR_Wrapper(void);
 
 void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)

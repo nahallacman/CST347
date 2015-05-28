@@ -14,7 +14,7 @@ extern "C" {
 
 void myCLI_init(void);
 
-//int delayLength;
+//static int delayLength;
 
 
 

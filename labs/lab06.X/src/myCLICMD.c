@@ -104,7 +104,7 @@ pcCommandString,
                         LEDTASKPRIORITY,
                         &xLEDHandle[LEDnum]);
 
-                 //send rate message to LED queue
+                    //send rate message to LED queue
                     pxRxedMessage2->LEDDelay = delayLength;
                     if( xQueueSendToBack(
                         xLEDQueue[LEDnum], //QueueHandle_t xQueue,
@@ -127,6 +127,18 @@ pcCommandString,
                         (void *) &xTask1Parameters,
                         LEDTASKPRIORITY,
                         &xLEDHandle[LEDnum]);
+                
+                                 //send rate message to LED queue
+                    pxRxedMessage2->LEDDelay = delayLength;
+                    if( xQueueSendToBack(
+                        xLEDQueue[LEDnum], //QueueHandle_t xQueue,
+                        &pxRxedMessage2, //const void * pvItemToQueue,
+                        0 //TickType_t xTicksToWait
+                    ) != pdPASS )
+                    {
+                        //task was not able to be created after the xTicksToWait
+                        //a = 0;
+                    }
 
                         configASSERT( xLEDHandle[LEDnum] );
                  break;
@@ -139,6 +151,18 @@ pcCommandString,
                     (void *) &xTask2Parameters,
                     LEDTASKPRIORITY,
                     &xLEDHandle[LEDnum]);
+                
+                    //send rate message to LED queue
+                    pxRxedMessage2->LEDDelay = delayLength;
+                    if( xQueueSendToBack(
+                        xLEDQueue[LEDnum], //QueueHandle_t xQueue,
+                        &pxRxedMessage2, //const void * pvItemToQueue,
+                        0 //TickType_t xTicksToWait
+                    ) != pdPASS )
+                    {
+                        //task was not able to be created after the xTicksToWait
+                        //a = 0;
+                    }
 
                     configASSERT( xLEDHandle[LEDnum] );
                     break;
@@ -260,7 +284,9 @@ static const xCommandLineInput xTaskChangeLED = {"change_led",
 
 void myCLI_init(void)
 {
-       const CLI_Command_Definition_t * const command = &xTaskStatsCommand;
+//delayLength = 0;
+
+        const CLI_Command_Definition_t * const command = &xTaskStatsCommand;
        FreeRTOS_CLIRegisterCommand( command );
        const CLI_Command_Definition_t * const command2 = &xTaskStartLED;
        FreeRTOS_CLIRegisterCommand( command2 );
