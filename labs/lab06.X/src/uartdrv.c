@@ -19,7 +19,7 @@ void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
 
 
     /* Variables */
-
+//    int test = 0;
 
     /* UART Configuration */
     UARTConfigure(umPortNum, UART_ENABLE_PINS_TX_RX_ONLY);
@@ -37,6 +37,9 @@ void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
     UARTSetDataRate(umPortNum,
             (uint32_t)configPERIPHERAL_CLOCK_HZ, ui32WantedBaud);
 
+//    test = UARTGetDataRate(umPortNum,
+//            (uint32_t)configPERIPHERAL_CLOCK_HZ);
+    
     /* Enable the UART for Transmit Only*/
     UARTEnable(umPortNum, UART_ENABLE_FLAGS(UART_PERIPHERAL |
                                             UART_TX |
@@ -57,7 +60,7 @@ void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud)
     //is this take necessary?
     xSemaphoreTake(
            InputByteBuffer,
-           portMAX_DELAY
+           0
     );
 
     OutputStringBuffer = xSemaphoreCreateMutex();
@@ -89,6 +92,7 @@ void vUART1_ISR(void)
         
         uData = UARTGetData(UART1);
         cData = uData.__data;
+        //cData = UARTGetData(UART1);
 
         UARTSetChar(cData);
 

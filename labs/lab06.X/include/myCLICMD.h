@@ -16,7 +16,8 @@ void myCLI_init(void);
 
 //static int delayLength;
 
-
+struct LEDMessage *pxRxedMessage2;
+struct LEDMessage pxAllocMessage;
 
 
 #ifdef	__cplusplus

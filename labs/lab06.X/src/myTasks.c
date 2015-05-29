@@ -198,7 +198,7 @@ static void taskToggleAnLED(void *pvParameters)
     uint8_t MessageIDtest = 0;
     //enum led_dir led_test;
     int delay = 500;
-
+    
     //int delay = 500;
     //int a = 0;
 
@@ -210,7 +210,7 @@ static void taskToggleAnLED(void *pvParameters)
         {
             if( uxQueueMessagesWaiting( xLEDQueue[pxTaskParameter->usLEDNumber] ) != 0 )
             {
-                if( xQueueReceive( xLEDQueue[pxTaskParameter->usLEDNumber], ( pxRxedMessage ), ( TickType_t ) 0 ) )
+                if( xQueueReceive( xLEDQueue[pxTaskParameter->usLEDNumber], ( &pxRxedMessage ), ( TickType_t ) 0 ) )
                 {
                     // pcRxedMessage now points to the struct AMessage variable posted
                     // by vATask.

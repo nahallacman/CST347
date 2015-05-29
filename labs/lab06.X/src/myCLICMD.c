@@ -47,8 +47,7 @@ static portBASE_TYPE prvTaskStartLED( int8_t *pcWriteBuffer,
  size_t xWriteBufferLen,
 const int8_t *pcCommandString )
 {
-    struct LEDMessage *pxRxedMessage2;
-    struct LEDMessage pxAllocMessage;
+
     //assign message memory
     pxRxedMessage2 = &pxAllocMessage;
 
