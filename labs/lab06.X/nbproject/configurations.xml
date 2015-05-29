@@ -102,7 +102,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="..\FreeRTOS\Source\include;../FreeRTOS/Source/portable/MPLAB/PIC32MX;.\include"/>
+                  value="../FreeRTOS/Source/include;../FreeRTOS/Source/portable/MPLAB/PIC32MX;./include"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="false"/>
@@ -128,7 +128,7 @@
         <property key="expand-macros" value="false"/>
         <property key="extra-include-directories-for-assembler" value=""/>
         <property key="extra-include-directories-for-preprocessor"
-                  value="./include;../FreeRTOS/Source/include;../FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
+                  value="../FreeRTOS/Source/include;../FreeRTOS/Source/portable/MPLAB/PIC32MX;./include"/>
         <property key="false-conditionals" value="false"/>
         <property key="keep-locals" value="false"/>
         <property key="list-assembly" value="false"/>
