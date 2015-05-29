@@ -105,17 +105,7 @@ convert a time in milliseconds into a time in ticks. */
 /* Performs the hardware initialisation to ready the hardware to run this example */
 static void prvSetupHardware(void);
 
-/*-----------------------------------------------------------*/
-/* Structures used by this demo.                             */
-/*-----------------------------------------------------------*/
-/* The structure that is passed into tasks that use the prvToggleAnLED() task function.
- The structure lets the task know which LED to toggle, and at which rate. */
-//typedef struct xTASK_PARAMETER {
-//    uint16_t usLEDNumber;                   /* The number of the LED to toggle. */
-//    portTickType xToggleRate;               /* The rate at which the LED should be toggle. */
-//} xTaskParameter_t;
-
-static const char M1[] = "1";
+//static const char M1[] = "1";
 
 /*-----------------------------------------------------------*/
 int main(void)

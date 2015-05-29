@@ -27,22 +27,6 @@ extern "C" {
 
 #include "buttondrv.h"
 
-    /* cals includes */
-enum state_enum{
-    IDLE = 0,
-    DB1,
-    PRESSED,
-    HOLD,
-    DB2
-};
-
-//Why do we use an enum if the size isn't defined?
-enum led_dir{
-    NONE = 0,
-    INCR,
-    DECR
-};
-
 /*-----------------------------------------------------------*/
 /* Structures used by this demo.                             */
 /*-----------------------------------------------------------*/
@@ -52,13 +36,6 @@ typedef struct xTASK_PARAMETER {
     uint16_t usLEDNumber;                   /* The number of the LED to toggle. */
     portTickType xToggleRate;               /* The rate at which the LED should be toggle. */
 } xTaskParameter_t;
-
-//struct /* __attribute__ ((packed)) */LEDMessage
-// {
-//    uint8_t ucMessageID;
-//    uint8_t LEDNum;
-//    //char ucData[ 20 ];
-// } xLEDMessage;
 
  struct /* __attribute__ ((packed)) */LEDMessage
  {
@@ -73,10 +50,6 @@ typedef struct xTASK_PARAMETER {
      char ucMessage[50];
  } xUARTMessage;
 
-
-//cals tasks
-//static void taskmyLeds(void *pvParameters);
-
 /* A task that toggles an LED at a fixed frequency.  This time, the LED to
 toggle and the rate at which the LED is toggled are passed into the task
 using the task parameter.  This allows the same task function to be used to
@@ -89,43 +62,13 @@ static void taskButton(void *pvParameters);
 //and queues
 static void SystemControlSetup();
 
-/*
-static void OLDtaskToggleAnLED(void *pvParameters);
-
-
-//extern static void taskmyLeds(void *pvParameters);
-static void taskSystemControl(void *pvParameters);
-
 //task for UART transmit control
 static void taskUARTTXControl(void *pvParameters);
 
 //task for UART recieve control
 static void taskUARTRXControl(void *pvParameters);
 
-
-
-
-uint8_t lockout[3];
-
-void createTaskMessageSendToBack(struct UARTMessage);
-
-*/
-
-//task for UART transmit control
-static void taskUARTTXControl(void *pvParameters);
-
-//task for UART recieve control
-static void taskUARTRXControl(void *pvParameters);
-
-static void vCommandConsoleTask( void *pvParameters );
-
-
-
-
-
-
-
-
+//static void vCommandConsoleTask( void *pvParameters );
 
 
 TaskHandle_t xLEDHandle[3];
@@ -138,12 +81,7 @@ QueueHandle_t xLEDQueue[3];
 
 TaskHandle_t xButtonTask;
 
-TaskHandle_t xCLITask;
-
-
-
-
-
+//TaskHandle_t xCLITask;
 
 
 static const xTaskParameter_t xTask0Parameters = {0 /* Toggle LED1 */, (200 / portTICK_RATE_MS) /* At 800ms. */};
@@ -152,13 +90,7 @@ static const xTaskParameter_t xTask2Parameters = {2 /* Toggle LED3 */, (200 / po
 
 static const int UARTTXTASKPRIORITY = 2;
 static const int UARTRXTASKPRIORITY = 3;
-//static const int MAINCONTROLTASKPRIORITY = 1;
 static const int LEDTASKPRIORITY = 1;
-//static const int LED1TASKPRIORITY = 5;
-//static const int LED2TASKPRIORITY = 4;
-//static const int LED3TASKPRIORITY = 3;
-
-
 
 static const char STATICNULL = '\0';
 #ifdef	__cplusplus

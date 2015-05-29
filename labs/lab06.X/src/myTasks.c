@@ -1,90 +1,12 @@
 #include "myTasks.h"
 
-//#include "myCLICMD.c"
-
-/*-----------------------------------------------------------*/
-/* Variables used by this demo.                              */
-/*-----------------------------------------------------------*/
-/* Create an xTaskParameters_t structure for each of the two tasks that are
-created using the prvToggleAnLED() task function. */
-
-//static const char LED1MESSAGE[] = "LED 1 ISNOW ACTIVE\n\r";
-//static const char LED2MESSAGE[] = "LED 2 ISNOW ACTIVE\n\r ";
-//static const char LED3MESSAGE[] = "LED 3 ISNOW ACTIVE\n\r ";
-//static const char LEDSTARTMESSAGE[] = "LED # STARTING    \n\r";
-//static const char LEDBLOCKMESSAGE[] = "LED # BLOCKING    \n\r ";
-//static const char LED3MESSAGE[] = "LED 3 ISNOW ACTIVE\n\r ";
-//static const char MAINCONTROLSTART[] = "Main Control Start\n\r";
-//static const char MAINCONTROLBLOCK[] = "Main Control Block\n\r";
-
-//task handles for the switch control tasks
-//TaskHandle_t xControlHandle[3];
-//TaskHandle_t xControlHandle;
-//task handles for the LED control tasks
-
-
 void SystemControlSetup()
 {
-    /*
-    if( xButtonTask == NULL )
-    {
-    //create the corresponding LED task
-    xTaskCreate(taskButton,
-                        "LED1",
-                        configMINIMAL_STACK_SIZE,
-                        (void *) &xTask1Parameters,
-                        1,
-                        &xButtonTask);
-
-                        configASSERT( xButtonTask );
-    }
-     */
-
-    xTaskParameter_t xTask3Parameters[3];
-    xTask3Parameters[0] = xTask0Parameters;
-    xTask3Parameters[1] = xTask1Parameters;
-    xTask3Parameters[2] = xTask2Parameters;
-
     UBaseType_t uxQueueLength = 5;
     UBaseType_t uxItemSize;
 
     uxItemSize = sizeof(xLEDMessage);
-/*
-    if( xLEDHandle[currentHandle] == NULL )
-        {
-        //create the corresponding LED task
-        xTaskCreate(taskToggleAnLED,
-                            "LED1",
-                            configMINIMAL_STACK_SIZE,
-                            //(void *) &xTask3Parameters[currentHandle],
-                            (void *) &xTask0Parameters,
-                            LEDTASKPRIORITY,
-                            &xLEDHandle[currentHandle]);
-
-                            configASSERT( xLEDHandle[currentHandle] );
-       }
-*/
-    //set up the 3 led tasks
-    //for(currentHandle = 0; currentHandle < 3; currentHandle++)
-    //{
-        // check if handle is null
-
-    //These will have to be created in a task, not initalized like this.
-//        if( xLEDHandle[currentHandle] == NULL )
-//        {
-//        //create the corresponding LED task
-//        xTaskCreate(taskToggleAnLED,
-//                            "LED1",
-//                            configMINIMAL_STACK_SIZE,
-//                            //(void *) &xTask3Parameters[currentHandle],
-//                            (void *) &xTask0Parameters,
-//                            LEDTASKPRIORITY,
-//                            &xLEDHandle[currentHandle]);
-//
-//                            configASSERT( xLEDHandle[currentHandle] );
-//       }
        
-
        if( xLEDQueue[currentHandle] == NULL )
        {
        xLEDQueue[currentHandle] = xQueueCreate
@@ -93,25 +15,9 @@ void SystemControlSetup()
                      uxItemSize
                   );
        }
-    //}
 
     currentHandle++;
-
-//        if( xLEDHandle[currentHandle] == NULL )
-//        {
-//        //create the corresponding LED task
-//        xTaskCreate(taskToggleAnLED,
-//                            "LED2",
-//                            configMINIMAL_STACK_SIZE,
-//                            //(void *) &xTask3Parameters[currentHandle],
-//                            (void *) &xTask1Parameters,
-//                            LEDTASKPRIORITY,
-//                            &xLEDHandle[currentHandle]);
-//
-//                            configASSERT( xLEDHandle[currentHandle] );
-//       }
-
-
+    
        if( xLEDQueue[currentHandle] == NULL )
        {
        xLEDQueue[currentHandle] = xQueueCreate
@@ -122,22 +28,7 @@ void SystemControlSetup()
        }
 
         currentHandle++;
-
-//        if( xLEDHandle[currentHandle] == NULL )
-//        {
-//        //create the corresponding LED task
-//        xTaskCreate(taskToggleAnLED,
-//                            "LED3",
-//                            configMINIMAL_STACK_SIZE,
-//                            //(void *) &xTask3Parameters[currentHandle],
-//                            (void *) &xTask2Parameters,
-//                            LEDTASKPRIORITY,
-//                            &xLEDHandle[currentHandle]);
-//
-//                            configASSERT( xLEDHandle[currentHandle] );
-//       }
-
-
+        
        if( xLEDQueue[currentHandle] == NULL )
        {
        xLEDQueue[currentHandle] = xQueueCreate
@@ -166,17 +57,6 @@ void SystemControlSetup()
             UARTRXTASKPRIORITY,
             &xUARTRXHandle);
        configASSERT( &xUARTRXHandle );
-
-       /*
-           xTaskCreate(vCommandConsoleTask,
-            "CONSOLE",
-            configMINIMAL_STACK_SIZE,
-            (void *) &xTask0Parameters,
-            LEDTASKPRIORITY,
-            &xCLITask);
-       configASSERT( &xCLITask );
-*/
-
 }
 
 
@@ -189,18 +69,11 @@ static void taskToggleAnLED(void *pvParameters)
     /* The parameter points to an xTaskParameters_t structure. */
     pxTaskParameter = (xTaskParameter_t *) pvParameters;
 
-    //xTaskParameter_t a;
-    //xTaskParameter_t *b;
-    //b = &a;
-
     struct LEDMessage *pxRxedMessage;
     struct LEDMessage pxAllocMessage;
     uint8_t MessageIDtest = 0;
-    //enum led_dir led_test;
+
     int delay = 500;
-    
-    //int delay = 500;
-    //int a = 0;
 
     pxRxedMessage = &pxAllocMessage;
 
@@ -263,12 +136,6 @@ static void taskUARTTXControl(void *pvParameters)
                 }
            // }
        }
-
-
-
-
-
-        //vTaskDelay(10);
     }
 
 }

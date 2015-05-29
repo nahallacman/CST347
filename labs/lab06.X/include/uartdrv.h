@@ -20,7 +20,7 @@ extern "C" {
 #include "queue.h"
 #include "myTasks.h"
 
-    //Task and Queue stuff for UART
+//Task and Queue stuff for UART
 TaskHandle_t xUARTTXHandle;
 TaskHandle_t xUARTRXHandle;
 
@@ -28,13 +28,8 @@ QueueHandle_t xUARTQueue;
 
 void initUART(UART_MODULE umPortNum, uint32_t ui32WantedBaud);
 
-//void vUartPutC(UART_MODULE umPortNum, char cByte);
-//
-//void vUartPutStr(UART_MODULE umPortNum, char *pString, int iStrLen);
-
 //does it need the UART_MODULE?
 char * vUartGetChar(UART_MODULE umPortNum);
-
 
 //buffer, get and set wrapping functionality for receiving characters
 char UARTRXChar;
@@ -46,8 +41,6 @@ char TXbuffer[50];
 int TXIndex;
 void UARTPutString(char * string);
 void ClearBuffer(void);
-
-
 
 SemaphoreHandle_t InputByteBuffer;
 SemaphoreHandle_t OutputStringBuffer;
