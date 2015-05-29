@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab06.X/src/main.c</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab06.X/include/uartdrv.h</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab06.X/src/uart_isr.S</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab06.X/src/myCLICMD.c</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/FreeRTOS/Source/tasks.c</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab06.X/src/myTasks.c</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab06.X/include/myTasks.h</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab06.X/include/myCLICMD.h</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab06.X/src/leddrv.c</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/FreeRTOS-Plus-CLI/FreeRTOS_CLI.c</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab06.X/nbproject/Makefile-default.mk</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/lab06.X/src/uartdrv.c</file>
+            <file>file:/C:/Users/mainuser/Desktop/School/CST347/labs/FreeRTOS/Source/portable/MemMang/heap_2.c</file>
+            <file>file:/C:/Program%20Files%20(x86)/Microchip/xc32/v1.34/pic32mx/include/peripheral/uart.h</file>
+        </group>
+    </open-files>
+</project-private>
