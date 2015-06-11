@@ -1,0 +1,598 @@
+/* BEGIN RESET STYLES*/
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* html5 display-role reset for older browsers */
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{ display: block;}
+body {line-height: 1;}
+ol,ul {list-style: none;}
+blockquote,q {quotes: none;}
+blockquote:before,blockquote:after,q:before,q:after { content: ''; content: none;}
+table {border-collapse: collapse; border-spacing: 0;}
+/*END RESET STYLES*/
+
+
+/* BEGIN MYBB SHELL (Overall iFrame Layout, Side Nav, etc) */
+html{font: 400 0.85em 'Helvetica Neue', Arial, sans-serif; color:#333;}
+body.mybb-shell {
+	background: #007896 repeat left top;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+.mybb-shell .mybb-iframe-wrap {
+	background: #fff;
+	border-radius: 6px 6px 0 0;
+	margin: 12px 20px 0 100px;
+	position: relative;
+	top: 0;
+}
+.cloud-iframe {
+	width: 100%;
+	height: 100%;
+	background-color: #808080; /*This color is only visible behind lighbox if access to a cloud tool is unauthorized. Matches left-side nav color when overlaid  by lighbox shade div.*/
+}
+.iframe-wrap {
+	bottom: 0;
+	left: 90px;
+	position: absolute;
+	right: 14px;
+	top: 14px;
+	border-radius: 0 4px 0 0;
+	border: 7px solid #333;
+	border-width: 7px 7px 0 0;
+	-webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+	-moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+/*END MYBB SHELL*/
+
+/*BEGIN SIDE NAV*/
+.side-nav {
+	background: #333;
+	bottom: 0;
+	left: 22px;
+	margin: 0;
+	position: fixed;
+	text-align: center;
+	top: 14px;
+	width: 68px;
+	z-index: 1;
+	-webkit-border-radius: 4px 0px 0px 0px;
+	-moz-border-radius: 4px 0px 0px 0px;
+	border-radius:4px 0px 0px 0px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+.side-nav ul {
+	width: 52px;
+	margin: 6px auto 0 auto;
+}
+.side-nav .profile {
+	display: block;
+	position: relative;
+	margin: 0 auto;
+	padding: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	width: 48px;
+	height: 48px;
+	border: 1px solid #111;
+	-moz-box-shadow: 0 1px 0 rgba(255, 255, 255, .1);
+	-webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, .1);
+	box-shadow: 0 1px 0 rgba(255, 255, 255, .1);
+}
+
+.side-nav li[id*="myProfile"] {
+	margin: 0 -8px 10px;
+text-align: center;
+border-bottom: 1px solid red;
+	border-bottom: 1px solid #191919;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.side-nav ul li[id*="myProfile"] a, .side-nav ul li[id*="myProfile"].active a {
+	margin: 12px auto 16px;
+	padding: 0;
+	border-radius: 3px;
+	width: 50px;
+}
+
+.side-nav .active .profile {
+	background-color: #222;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius:4px;
+	box-shadow: 0 0 12px #222 inset;
+}
+
+.side-nav ul li a span.badge {
+	-webkit-border-radius: 2px 2px 2px 2px;
+	-moz-border-radius: 2px 2px 2px 2px;
+	border-radius:2px 2px 2px 2px;
+	color: #EEEEEE;
+	display: block;
+	font-size: 11px;
+	height: 13px;
+	line-height: 0.9em;
+	padding-top: 4px;
+	position: absolute;
+	right: 4px;
+	top: 0;
+	width: 20;
+}
+.side-nav ul li{
+	/* IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	/* IE 5-7 */
+	filter: alpha(opacity=80);
+	/* Netscape */
+	-moz-opacity: 0.8;
+	/* Safari 1.x */
+	-khtml-opacity: 0.8;
+	/* Good browsers */
+	opacity: 0.8;
+	margin-bottom: 10px;
+	border: 1px solid transparent;
+}
+.side-nav ul li:hover{
+	opacity:1;
+}
+.side-nav ul li.active a {
+	background-color: #222;
+	box-shadow: 0 0 8px #000 inset, 0 1px 0 rgba(255, 255, 255, .07);
+	border-color: #111;
+	cursor: pointer;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-ms-border-radius: 4px;
+	border-radius: 4px;
+	/* IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	/* IE 5-7 */
+	filter: alpha(opacity=100);
+	/* Netscape */
+	-moz-opacity: 1;
+	/* Safari 1.x */
+	-khtml-opacity: 1;
+	/* Good browsers */
+	opacity: 1;
+}
+.side-nav a {
+	display: block;
+	position: relative;
+}
+.side-nav .badge {
+	color: white;
+	padding: 1px 5px;
+	font-size: 75%;
+	margin: 0 0 0 3px;
+	border-radius: 12px;
+	font-weight: bold;
+	right: 0px !important;
+}
+.side-nav .more-tools {
+	position: absolute;
+	left: 100%;
+	bottom: 6px;
+	background-color: #404040;
+	-webkit-box-shadow: 0 0 12px 1px #111111;
+	-moz-box-shadow: 0 0 12px 1px #111111;
+	box-shadow: 0 0 12px 1px #111111;
+	padding: 9px;
+}
+
+.side-nav .more-tools li {margin-bottom:0;}
+/*END SIDE NAV*/
+
+
+/* BEGIN LARGE TOOL ICONS */
+.menu-icon{
+	background-image: url('/images/ci/mybb/mybb_nav_sprite.png');
+	background-repeat: no-repeat;
+	background-color: transparent;
+	height: 50px; 
+	display: block;
+}
+
+.menu-icon.home {background-position:  center 0}
+.menu-icon.stream {background-position: center -50px}
+.menu-icon.msg {background-position: center -100px}
+.menu-icon.grades {background-position: center -150px}
+.menu-icon.people {	background-position: center -200px}
+.menu-icon.spaces {background-position:  center -250px}
+.menu-icon.todo {background-position: center -300px}
+.menu-icon.alerts {background-position:  center -350px}
+.menu-icon.calendar {background-position: center -400px}
+.menu-icon.more {background-position: 0 -450px}
+
+.more-tools .menu-icon {
+	width: 50px;
+	margin-bottom: 0;
+}
+/* END LARGE TOOL ICONS */
+
+
+/*BEGIN BADGES*/
+/*GENERIC RED*/
+.badge {
+	background-color: #ad0000;
+	-webkit-box-shadow: 0 1px 1px 0px #222 inset;
+	-moz-box-shadow: 0 1px 1px 0px #222 inset;
+	box-shadow: 0 1px 1px 0px #222 inset;
+}
+/*END BADGES*/
+
+
+/*BEGIN AVATAR STYLES*/
+.avatar48{
+	position: absolute;
+	left: 35px;
+	top: 17px;
+	height: 48px;
+	width: 48px;
+	
+	
+	top:14px;/*@@*/
+	left: 14px;/*@@*/
+	background: #fff;
+	background: rgba(255, 255, 255, .5);
+	padding: 2px;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, .15);
+	border-radius: 1px;
+	
+	
+}
+/* Add additional avatar styles here as needed. */
+/*END AVATAR STYLES*/
+
+
+/*BEGIN TOOL HEADERS*/
+h1 {
+	box-shadow: none;
+	position: relative;
+	font-weight: 600;
+	font-size: 210%;
+	padding: 0;
+	letter-spacing: 0;
+	text-shadow: none;
+	top: 0;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	line-height: 1;
+}
+
+h1 .current-page {
+	color: white;
+	font-weight: 600;
+	display: inline-block;
+	font-family: Georgia, serif;
+	font-size: 150%;
+	min-height: 39px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+h1 .ribbon-text {
+	display: none;
+}
+	
+h1 .current-page .icon {
+	display: inline-block;
+	height: 36px;
+	width: 36px;
+	margin: 0;
+	background-image: url(images/mybb_title_sprite.png);
+	background-repeat: no-repeat;
+}
+
+.mybb-column h1{
+	margin: 24px 0 18px 24px;
+}
+
+.title-date, .title-text {
+	text-transform: none;
+	margin: 0;
+	font-weight: 200;
+	color: #311D11;
+	color: #01758C;
+	position: relative;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .9);
+}
+
+.title-date {
+/* 	font-size: 150%; */
+/* 	font-weight: 100; */
+	margin-left: -9px;
+}
+
+#streamHeader_messages .icon {background-position: center -108px;}
+#streamHeader_people .icon {background-position: center -208px;}
+#streamHeader_todo .icon {background-position: center -310px;}
+#streamHeader_stream .icon {background-position: center -60px;}
+#streamHeader_spaces .icon {background-position: center -18px;}
+#streamHeader_mygrades .icon, #streamHeader_mygrades_d .icon {background-position: center -158px;}
+#streamHeader_alerts .icon {background-position: center -360px;}
+/*END TOOL HEADERS*/
+
+
+/*OTHER SHARED STYLES*/
+
+/*RHS SECTION TITLE (Used in Grades and Overview Pages) */
+h3.section-title {
+	color: #898273;
+	font-weight: 200;
+	font-size: 20px;
+	letter-spacing: 0;
+	padding: 12px 0 12px 27px;
+	margin: 24px 0 0 0;
+	position: relative;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .9);
+	clear: both; 
+	font-family: 'Helvetica Neue', "Lucida Grande", sans-serif;
+	text-transform: uppercase;
+/* 	color: rgba(0,0,0,.5); */
+}
+
+/*BEGIN OVERVIEW STYLES -- TO BE MOVED INTO OVERVIEW SPECIFIC STYLESHEET*/
+.mybb-overview #column_1 h1 {
+	display: none;
+}
+.mybb-overview .stream_left, 
+.mybb-overview .stream_page_left {
+	padding: 0;
+	border: 0;
+	float: none;
+}
+/*END OVERVIEW STYLES -- TO BE MOVED INTO OVERVIEW SPECIFIC STYLESHEET*/
+
+/*BEGIN SHARED STREAM STYLES*/
+.stream_item:first-child {
+/* 	border-top: 0; */
+}
+/*END SHARED STREAM STYLES*/
+
+
+/* BEGIN SHARED COLORING/BORDERS FOR CORE COMPONENTS */
+.cmdiv {
+	background: #D1EAEF;
+	-moz-box-shadow: -2px -2px 9px rgba(0, 0, 0, 0.1), 3px 3px 9px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: -2px -2px 9px rgba(0, 0, 0, 0.1), 3px 3px 9px rgba(0, 0, 0, 0.3);
+	border: 1px solid #999;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+.cmdiv ul {
+	border-bottom: 0;
+	border-top: 1px dotted #ACC2DF;
+}
+.nav .sub ul li a,
+.cmdiv a,
+.menumini a {
+	background: transparent;
+	color: #333;
+	font-weight: normal;
+	text-decoration: none;
+	border: 0;
+	text-shadow: none;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	font-size: 95%;
+}
+.cmdiv a {
+	font-size: 95%;
+	border: none;
+}
+.cmdiv a.close-menu {
+	position: relative;
+	top: 0;
+	right: 0;
+	opacity: 1;
+	filter: alpha(opacity=100);
+	z-index: 100;
+}
+
+/* TODO: Ick.. this styling depends on the as_2012 theme, but the alternative is copying the controls.png file into plugins/bb-social-learning which is equally as icky... deferring to the UI team to cleanup.
+*/
+a.cmimg {
+  background:transparent url(/themes/as_2012/images/controls.png) no-repeat scroll -320px -125px;
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+
+a.cmimg:hover, a.cmimg:focus {
+  background-position: -320px -143px;
+}
+
+a.cmimg img {
+  width: 15px;
+  height: 15px;
+}
+
+div.lb-overlay {
+ background-color: #000000;
+}
+
+div.lb-wrapper div.lb-header {
+margin-bottom:.5em;
+}
+
+div.lb-wrapper div.lb-header a img {
+ border: none;
+}
+
+div.lb-wrapper div.lb-content {
+ background-color: #FFFFFF;
+}
+
+div.lb-wrapper div.lb-content div.lb-loading {
+ background: transparent
+  url(/images/ci/misc/progress/progress_learningSystem.gif) no-repeat
+  scroll center center
+}
+
+
+h1, h2, h3, h4, h5, h6, strong, b {
+  font-weight: bold;
+}
+
+em {
+  font-style:italic;
+}
+
+/* END SHARED COLORING/BORDERS FOR CORE COMPONENTS */
+
+
+/*message item in overview page*/
+
+#MessagesOverview {
+	padding:0 24px;
+}
+
+.message-item {
+	position: relative;
+	padding: 18px 15px 24px 86px;
+	cursor: default;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	border-top: 1px dashed #ccc;
+	border-top: 1px dashed rgba(0, 0, 0, .2);
+	border-left:1px solid transparent;
+	border-right: 1px solid transparent;
+	min-height: 60px;
+}
+
+.message-item:hover, .message-item:focus {
+	background-color: #EAEAEA;
+	background-color: rgba(0, 0, 0, .02);
+	border-top-style: solid;
+}
+
+.message-item.active, .message-item.active:hover {
+	z-index:2;
+	color: #000;
+	border-radius: 4px;
+	background-color: #eee; /*IE*/
+	background-color: rgba(0, 0, 0, .05);
+	color: #333;
+	border-right-color: transparent;
+	border: 1px solid #CCC;
+	border: 1px solid rgba(0, 0, 0, .13);
+	box-shadow: 1px 1px 0 rgba(255, 255, 255, .5), 1px 1px 7px rgba(0, 0, 0, .1) inset;
+}
+
+
+.message-item.active + .message-item {
+	box-shadow: none;
+	border-top: 0;
+}
+
+.message-item:last-child {
+	border-bottom: 1px dashed #ccc;
+	border-bottom: 1px dashed rgba(0, 0, 0, .2);
+}
+
+.message-item:hover + .message-item {
+	border-top-style: solid;
+}
+
+.message-item:last-child:hover {
+	border-bottom-style: solid;
+}
+
+
+.message-item div {
+	clear: right;
+	text-overflow: ellipsis;
+	color: #999;
+}
+
+a.name {
+	font: 600 13px 'Helvetica Neue',  Arial, sans-serif;
+	border-bottom: 1px dotted #01758C;
+}
+
+a.name:hover {
+	border-bottom-style: solid;
+}
+
+.message-text {
+	font: 16px/1.25 Georgia, serif;
+	color: #311D11;
+	margin-top: 6px;
+	overflow: hidden;
+}
+
+span.timestamp {
+	font: 400 12px 'Helvetica Neue', "Lucida Grande", sans-serif;
+}
+
+
+/*Skip Links*/
+
+#myBbSkipLinks {
+	position: relative;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	filter: alpha(opacity=100);
+	-moz-opacity: 1;
+	-khtml-opacity: 1;
+	opacity: 1;
+	z-index: 100;
+	height:0;
+	overflow: visible;
+	margin: 0;
+}
+
+#myBbSkipLinks a {
+	position: absolute;
+}
+
+
+a.hideoff.skipLink {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	filter: alpha(opacity=0);
+	-moz-opacity: 0;
+	-khtml-opacity: 0;
+	opacity: 0;
+	left: -10000px;
+	top: -1000px;
+}
+
+
+a.skipLink {
+	color: #fff;
+	position: absolute;
+	width: 140px!important;
+	padding: 9px;
+	background: #333;
+	background: rgba(0,0,0,.7);
+	text-align: center;
+	font: normal 80%/1.4 Georgia, serif;
+	text-transform: uppercase;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	top: -14px;
+	left: -19px;
+	opacity: 1;
+	-moz-transition: all .3s ease-in-out;
+	-webkit-transition: all .3s ease-in-out;
+	transition: all .3s ease-in-out;
+	z-index: 1000;
+	height: auto;
+	text-decoration: none;
+}
+
+#myBbSkipLinks a.skipLink:focus {
+	outline: 0;
+}
